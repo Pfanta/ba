@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class GenerationUtils {
 	
-	private static final int DEFAULT_MASCHINES_COUNT = 4;
+	private static final int DEFAULT_MACHINES_COUNT = 4;
 	private static final int DEFAULT_JOBS_COUNT = 4;
 	
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
@@ -31,7 +31,7 @@ public class GenerationUtils {
 		grid.setVgap(10);
 		grid.setPadding(new Insets(20, 10, 10, 10));
 		
-		NumberTextField textField1 = new NumberTextField(DEFAULT_MASCHINES_COUNT);
+		NumberTextField textField1 = new NumberTextField(DEFAULT_MACHINES_COUNT);
 		NumberTextField textField2 = new NumberTextField(DEFAULT_JOBS_COUNT);
 		JFXComboBox<ShopClass> typeBox = new JFXComboBox<>();
 		typeBox.getItems().addAll(ShopClass.FS, ShopClass.FFS, ShopClass.JS);
@@ -63,14 +63,14 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 @param i number of maschines
+	 @param i number of machines
 	 @param j number of jobs
 	 @param deadlines whether deadlines should be generated
 	 @param shopClass Class of the shop to be generated
 	 @return Task
 	 */
 	private static Task generateRandomTask(int i, int j, boolean deadlines, ShopClass shopClass) {
-		return Task.empty();
+		return Task.empty(); //TODO
 	}
 	
 	public static class GenerationDialogResult {

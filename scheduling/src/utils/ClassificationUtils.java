@@ -31,7 +31,7 @@ public class ClassificationUtils {
 			else
 				return new Classification(machineCount, jobCount, ShopClass.NONE);
 		else
-			return new Classification(-1, -1, ShopClass.NONE); //TODO: Flexibles
+			return new Classification(-1, -1, ShopClass.NONE); //TODO: Flexible
 	}
 	
 	private static boolean checkIsOpenShop(Task currentTask) {

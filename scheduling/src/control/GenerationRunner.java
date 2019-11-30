@@ -10,7 +10,7 @@ import java.util.List;
 
 public class GenerationRunner {
 	
-	private MainWindowAUI mainWindowAUI;
+	private final MainWindowAUI mainWindowAUI;
 	private Worker worker;
 	
 	public GenerationRunner(MainWindowAUI mainWindowAUI) {
@@ -27,7 +27,7 @@ public class GenerationRunner {
 	}
 	
 	class Worker extends Thread {
-		private Task task;
+		private final Task task;
 		private volatile boolean running;
 		
 		Worker(Task task) {

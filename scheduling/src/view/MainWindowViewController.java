@@ -109,7 +109,7 @@ public class MainWindowViewController implements MainWindowAUI {
 			try {
 				load(file);
 			} catch(IOException ex) {
-				ApplicationUtils.showException("Error", "Error occured while loading", ex);
+				ApplicationUtils.showException("Error", "Error occurred while loading", ex);
 			} catch(IllegalArgumentException ex) {
 				ApplicationUtils.showException("Error", "Error while parsing File", ex);
 			}
@@ -124,7 +124,7 @@ public class MainWindowViewController implements MainWindowAUI {
 			try {
 				save(file);
 			} catch(IOException ex) {
-				ApplicationUtils.showException("Error", "Error occured while saving", ex);
+				ApplicationUtils.showException("Error", "Error occurred while saving", ex);
 			}
 		}
 	}

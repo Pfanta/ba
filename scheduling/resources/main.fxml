@@ -17,7 +17,7 @@
 	<Separator layoutX="600" layoutY="5" orientation="VERTICAL" prefHeight="465"/>
 	
 	<!-- Settings Page -->
-	<Label layoutX="610" layoutY="10" prefHeight="10" text="Zielfunktion"/>
+	<Label layoutX="610" layoutY="10" prefHeight="10" text="Target function"/>
 	
 	<JFXComboBox fx:id="comboBox"
 	             layoutX="615"
@@ -36,22 +36,22 @@
 	<Label layoutX="610"
 	       layoutY="100"
 	       prefHeight="10"
-	       text="Nebenbedingungen"/>
+	       text="Conditions"/>
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="130"
 	             focusTraversable="false"
-	             text="Nebenbedingung 1"/>
+	             text="Condition 1"/>
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="160"
 	             focusTraversable="false"
-	             text="Nebenbedingung 2"/>
+	             text="Condition 2"/>
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="190"
 	             focusTraversable="false"
-	             text="Nebenbedingung 3"/>
+	             text="Condition 3"/>
 	
 	<JFXButton layoutX="610"
 	           layoutY="370"
