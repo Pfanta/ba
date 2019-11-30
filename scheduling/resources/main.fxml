@@ -22,7 +22,8 @@
 	<JFXComboBox fx:id="comboBox"
 	             layoutX="615"
 	             layoutY="35"
-	             prefWidth="170">
+	             prefWidth="170"
+	             focusTraversable="false">
 		<items>
 			<FXCollections fx:factory="observableArrayList">
 				<String fx:value="Makespan"/>
@@ -39,14 +40,17 @@
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="130"
+	             focusTraversable="false"
 	             text="Nebenbedingung 1"/>
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="160"
+	             focusTraversable="false"
 	             text="Nebenbedingung 2"/>
 	
 	<JFXCheckBox layoutX="620"
 	             layoutY="190"
+	             focusTraversable="false"
 	             text="Nebenbedingung 3"/>
 	
 	<JFXButton layoutX="610"
@@ -55,6 +59,7 @@
 	           prefWidth="85"
 	           styleClass="runBtn"
 	           mnemonicParsing="false"
+	           focusTraversable="false"
 	           onAction="#onGenerateButtonClicked"
 	           text="Generate"/>
 	
@@ -64,6 +69,7 @@
 	           prefWidth="85"
 	           styleClass="runBtn"
 	           mnemonicParsing="false"
+	           focusTraversable="false"
 	           onAction="#onLoadButtonClicked"
 	           text="Load"/>
 	
@@ -73,6 +79,7 @@
 	           prefWidth="85"
 	           styleClass="runBtn"
 	           mnemonicParsing="false"
+	           focusTraversable="false"
 	           onAction="#onSaveButtonClicked"
 	           text="Save"/>
 	
@@ -89,6 +96,7 @@
 	           prefWidth="85"
 	           styleClass="runBtn"
 	           mnemonicParsing="false"
+	           focusTraversable="false"
 	           onAction="#onRunButtonClicked"
 	           text="Run"/>
 	

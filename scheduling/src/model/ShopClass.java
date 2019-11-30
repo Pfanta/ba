@@ -5,7 +5,8 @@ public enum ShopClass {
 	FFS,
 	JS,
 	FJS,
-	OS;
+	OS,
+	NONE;
 	
 	@Override
 	public String toString() {

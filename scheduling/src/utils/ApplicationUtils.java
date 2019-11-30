@@ -35,7 +35,7 @@ public class ApplicationUtils {
 		alert.showAndWait();
 	}
 	
-	public static Job parse(String input) {
+	public static Job parse(String input) throws IllegalArgumentException {
 		return null;
 	}
 }

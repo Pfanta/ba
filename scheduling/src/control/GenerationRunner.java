@@ -11,21 +11,54 @@ import java.util.List;
 public class GenerationRunner {
 	
 	private MainWindowAUI mainWindowAUI;
+	private Worker worker;
 	
 	public GenerationRunner(MainWindowAUI mainWindowAUI) {
 		this.mainWindowAUI = mainWindowAUI;
 	}
 	
 	public void run(Task task) {
-		new Thread(() -> {
+		worker = new Worker(task);
+		worker.start();
+	}
+	
+	public void cancel() {
+		worker.cancel();
+	}
+	
+	class Worker extends Thread {
+		private Task task;
+		private volatile boolean running;
+		
+		Worker(Task task) {
+			this.task = task;
+		}
+		
+		@Override
+		public void run() {
+			this.running = true;
+			
 			ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
-			mainWindowAUI.onClassificationFinished(classification);
 			
-			List<String> results = Scheduler.run(classification);
-			mainWindowAUI.onGenerationFinished(results.size());
+			if(running) {
+				mainWindowAUI.onClassificationFinished(classification);
+				List<String> results = Scheduler.run(classification);
+				
+				if(running) {
+					mainWindowAUI.onGenerationFinished(results.size());
+					int result = RunnerUtils.runResults(results);
+					
+					if(running) {
+						mainWindowAUI.onRunnerResult(result);
+					}
+				}
+			}
 			
-			int result = RunnerUtils.runResults(results);
-			mainWindowAUI.onRunnerFinished(result);
-		}).start();
+			mainWindowAUI.onFinished();
+		}
+		
+		void cancel() {
+			running = false;
+		}
 	}
 }

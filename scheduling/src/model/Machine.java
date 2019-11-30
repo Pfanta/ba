@@ -17,11 +17,11 @@ public class Machine {
 		return name;
 	}
 	
-	/*@Override
+	@Override
 	public boolean equals(Object other) {
-		if(other instanceof Machine)  {
-			return ((Machine)other).name.equals(this.name);
+		if(other instanceof Machine) {
+			return ((Machine) other).name.equals(this.name);
 		}
 		return false;
-	}*/
+	}
 }

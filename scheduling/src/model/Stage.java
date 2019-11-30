@@ -1,9 +1,12 @@
 package model;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class Stage {
+	@Getter
 	private Collection<MachineTuple> machinesWithTimes = new ArrayList<>();
 	
 	@Override

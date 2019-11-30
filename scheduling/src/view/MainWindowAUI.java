@@ -16,5 +16,10 @@ public interface MainWindowAUI {
 	/**
 	 @param result result value for target Function e.g. finish time for function C_max
 	 */
-	void onRunnerFinished(int result);
+	void onRunnerResult(int result);
+	
+	/**
+	 Resets
+	 */
+	void onFinished();
 }

@@ -3,6 +3,7 @@ package view;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import control.GenerationRunner;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,20 +25,24 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Optional;
 
 public class MainWindowViewController implements MainWindowAUI {
-	
-	/* control */
-	GenerationRunner generationRunner;
 	@FXML
 	private Pane jobsPane;
 	@FXML
 	private JFXComboBox<String> comboBox;
 	@FXML
 	private JFXButton runBtn;
+	
 	private javafx.stage.Stage stage;
+	private ProgressDialog progressDialog;
+	
 	/* model */
 	private Task currentTask;
+	
+	/* control */
+	private GenerationRunner generationRunner;
 	
 	void setup(javafx.stage.Stage stage) {
 		this.stage = stage;
@@ -72,18 +77,9 @@ public class MainWindowViewController implements MainWindowAUI {
 		}));
 	}
 	
-	private void refreshClassification() {
-		ClassificationUtils.Classification classification = ClassificationUtils.classify(currentTask);
-	}
-	
 	private void load(File file) throws IOException {
 		currentTask = Task.empty();
-		
-		try {
-			Files.lines(file.toPath()).forEach(s -> currentTask.add(ApplicationUtils.parse(s)));
-		} catch(IllegalArgumentException ex) {
-			ApplicationUtils.showException("Error", "Error while parsing File", ex);
-		}
+		Files.lines(file.toPath()).forEach(s -> currentTask.add(ApplicationUtils.parse(s)));
 	}
 	
 	private void save(File file) throws IOException {
@@ -114,6 +110,8 @@ public class MainWindowViewController implements MainWindowAUI {
 				load(file);
 			} catch(IOException ex) {
 				ApplicationUtils.showException("Error", "Error occured while loading", ex);
+			} catch(IllegalArgumentException ex) {
+				ApplicationUtils.showException("Error", "Error while parsing File", ex);
 			}
 		}
 	}
@@ -134,24 +132,42 @@ public class MainWindowViewController implements MainWindowAUI {
 	public void onRunButtonClicked(ActionEvent event) {
 		runBtn.setOpacity(.5);
 		generationRunner.run(currentTask);
-	}
-	
-	
-	@Override
-	public void onClassificationFinished(ClassificationUtils.Classification result) {
-		System.out.println("classification");
-	}
-	
-	@Override
-	public void onGenerationFinished(int results) {
-		System.out.println("generation");
-	}
-	
-	@Override
-	public void onRunnerFinished(int result) {
-		runBtn.setOpacity(1);
 		
+		progressDialog = new ProgressDialog(comboBox.getSelectionModel().getSelectedItem()); // TODO: Use value for generation
+		Optional<Boolean> result = progressDialog.showAndWait();
+		result.ifPresent(b -> {
+			if(!b) {
+				generationRunner.cancel();
+			}
+		});
+	}
+	//endregion
+	
+	//region AUI refreshes
+	@Override
+	public void onClassificationFinished(ClassificationUtils.Classification classification) {
+		System.out.println("classification");
+		
+		Platform.runLater(() -> progressDialog.setClassificationResult(classification));
+	}
+	
+	@Override
+	public void onGenerationFinished(int result) {
+		System.out.println("generation");
+		
+		Platform.runLater(() -> progressDialog.setGenerationResult(result));
+	}
+	
+	@Override
+	public void onRunnerResult(int result) {
 		System.out.println("runner");
+		
+		Platform.runLater(() -> progressDialog.setRunResult(result));
+	}
+	
+	@Override
+	public void onFinished() {
+		runBtn.setOpacity(1);
 	}
 	//endregion
 }
