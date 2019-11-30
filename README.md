@@ -37,7 +37,7 @@ join the [chat](https://gitter.im/combinators/cls-scala) or just open a pull req
 
 Join [combinators/cls-scala](https://gitter.im/combinators/cls-scala) on Gitter.
 
-### Main Authors
+### view.Main Authors
 
 - Jan Bessai
 - Boris Düdder

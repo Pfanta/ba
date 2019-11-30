@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import java.lang.String?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="view.MainWindowViewController">
+	
+	<!-- Job Page -->
+	<ScrollPane prefHeight="475" prefWidth="600">
+		<Pane fx:id="jobsPane"/>
+	</ScrollPane>
+	
+	<Separator layoutX="600" layoutY="5" orientation="VERTICAL" prefHeight="465"/>
+	
+	<!-- Settings Page -->
+	<Label layoutX="610" layoutY="10" prefHeight="10" text="Zielfunktion"/>
+	
+	<JFXComboBox fx:id="comboBox"
+	             layoutX="615"
+	             layoutY="35"
+	             prefWidth="170">
+		<items>
+			<FXCollections fx:factory="observableArrayList">
+				<String fx:value="Makespan"/>
+				<String fx:value="Weighted tardiness"/>
+			</FXCollections>
+		</items>
+	</JFXComboBox>
+	
+	
+	<Label layoutX="610"
+	       layoutY="100"
+	       prefHeight="10"
+	       text="Nebenbedingungen"/>
+	
+	<JFXCheckBox layoutX="620"
+	             layoutY="130"
+	             text="Nebenbedingung 1"/>
+	
+	<JFXCheckBox layoutX="620"
+	             layoutY="160"
+	             text="Nebenbedingung 2"/>
+	
+	<JFXCheckBox layoutX="620"
+	             layoutY="190"
+	             text="Nebenbedingung 3"/>
+	
+	<JFXButton layoutX="610"
+	           layoutY="370"
+	           prefHeight="25"
+	           prefWidth="85"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           onAction="#onGenerateButtonClicked"
+	           text="Generate"/>
+	
+	<JFXButton layoutX="610"
+	           layoutY="405"
+	           prefHeight="25"
+	           prefWidth="85"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           onAction="#onLoadButtonClicked"
+	           text="Load"/>
+	
+	<JFXButton layoutX="610"
+	           layoutY="440"
+	           prefHeight="25"
+	           prefWidth="85"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           onAction="#onSaveButtonClicked"
+	           text="Save"/>
+	
+	<JFXProgressBar layoutX="705"
+	                layoutY="370"
+	                prefHeight="95"
+	                prefWidth="85"
+	/>
+	
+	<JFXButton fx:id="runBtn"
+	           layoutX="705"
+	           layoutY="370"
+	           prefHeight="95"
+	           prefWidth="85"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           onAction="#onRunButtonClicked"
+	           text="Run"/>
+	
+	<!-- Bottom Bar -->
+	<Separator layoutY="475" prefWidth="800"/>
+</AnchorPane>

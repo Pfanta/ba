@@ -25,22 +25,31 @@ lazy val commonSettings = Seq(
 ) ++ publishSettings
 
 lazy val examples = (Project(id = "examples", base = file("examples")))
-    .settings(commonSettings: _*)
-    .settings(noPublishSettings: _*)
-    .settings(
-      moduleName := "examples"
-    ).dependsOn(root)
+  .settings(commonSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(
+    moduleName := "examples"
+  ).dependsOn(root)
+
+lazy val scheduling = (Project(id = "scheduling", base = file("scheduling")))
+  .settings(commonSettings: _*)
+  .settings(noPublishSettings: _*)
+  .settings(
+    moduleName := "scheduling"
+  ).dependsOn(root)
 
 lazy val root = (Project(id = "cls-scala", base = file(".")))
-    .settings(commonSettings: _*)
-    .settings(
-      moduleName := "cls-scala",
-      libraryDependencies ++= Seq(
-        "org.combinators" %% "shapeless-feat" % "0.2.2",
-        "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-        "org.scalactic" %% "scalactic" % "3.0.5" % "test",
-        "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-      )
+  .settings(commonSettings: _*)
+  .settings(
+    moduleName := "cls-scala",
+    libraryDependencies ++= Seq(
+      "org.combinators" %% "shapeless-feat" % "0.2.2",
+      "org.scala-lang" % "scala-compiler" % scalaVersion.value,
+      "org.scalactic" %% "scalactic" % "3.0.5" % "test",
+      "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+      "com.jfoenix" % "jfoenix" % "1.3.0",
+      "org.projectlombok" % "lombok" % "1.16.16",
+    )
     )
 
 
