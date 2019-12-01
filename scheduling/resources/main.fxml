@@ -7,7 +7,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import java.lang.String?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/10.0.2-internal" fx:controller="view.MainWindowViewController">
+            xmlns="http://javafx.com/javafx/10.0.2-internal"
+            fx:controller="org.combinators.cls.scheduling.view.MainWindowViewController">
 	
 	<!-- Job Page -->
 	<ScrollPane prefHeight="475" prefWidth="600">
