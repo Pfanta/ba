@@ -12,29 +12,29 @@ import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.view.customcontrol.DialogLabel;
 
 public class ProgressDialog extends Dialog<Boolean> {
-	
+
+	private final JFXProgressBar progressBar;
+	private final Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
 	private boolean finished;
-	private JFXProgressBar progressBar;
-	private Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
-	
+
 	public ProgressDialog(String function) {
 		super();
 		this.setTitle("Running...");
 		this.setHeaderText("");
-		
+
 		Pane pane = new Pane();
 		pane.setPadding(new Insets(20, 10, 10, 10));
-		
+
 		labelNumMachines = new DialogLabel(150, 0, Pos.CENTER_RIGHT);
 		labelNumJobs = new DialogLabel(150, 30, Pos.CENTER_RIGHT);
 		labelClassification = new DialogLabel(150, 60, Pos.CENTER_RIGHT);
 		labelNumResults = new DialogLabel(150, 90, Pos.CENTER_RIGHT);
 		labelResult = new DialogLabel(150, 120, Pos.CENTER_RIGHT);
-		
+
 		progressBar = new JFXProgressBar(0);
 		progressBar.setPrefWidth(300);
 		progressBar.setLayoutY(160);
-		
+
 		labelProgress = new DialogLabel("1/3 Classification...", 0, 160, Pos.CENTER);
 		labelProgress.setPrefWidth(300);
 		

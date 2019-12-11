@@ -52,15 +52,16 @@ public class MainWindowViewController implements MainWindowAUI {
 	}
 	
 	private void refreshJobsPane() {
+		//FIXME: Restrict Task to max size
 		ObservableList<Node> nodes = jobsPane.getChildren();
 		nodes.clear();
-		
-		for(int i = 0; i < currentTask.getJobs().size(); i++) {
+
+		for (int i = 0; i < currentTask.getJobs().size(); i++) {
 			nodes.add(new CustomLabel("Job " + i, 10, 10 + i * 40, 50, 30));
-			
+
 			int y = 0;
 			final Job currentJob = currentTask.getJobs().get(i);
-			for(Stage stage : currentJob.getStages()) {
+			for (Stage stage : currentJob.getStages()) {
 				nodes.add(new CustomJFXTextField(stage.toString(), 60 + y * 110, 10 + i * 40, 100, 30));//TODO: Display Stages
 				y++;
 			}

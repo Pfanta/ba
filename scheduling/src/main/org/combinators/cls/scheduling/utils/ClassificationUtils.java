@@ -106,9 +106,7 @@ public class ClassificationUtils {
 		 @return true for shopClasses JS and FJS
 		 */
 		public boolean isStrictlyJobShop() {
-			System.out.println(shopClass);
-			return true;
-			//return this.shopClass.equals(ShopClass.JS) || this.shopClass.equals(ShopClass.FJS);
+			return this.shopClass.equals(ShopClass.JS) || this.shopClass.equals(ShopClass.FJS);
 		}
 
 		@Override

@@ -67,12 +67,11 @@ public class GenerationUtils {
 		switch(result.getShopClass()) {
 			case FS:
 				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
-			case FFS:
-				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());//TODO: Generate flexibleFlowShops
 			case JS:
 				return generateRandomJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
-			case FJS:
-				return generateRandomJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines()); //TODO: Generate flexibleJobShops
+
+			case FFS: //TODO: Generate flexibleFlowShops
+			case FJS: //TODO: Generate flexibleJobShops
 			default:
 				return Task.empty();
 		}
