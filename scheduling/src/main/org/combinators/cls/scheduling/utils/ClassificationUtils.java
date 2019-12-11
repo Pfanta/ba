@@ -94,7 +94,23 @@ public class ClassificationUtils {
 			this.jobCount = jobCount;
 			this.shopClass = shopClass;
 		}
-		
+
+		/**
+		 @return true for shopClasses FS and FFS
+		 */
+		public boolean isStrictlyFlowShop() {
+			return this.shopClass.equals(ShopClass.FS) || this.shopClass.equals(ShopClass.FFS);
+		}
+
+		/**
+		 @return true for shopClasses JS and FJS
+		 */
+		public boolean isStrictlyJobShop() {
+			System.out.println(shopClass);
+			return true;
+			//return this.shopClass.equals(ShopClass.JS) || this.shopClass.equals(ShopClass.FJS);
+		}
+
 		@Override
 		public String toString() {
 			return "Classification{" +

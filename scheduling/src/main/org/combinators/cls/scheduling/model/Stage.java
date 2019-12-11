@@ -8,7 +8,19 @@ import java.util.Collection;
 public class Stage {
 	@Getter
 	private Collection<MachineTuple> machinesWithTimes = new ArrayList<>();
-	
+
+	public Stage(Collection<MachineTuple> machinesWithTimes) {
+		this.machinesWithTimes.addAll(machinesWithTimes);
+	}
+
+	public Stage(MachineTuple machineTuple) {
+		this.machinesWithTimes.add(machineTuple);
+	}
+
+	public Stage() {
+
+	}
+
 	public void addMachine(Machine machine, int time) {
 		machinesWithTimes.add(new MachineTuple(machine, time));
 	}

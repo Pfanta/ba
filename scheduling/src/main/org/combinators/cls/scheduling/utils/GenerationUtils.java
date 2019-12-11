@@ -70,7 +70,54 @@ public class GenerationUtils {
 	 @return Task
 	 */
 	private static Task generateRandomTask(int i, int j, boolean deadlines, ShopClass shopClass) {
-		return Task.empty(); //TODO
+		switch(result.getShopClass()) {
+			case FS:
+				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+			case FFS:
+				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());//TODO: Generate flexibleFlowShops
+			case JS:
+				return generateRandomJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+			case FJS:
+				return generateRandomJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines()); //TODO: Generate flexibleJobShops
+			default:
+				return Task.empty();
+		}
+	}
+
+	private static Task generateRandomFlowShop(int numMachines, int numJobs, boolean deadlines) {
+		LinkedList<Machine> machines = new LinkedList<>();
+		Task task = Task.empty();
+
+		for(int i = 0; i < numMachines; i++) {
+			machines.add(new Machine("M" + i));
+		}
+
+		for(int i = 0; i < numJobs; i++) {
+			Job job = Job.empty();
+			for(int j = 0; j < numMachines; j++) {
+				job.addStage(new Stage(new MachineTuple(machines.get(j), random.nextInt(MAX_MACHINE_TIME - MIN_MACHINE_TIME) + MIN_MACHINE_TIME)));
+			}
+			task.add(job);
+		}
+
+		return task;
+	}
+
+	/**
+	 Generates a random JobShop
+	 @param i number of machines
+	 @param j number of jobs
+	 @param deadlines whether deadlines should be generated
+	 @return Task
+	 */
+	private static Task generateRandomJobShop(int i, int j, boolean deadlines) {
+		Task task = generateRandomFlowShop(i, j, deadlines);
+
+		do {
+			task.getJobs().forEach(job -> Collections.shuffle(job.getStages()));
+		} while(!ClassificationUtil.classify(task).isStrictlyJobShop());
+
+		return task;
 	}
 	
 	public static class GenerationDialogResult {

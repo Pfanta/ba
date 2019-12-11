@@ -95,6 +95,7 @@ public class MainWindowViewController implements MainWindowAUI {
 		if(file != null) {
 			try {
 				currentTask = LoadSaveUtil.load(file);
+				refreshJobsPane();
 			} catch(IOException ex) {
 				ApplicationUtils.showException("Error", "Error occurred while loading", ex);
 			} catch(IllegalArgumentException ex) {
