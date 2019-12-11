@@ -24,13 +24,6 @@ lazy val commonSettings = Seq(
   )
 ) ++ publishSettings
 
-lazy val examples = (Project(id = "examples", base = file("examples")))
-  .settings(commonSettings: _*)
-  .settings(noPublishSettings: _*)
-  .settings(
-    moduleName := "examples"
-  ).dependsOn(root)
-
 lazy val scheduling = (Project(id = "scheduling", base = file("scheduling")))
   .settings(commonSettings: _*)
   .settings(noPublishSettings: _*)

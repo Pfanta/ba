@@ -4,11 +4,11 @@ import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.LoadSaveUtil;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 class ClassificationTest {
 	

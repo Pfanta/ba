@@ -9,12 +9,12 @@ public class MachineTuple {
 	@Getter
 	@Setter
 	private Integer time;
-	
-	MachineTuple(Machine machine, int time) {
+
+	public MachineTuple(Machine machine, int time) {
 		this.machine = machine;
 		this.time = time;
 	}
-	
+
 	@Override
 	public String toString() {
 		return machine + "(" + time + ")";

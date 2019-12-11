@@ -9,23 +9,28 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import lombok.Getter;
-import org.combinators.cls.scheduling.model.ShopClass;
-import org.combinators.cls.scheduling.model.Task;
+import org.combinators.cls.scheduling.model.*;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Random;
 
 public class GenerationUtils {
-	
+
 	private static final int DEFAULT_MACHINES_COUNT = 4;
 	private static final int DEFAULT_JOBS_COUNT = 4;
-	
+	private static final int MIN_MACHINE_TIME = 1;
+	private static final int MAX_MACHINE_TIME = 15;
+	private static final Random random = new Random();
+
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
 		Dialog<GenerationDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Generation Dialog");
 		dialog.setHeaderText("Generate random scheduling problem");
 		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		
+
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -59,17 +64,6 @@ public class GenerationUtils {
 	 @return Task
 	 */
 	public static Task generateRandomTask(GenerationDialogResult result) {
-		return generateRandomTask(result.getMachineCount(), result.getJobCount(), result.isDeadlines(), result.getShopClass());
-	}
-	
-	/**
-	 @param i number of machines
-	 @param j number of jobs
-	 @param deadlines whether deadlines should be generated
-	 @param shopClass Class of the shop to be generated
-	 @return Task
-	 */
-	private static Task generateRandomTask(int i, int j, boolean deadlines, ShopClass shopClass) {
 		switch(result.getShopClass()) {
 			case FS:
 				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
@@ -115,7 +109,7 @@ public class GenerationUtils {
 
 		do {
 			task.getJobs().forEach(job -> Collections.shuffle(job.getStages()));
-		} while(!ClassificationUtil.classify(task).isStrictlyJobShop());
+		} while (!ClassificationUtils.classify(task).isStrictlyJobShop());
 
 		return task;
 	}
