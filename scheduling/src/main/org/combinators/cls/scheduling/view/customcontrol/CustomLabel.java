@@ -10,4 +10,10 @@ public class CustomLabel extends Label {
 		setLayoutY(layoutY);
 		setPrefSize(prefWidth, prefHeight);
 	}
+	
+	public CustomLabel(String text, int layoutX, int layoutY) {
+		super(text);
+		setLayoutX(layoutX);
+		setLayoutY(layoutY);
+	}
 }

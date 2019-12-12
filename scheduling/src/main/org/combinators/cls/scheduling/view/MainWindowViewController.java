@@ -11,6 +11,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
 import org.combinators.cls.scheduling.model.Job;
+import org.combinators.cls.scheduling.model.JobMachineTuple;
 import org.combinators.cls.scheduling.model.Stage;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ApplicationUtils;
@@ -26,6 +27,9 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class MainWindowViewController implements MainWindowAUI {
+	private static final int MAX_JOBS_SHOWN = 20;
+	private static final int MAX_MACHINES_SHOWN = 15;
+	
 	@FXML
 	private Pane jobsPane;
 	@FXML
@@ -52,16 +56,22 @@ public class MainWindowViewController implements MainWindowAUI {
 	}
 	
 	private void refreshJobsPane() {
-		//FIXME: Restrict Task to max size
 		ObservableList<Node> nodes = jobsPane.getChildren();
 		nodes.clear();
-
-		for (int i = 0; i < currentTask.getJobs().size(); i++) {
+		
+		//Catch too large tasks
+		JobMachineTuple tuple = ClassificationUtils.getTaskDimensions(currentTask);
+		if(tuple.getJobCount() > MAX_JOBS_SHOWN || tuple.getMachineCount() > MAX_MACHINES_SHOWN) {
+			nodes.add(new CustomLabel("Dimensions of Task too large to visualize.", 50, 50));
+			return;
+		}
+		
+		for(int i = 0; i < currentTask.getJobs().size(); i++) {
 			nodes.add(new CustomLabel("Job " + i, 10, 10 + i * 40, 50, 30));
-
+			
 			int y = 0;
 			final Job currentJob = currentTask.getJobs().get(i);
-			for (Stage stage : currentJob.getStages()) {
+			for(Stage stage : currentJob.getStages()) {
 				nodes.add(new CustomJFXTextField(stage.toString(), 60 + y * 110, 10 + i * 40, 100, 30));//TODO: Display Stages
 				y++;
 			}

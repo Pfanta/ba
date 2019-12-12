@@ -11,25 +11,18 @@ public class ClassificationUtils {
 	
 	/**
 	 Classifies given Task
-	 @param currentTask Task to be classified
+	 @param task Task to be classified
 	 @return Classification for Task including machine- and job-count
 	 */
-	public static Classification classify(Task currentTask) {
-		List<List<Machine>> machines = currentTask.getJobs().stream()
-				                               .map(job -> job.getStages().stream()
-						                                           .map(stage -> stage.getMachinesWithTimes().stream()
-								                                                         .map(MachineTuple::getMachine)
-								                                                         .collect(Collectors.toList()))
-						                                           .collect(Collectors.toList()).stream()
-						                                           .flatMap(List::stream)
-						                                           .collect(Collectors.toList())).collect(Collectors.toList());
+	public static Classification classify(Task task) {
+		List<List<Machine>> machines = mapTaskToMachines(task);
 		
+		int jobCount = machines.size();
 		int machineCount = (int) machines.stream().flatMap(Collection::stream).distinct().count();
-		int jobCount = currentTask.getJobs().size();
 		
-		if(!checkFlexibility(currentTask))
+		if(!checkFlexibility(task))
 			if(checkIsOpenShop(machines))
-				if(checkIsJobShop(currentTask))
+				if(checkIsJobShop(task))
 					if(checkIsFlowShop(machines))
 						return new Classification(machineCount, jobCount, ShopClass.FS);
 					else
@@ -41,6 +34,22 @@ public class ClassificationUtils {
 		else
 			return new Classification(machineCount, jobCount, ShopClass.FFS); //TODO: Flexible
 		
+	}
+	
+	public static JobMachineTuple getTaskDimensions(Task task) {
+		List<List<Machine>> machines = mapTaskToMachines(task);
+		return new JobMachineTuple(machines.size(), (int) machines.stream().flatMap(Collection::stream).distinct().count());
+	}
+	
+	private static List<List<Machine>> mapTaskToMachines(Task task) {
+		return task.getJobs().stream()
+				       .map(job -> job.getStages().stream()
+						                   .map(stage -> stage.getMachinesWithTimes().stream()
+								                                 .map(MachineTuple::getMachine)
+								                                 .collect(Collectors.toList()))
+						                   .collect(Collectors.toList()).stream()
+						                   .flatMap(List::stream)
+						                   .collect(Collectors.toList())).collect(Collectors.toList());
 	}
 	
 	/**
