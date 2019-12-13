@@ -4,9 +4,9 @@ import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GenerationTest {
     @Test
@@ -88,29 +88,29 @@ public class GenerationTest {
         assertEquals(ShopClass.FJS, classification.getShopClass());
         assertTrue(classification.isDeadlines());
     }
-
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testGenerationZeroJobs() {
-        GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 0, true, ShopClass.FS));
+        assertThrows(IllegalArgumentException.class, () -> GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 0, true, ShopClass.FS)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testGenerationZeroMachines() {
-        GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(0, 5, true, ShopClass.FS));
+        assertThrows(IllegalArgumentException.class, () -> GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(0, 5, true, ShopClass.FS)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testGenerationNegativeJobs() {
-        GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, -1, true, ShopClass.FS));
+        assertThrows(IllegalArgumentException.class, () -> GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, -1, true, ShopClass.FS)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testGenerationNegativeMachines() {
-        GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(-1, 5, true, ShopClass.FS));
+        assertThrows(IllegalArgumentException.class, () -> GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(-1, 5, true, ShopClass.FS)));
     }
-
-    @Test(expected = IllegalArgumentException.class)
+    
+    @Test
     public void testGenerationNoShopClass() {
-        GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 5, true, ShopClass.NONE));
+        assertThrows(IllegalArgumentException.class, () -> GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 5, true, ShopClass.NONE)));
     }
 }

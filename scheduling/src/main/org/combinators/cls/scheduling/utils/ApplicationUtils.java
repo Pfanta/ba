@@ -40,16 +40,23 @@ public class ApplicationUtils {
 		alert.showAndWait();
 	}
 	
+	public static void showWarning(String title, String content) {
+		Alert alert = new Alert(Alert.AlertType.WARNING);
+		alert.setTitle(title);
+		alert.setHeaderText(content);
+		alert.showAndWait();
+	}
+	
 	/*J1|D-1|M1,5|M2,3|M3,3|M4,2|*/
 	public static Job parse(String input) throws IllegalArgumentException {
 		String[] split = input.split("\\|");
-		if (split.length < 3)
+		if(split.length < 3)
 			throw new IllegalArgumentException("Not a valid String: " + input);
-
+		
 		Job job = new Job(split[0], Integer.parseInt(split[1]));
-
+		
 		Set<Machine> allMachines = new HashSet<>();
-		for (int i = 2; i < split.length; i++) {
+		for(int i = 2; i < split.length; i++) {
 			Stage stage = new Stage();
 			String s = split[i];
 			String[] machinesSplit = s.split(";");

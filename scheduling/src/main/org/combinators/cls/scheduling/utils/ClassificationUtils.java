@@ -3,7 +3,9 @@ package org.combinators.cls.scheduling.utils;
 import lombok.Getter;
 import org.combinators.cls.scheduling.model.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,9 @@ public class ClassificationUtils {
 	 @return Classification for Task including machine- and job-count
 	 */
 	public static Classification classify(Task task) {
+		if(!validate(task))
+			return new Classification(-1, -1, false, ShopClass.NONE); //Invalid Task
+		
 		List<List<Machine>> machines = mapTaskToMachines(task);
 		
 		int jobCount = machines.size();
@@ -59,7 +64,7 @@ public class ClassificationUtils {
 	 @precondition Task is Non-Flexible
 	 */
 	private static boolean checkIsOpenShop(List<List<Machine>> machines) {
-		return true; //TODO
+		return true; //TODO checkIsOpenShop
 	}
 	
 	/**
@@ -89,7 +94,46 @@ public class ClassificationUtils {
 	private static boolean checkFlexibility(Task currentTask) {
 		return currentTask.getJobs().stream().map(Job::getStages).flatMap(List::stream).anyMatch(stage -> stage.getMachinesWithTimes().size() > 1);
 	}
-
+	
+	/**
+	 Validates Task, such that there is min. one Job containing min. one Stage with min. one Machine each
+	 @param task Task to be validated
+	 @return true for valid Task, false otherwise
+	 */
+	public static boolean validate(Task task) {
+		if(task == null)
+			return false;
+		
+		ArrayList<Job> jobs = task.getJobs();
+		if(jobs == null || jobs.size() == 0)
+			return false;
+		
+		for(Job job : jobs) {
+			if(job == null)
+				return false;
+			
+			LinkedList<Stage> stages = job.getStages();
+			if(stages == null || stages.size() == 0)
+				return false;
+			
+			for(Stage stage : stages) {
+				if(stage == null)
+					return false;
+				
+				Collection<MachineTuple> machinesWithTimes = stage.getMachinesWithTimes();
+				if(machinesWithTimes == null || machinesWithTimes.size() == 0)
+					return false;
+				
+				for(MachineTuple machineTuple : machinesWithTimes) {
+					if(machineTuple == null || machineTuple.getMachine() == null || machineTuple.getTime() == null)
+						return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	public static class Classification {
 		@Getter
 		private final int machineCount;
@@ -106,7 +150,7 @@ public class ClassificationUtils {
 			this.deadlines = deadlines;
 			this.shopClass = shopClass;
 		}
-
+		
 		/**
 		 * @return true for shopClasses FS and FFS
 		 */

@@ -3,7 +3,6 @@ import sbt.Resolver
 
 lazy val commonSettings = Seq(
   organization := "org.combinators",
-
   scalaVersion := "2.12.6",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
 
@@ -29,6 +28,7 @@ lazy val scheduling = (Project(id = "scheduling", base = file("scheduling")))
   .settings(noPublishSettings: _*)
   .settings(
     moduleName := "scheduling"
+
   ).dependsOn(root)
 
 lazy val root = (Project(id = "cls-scala", base = file(".")))
@@ -41,7 +41,7 @@ lazy val root = (Project(id = "cls-scala", base = file(".")))
       "org.scalactic" %% "scalactic" % "3.0.5" % "test",
       "org.scalatest" %% "scalatest" % "3.0.5" % "test",
       "com.jfoenix" % "jfoenix" % "1.3.0",
-      "org.projectlombok" % "lombok" % "1.16.16",
+      "org.projectlombok" % "lombok" % "1.16.16"
     )
     )
 

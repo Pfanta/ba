@@ -5,13 +5,18 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-public class Machine implements Comparable<Machine> {
+public class Machine implements Comparable<Machine>, Writable {
 	@Getter
 	@Setter
 	private String name;
 	
 	public Machine(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public String getString() {
+		return name;
 	}
 	
 	@Override

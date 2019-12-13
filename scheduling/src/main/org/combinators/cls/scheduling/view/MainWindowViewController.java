@@ -116,12 +116,17 @@ public class MainWindowViewController implements MainWindowAUI {
 	}
 	
 	public void onSaveButtonClicked(ActionEvent event) {
+		if(!ClassificationUtils.validate(currentTask)) {
+			ApplicationUtils.showWarning("Invalid Task", "Current Task is not valid.");
+			return;
+		}
+		
 		FileChooser fileDialog = new FileChooser();
 		fileDialog.setTitle("Save Task File");
 		File file = fileDialog.showSaveDialog(stage);
 		if(file != null) {
 			try {
-				LoadSaveUtil.save(file);
+				LoadSaveUtil.save(file, currentTask);
 			} catch(IOException ex) {
 				ApplicationUtils.showException("Error", "Error occurred while saving", ex);
 			}

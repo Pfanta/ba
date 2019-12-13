@@ -12,15 +12,15 @@ public enum ShopClass {
 	public String toString() {
 		switch(this) {
 			case FS:
-				return "Flow Shop";
+				return "FlowShop";
 			case FFS:
-				return "Flexible Flow Shop";
+				return "FlexibleFlowShop";
 			case JS:
-				return "Job Shop";
+				return "JobShop";
 			case FJS:
-				return "Flexible Job Shop";
+				return "FlexibleJobShop";
 			case OS:
-				return "Open Shop";
+				return "OpenShop";
 			case NONE:
 				return "NONE";
 			default:

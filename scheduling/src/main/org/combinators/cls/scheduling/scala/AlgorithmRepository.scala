@@ -6,20 +6,24 @@ import org.combinators.cls.types.{Kinding, Type, Variable}
 
 class AlgorithmRepository {
 
-  lazy val algorithm: Variable = Variable("algorithm")
+  lazy val shopClass: Variable = Variable("algorithm")
 
-  lazy val kinding: Kinding = Kinding(algorithm).addOption('true).addOption('false)
+  lazy val kinding: Kinding = Kinding(shopClass)
+    .addOption('FS)
+    .addOption('FFS)
+    .addOption('JS)
+    .addOption('FJS)
+    .addOption('OS)
+    .addOption('NONE)
 
   @combinator object Scheduler {
-    val semanticType: Type = 'Task =>: 'Algorithm(algorithm) =>: 'Scheduler(algorithm)
+    val semanticType: Type = 'Algorithm(shopClass) =>: 'Scheduler(shopClass)
 
-    def apply(Task: String, Algorithm: String): String =
+    def apply(Algorithm: String): String =
       s"""|import java.util.*;
 			    |import java.util.stream.IntStream;
 			    |
 			    |public class Scheduler {
-			    |  $Task
-			    |
 			    | private static TaskList[] schedule = new TaskList[_machines];
 			    |
 			    |	public static void main(String[] args) {
@@ -82,30 +86,8 @@ class AlgorithmRepository {
 			    |}""".stripMargin
   }
 
-  @combinator object Task1 {
-    val semanticType: Type = 'Task
-
-    def apply(): String =
-      s"""|  private static int _jobs = 4;
-			    |	private static int _machines = 4;
-			    |
-			    |	private static int[][] _time = new int[][]{
-			    |			{5,3,3,2},
-			    |			{7,4,8,6},
-			    |			{1,6,5,3},
-			    |			{2,1,4,7}
-			    |	};
-			    |
-			    |	private static int[][] _order = new int[][]{
-			    |			{0,1,2,3},
-			    |			{1,0,2,3},
-			    |			{3,2,1,0},
-			    |			{2,3,1,0}
-			    |	};""".stripMargin
-  }
-
-  @combinator object Algorithm0 {
-    val semanticType: Type = 'Heuristic =>: 'Algorithm('false)
+  @combinator object GifflerThompson {
+    val semanticType: Type = 'Heuristic =>: 'Algorithm('JS)
 
     def apply(Heuristic: String): String =
       s"""|final int[] machineWorkingUntil = new int[_machines]; //Zi
@@ -158,11 +140,30 @@ class AlgorithmRepository {
 			    |		});""".stripMargin
   }
 
-  @combinator object Algorithm1 {
-    val semanticType: Type = 'Algorithm('true)
+  @combinator object AlgorithmFS {
+    val semanticType: Type = 'Algorithm('FS)
 
-    def apply: String = "System.out.println(\"Hello World\");"
+    def apply: String = "System.out.println(\"FS\");"
   }
+
+  @combinator object AlgorithmFFS {
+    val semanticType: Type = 'Algorithm('FFS)
+
+    def apply: String = "System.out.println(\"FFS\");"
+  }
+
+  @combinator object AlgorithmOS {
+    val semanticType: Type = 'Algorithm('OS)
+
+    def apply: String = "System.out.println(\"OS\");"
+  }
+
+  @combinator object Fallback {
+    val semanticType: Type = 'Algorithm('NONE)
+
+    def apply: String = "System.out.println(\"NONE\");"
+  }
+
 
   @combinator object RANDOM {
     val semanticType: Type = 'Heuristic
@@ -236,4 +237,3 @@ class AlgorithmRepository {
 			    |			int jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 }
-

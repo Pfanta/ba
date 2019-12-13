@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import java.util.LinkedList;
 
-public class Job {
+public class Job implements Writable {
 	@Getter
 	private final LinkedList<Stage> stages = new LinkedList<>();
 	@Getter
@@ -26,13 +26,21 @@ public class Job {
 		this.name = name;
 		this.deadline = -1;
 	}
-
+	
 	public Job(String name, int deadline) {
 		this.name = name;
 		this.deadline = deadline;
 	}
-
+	
 	public void addStage(Stage stage) {
 		stages.add(stage);
+	}
+	
+	@Override
+	public String getString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(name).append('|').append(deadline).append('|');
+		stages.forEach(stage -> builder.append(stage.getString()).append('|'));
+		return builder.toString();
 	}
 }
