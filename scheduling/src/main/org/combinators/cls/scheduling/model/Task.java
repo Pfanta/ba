@@ -1,13 +1,18 @@
 package org.combinators.cls.scheduling.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-public class Task implements Writable {
+public class Task implements IWritable, ICloneable<Task> {
 	
 	@Getter
-	private ArrayList<Job> jobs = new ArrayList<>();
+	private LinkedList<Job> jobs = new LinkedList<>();
+	
+	@Getter
+	@Setter
+	private int result;
 	
 	public void add(Job job) {
 		jobs.add(job);
@@ -23,5 +28,13 @@ public class Task implements Writable {
 		jobs.forEach(job -> builder.append(job.getString()).append("\n"));
 		builder.setLength(builder.length() - 1);
 		return builder.toString();
+	}
+	
+	@Override
+	public Task cloned() {
+		Task task = new Task();
+		task.result = this.result;
+		jobs.forEach(job -> task.add(job.cloned()));
+		return task;
 	}
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class Stage implements Writable {
+public class Stage implements IWritable, ICloneable<Stage> {
 	@Getter
 	private Collection<MachineTuple> machinesWithTimes = new ArrayList<>();
 	
@@ -17,12 +17,14 @@ public class Stage implements Writable {
 		this.machinesWithTimes.add(machineTuple);
 	}
 	
-	public Stage() {
-	
-	}
+	public Stage() {}
 	
 	public void addMachine(Machine machine, int time) {
 		machinesWithTimes.add(new MachineTuple(machine, time));
+	}
+	
+	private void addMachineTuple(MachineTuple machineTuple) {
+		machinesWithTimes.add(machineTuple);
 	}
 	
 	@Override
@@ -47,5 +49,12 @@ public class Stage implements Writable {
 		stringBuilder.setLength(stringBuilder.length() - 1);
 		
 		return stringBuilder.toString();
+	}
+	
+	@Override
+	public Stage cloned() {
+		Stage stage = new Stage();
+		this.machinesWithTimes.forEach(machineTuple -> stage.addMachineTuple(machineTuple.cloned()));
+		return stage;
 	}
 }

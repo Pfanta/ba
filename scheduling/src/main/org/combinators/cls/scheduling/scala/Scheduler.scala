@@ -10,6 +10,7 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object Scheduler {
+  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository {}
 
   lazy val repository: Repository = new Repository {}
   lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.kinding, classLoader = this.getClass.getClassLoader)
@@ -39,9 +40,5 @@ object Scheduler {
       }
     }
     results.toList.asJava
-  }
-
-  trait Repository extends AlgorithmRepository {
-    //TODO: Add Runner Body
   }
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-public class Machine implements Comparable<Machine>, Writable {
+public class Machine implements Comparable<Machine>, IWritable, ICloneable<Machine> {
 	@Getter
 	@Setter
 	private String name;
@@ -40,5 +40,10 @@ public class Machine implements Comparable<Machine>, Writable {
 	@Override
 	public int compareTo(Machine o) {
 		return this.name.compareTo(o.name);
+	}
+	
+	@Override
+	public Machine cloned() {
+		return new Machine(this.name);
 	}
 }

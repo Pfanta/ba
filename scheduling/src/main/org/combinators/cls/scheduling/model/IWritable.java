@@ -1,5 +1,5 @@
 package org.combinators.cls.scheduling.model;
 
-public interface Writable {
+public interface IWritable {
 	String getString();
 }

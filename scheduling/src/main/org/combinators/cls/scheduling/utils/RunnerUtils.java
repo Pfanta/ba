@@ -13,10 +13,11 @@ public class RunnerUtils {
 		
 		for(String runnerCode : runners) {
 			try {
-				Function<Task, Integer> function = Reflect.compile("org.combinators.cls.scheduling.Runner", runnerCode).create().get(); //TODO: make runners return Schedule instead of finish time
-				min = Math.min(min, function.apply(task));
+				Function<Task, Task> function = Reflect.compile("org.combinators.cls.scheduling.Runner", runnerCode).create().get();
+				Task schedule = function.apply(task.cloned());
+				min = Math.min(min, schedule.getResult());
 			} catch(ReflectException e) {
-				ApplicationUtils.showException("Reflection exception occured", "Exception while running results", e);
+				ApplicationUtils.showException("Reflection exception occurred", "Exception while running results", e);
 			}
 		}
 		
