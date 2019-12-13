@@ -44,10 +44,10 @@ public class MainWindowViewController implements MainWindowAUI {
 	
 	void setup(javafx.stage.Stage stage) {
 		this.stage = stage;
-		this.currentTask = Task.empty();
+		this.currentTask = new Task();
 		this.generationRunner = new GenerationRunner(this);
 		comboBox.getSelectionModel().select(0);
-		
+
 		refreshJobsPane();
 	}
 	
@@ -71,7 +71,7 @@ public class MainWindowViewController implements MainWindowAUI {
 			}));
 		}
 		nodes.add(new CustomJFXPlusButton(10, 10 + currentTask.getJobs().size() * 40, 30, 30, event -> {
-			currentTask.add(Job.empty());
+			currentTask.add(new Job());
 			refreshJobsPane();
 		}));
 	}

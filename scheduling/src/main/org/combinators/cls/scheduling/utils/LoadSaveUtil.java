@@ -15,11 +15,11 @@ public class LoadSaveUtil {
 	}
 	
 	public static Task load(File file) throws IOException {
-		Task task = Task.empty();
-		Files.lines(file.toPath()).forEach(s -> task.add(ApplicationUtils.parse(s)));
-		
-		return task;
-	}
+        Task task = new Task();
+        Files.lines(file.toPath()).forEach(s -> task.add(ApplicationUtils.parse(s)));
+
+        return task;
+    }
 	
 	public static void save(File file) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));

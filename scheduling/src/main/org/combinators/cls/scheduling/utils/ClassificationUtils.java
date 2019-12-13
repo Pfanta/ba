@@ -28,18 +28,18 @@ public class ClassificationUtils {
 		int jobCount = currentTask.getJobs().size();
 		
 		if(!checkFlexibility(currentTask))
-			if(checkIsOpenShop(machines))
-				if(checkIsJobShop(currentTask))
-					if(checkIsFlowShop(machines))
-						return new Classification(machineCount, jobCount, ShopClass.FS);
+			if (checkIsOpenShop(machines))
+				if (checkIsJobShop(currentTask))
+					if (checkIsFlowShop(machines))
+						return new Classification(machineCount, jobCount, currentTask.hasDeadlines(), ShopClass.FS);
 					else
-						return new Classification(machineCount, jobCount, ShopClass.JS);
+						return new Classification(machineCount, jobCount, currentTask.hasDeadlines(), ShopClass.JS);
 				else
-					return new Classification(machineCount, jobCount, ShopClass.OS);
+					return new Classification(machineCount, jobCount, currentTask.hasDeadlines(), ShopClass.OS);
 			else
-				return new Classification(machineCount, jobCount, ShopClass.NONE);
+				return new Classification(machineCount, jobCount, currentTask.hasDeadlines(), ShopClass.NONE);
 		else
-			return new Classification(machineCount, jobCount, ShopClass.FFS); //TODO: Flexible
+			return new Classification(machineCount, jobCount, currentTask.hasDeadlines(), ShopClass.FFS); //TODO: Flexible
 		
 	}
 	
@@ -80,23 +80,26 @@ public class ClassificationUtils {
 	private static boolean checkFlexibility(Task currentTask) {
 		return currentTask.getJobs().stream().map(Job::getStages).flatMap(List::stream).anyMatch(stage -> stage.getMachinesWithTimes().size() > 1);
 	}
-	
+
 	public static class Classification {
 		@Getter
-		private int machineCount;
+		private final int machineCount;
 		@Getter
-		private int jobCount;
+		private final int jobCount;
 		@Getter
-		private ShopClass shopClass;
-		
-		Classification(int machineCount, int jobCount, ShopClass shopClass) {
+		private final boolean deadlines;
+		@Getter
+		private final ShopClass shopClass;
+
+		Classification(int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
 			this.machineCount = machineCount;
 			this.jobCount = jobCount;
+			this.deadlines = deadlines;
 			this.shopClass = shopClass;
 		}
 
 		/**
-		 @return true for shopClasses FS and FFS
+		 * @return true for shopClasses FS and FFS
 		 */
 		public boolean isStrictlyFlowShop() {
 			return this.shopClass.equals(ShopClass.FS) || this.shopClass.equals(ShopClass.FFS);
