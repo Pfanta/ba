@@ -42,21 +42,18 @@ public class ApplicationUtils {
 	
 	/*J1|D-1|M1,5|M2,3|M3,3|M4,2|*/
 	public static Job parse(String input) throws IllegalArgumentException {
-		Job job = Job.empty();
-		
 		String[] split = input.split("\\|");
-		if(split.length < 3)
+		if (split.length < 3)
 			throw new IllegalArgumentException("Not a valid String: " + input);
-		
-		job.setName(split[0]);
-		job.setDeadline(Integer.parseInt(split[1]));
-		
+
+		Job job = new Job(split[0], Integer.parseInt(split[1]));
+
 		Set<Machine> allMachines = new HashSet<>();
-		for(int i = 2; i < split.length; i++) {
+		for (int i = 2; i < split.length; i++) {
 			Stage stage = new Stage();
 			String s = split[i];
 			String[] machinesSplit = s.split(";");
-			
+
 			Arrays.stream(machinesSplit).forEach(t -> {
 				String[] l = t.split(",");
 				Machine machine = new Machine(l[0]);

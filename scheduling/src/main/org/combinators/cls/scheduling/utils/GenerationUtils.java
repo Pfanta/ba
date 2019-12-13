@@ -23,6 +23,7 @@ public class GenerationUtils {
 	private static final int DEFAULT_JOBS_COUNT = 4;
 	private static final int MIN_MACHINE_TIME = 1;
 	private static final int MAX_MACHINE_TIME = 15;
+	private static final int MAX_DEADLINE_PLUS = 10;
 	private static final Random random = new Random();
 
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
@@ -64,7 +65,10 @@ public class GenerationUtils {
 	 @return Task
 	 */
 	public static Task generateRandomTask(GenerationDialogResult result) {
-		switch(result.getShopClass()) {
+		if (result.getJobCount() <= 0 || result.getMachineCount() <= 0 || result.getShopClass().equals(ShopClass.NONE))
+			throw new IllegalArgumentException();
+
+		switch (result.getShopClass()) {
 			case FS:
 				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
 			case JS:
@@ -73,23 +77,29 @@ public class GenerationUtils {
 			case FFS: //TODO: Generate flexibleFlowShops
 			case FJS: //TODO: Generate flexibleJobShops
 			default:
-				return Task.empty();
+				return new Task();
 		}
 	}
 
 	private static Task generateRandomFlowShop(int numMachines, int numJobs, boolean deadlines) {
 		LinkedList<Machine> machines = new LinkedList<>();
-		Task task = Task.empty();
+		Task task = new Task();
 
-		for(int i = 0; i < numMachines; i++) {
+		for (int i = 0; i < numMachines; i++) {
 			machines.add(new Machine("M" + i));
 		}
 
-		for(int i = 0; i < numJobs; i++) {
-			Job job = Job.empty();
-			for(int j = 0; j < numMachines; j++) {
-				job.addStage(new Stage(new MachineTuple(machines.get(j), random.nextInt(MAX_MACHINE_TIME - MIN_MACHINE_TIME) + MIN_MACHINE_TIME)));
+		for (int i = 0; i < numJobs; i++) {
+			Job job = new Job("J" + i);
+			int totalTime = 0;
+			for (int j = 0; j < numMachines; j++) {
+				int time = random.nextInt(MAX_MACHINE_TIME - MIN_MACHINE_TIME) + MIN_MACHINE_TIME;
+				totalTime += time;
+				job.addStage(new Stage(new MachineTuple(machines.get(j), time)));
 			}
+			if (deadlines)
+				job.setDeadline(totalTime + random.nextInt(MAX_DEADLINE_PLUS) * numMachines);
+
 			task.add(job);
 		}
 
@@ -112,7 +122,7 @@ public class GenerationUtils {
 
 		return task;
 	}
-	
+
 	public static class GenerationDialogResult {
 		@Getter
 		private int machineCount;
@@ -122,8 +132,8 @@ public class GenerationUtils {
 		private boolean deadlines;
 		@Getter
 		private ShopClass shopClass;
-		
-		GenerationDialogResult(int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
+
+		public GenerationDialogResult(int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
 			this.machineCount = machineCount;
 			this.jobCount = jobCount;
 			this.deadlines = deadlines;

@@ -10,12 +10,12 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ClassificationTest {
-	
+public class ClassificationTest {
+
 	@Test
 	public void testClassificationFlowShopAscending() throws IOException {
 		Task task = LoadSaveUtil.load(getClass().getResource("/flowShop4x4_ascending.task").getFile());
-		
+
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(4, classification.getMachineCount());
 		assertEquals(4, classification.getJobCount());
