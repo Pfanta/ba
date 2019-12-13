@@ -3,7 +3,7 @@ package org.combinators.cls.scheduling;
 import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
-import org.combinators.cls.scheduling.utils.LoadSaveUtil;
+import org.combinators.cls.scheduling.utils.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class ClassificationTest {
 
 	@Test
 	public void testClassificationFlowShopAscending() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/flowShop4x4_ascending.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flowShop4x4_ascending.task").getFile());
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(4, classification.getMachineCount());
 		assertEquals(4, classification.getJobCount());
@@ -23,7 +23,7 @@ public class ClassificationTest {
 	
 	@Test
 	public void testClassificationFlowShopNonAscending() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/flowShop4x4_nonAscending.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flowShop4x4_nonAscending.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(4, classification.getMachineCount());
@@ -33,7 +33,7 @@ public class ClassificationTest {
 	
 	@Test
 	public void testClassificationJobShop() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/jobShop4x4.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/jobShop4x4.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(4, classification.getMachineCount());
@@ -43,7 +43,7 @@ public class ClassificationTest {
 	
 	@Test
 	public void testClassificationJobShop2() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/jobShop3x5.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/jobShop3x5.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(3, classification.getMachineCount());
@@ -53,7 +53,7 @@ public class ClassificationTest {
 	
 	@Test
 	public void testClassificationOpenShop() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/openShop4x4.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/openShop4x4.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(4, classification.getMachineCount());
@@ -63,7 +63,7 @@ public class ClassificationTest {
 	
 	@Test
 	public void testClassificationFlexibleFlowShop() throws IOException {
-		Task task = LoadSaveUtil.load(getClass().getResource("/tasks/flexibleFlowShop4x4_ascending.task").getFile());
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flexibleFlowShop4x4_ascending.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 		assertEquals(5, classification.getMachineCount());

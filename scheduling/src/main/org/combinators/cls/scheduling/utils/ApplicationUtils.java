@@ -1,5 +1,6 @@
 package org.combinators.cls.scheduling.utils;
 
+import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
@@ -15,7 +16,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ApplicationUtils {
+	
 	public static void showException(String title, String content, Exception ex) {
+		Platform.runLater(() -> showExceptionDialog(title, content, ex));
+	}
+	
+	private static void showExceptionDialog(String title, String content, Exception ex) {
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle(title);
 		alert.setHeaderText(content);
@@ -41,6 +47,10 @@ public class ApplicationUtils {
 	}
 	
 	public static void showWarning(String title, String content) {
+		Platform.runLater(() -> showWarningDialog(title, content));
+	}
+	
+	private static void showWarningDialog(String title, String content) {
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setTitle(title);
 		alert.setHeaderText(content);

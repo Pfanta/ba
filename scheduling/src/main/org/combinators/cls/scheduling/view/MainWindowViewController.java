@@ -17,7 +17,7 @@ import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ApplicationUtils;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
-import org.combinators.cls.scheduling.utils.LoadSaveUtil;
+import org.combinators.cls.scheduling.utils.IOUtils;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXPlusButton;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXTextField;
 import org.combinators.cls.scheduling.view.customcontrol.CustomLabel;
@@ -105,7 +105,7 @@ public class MainWindowViewController implements MainWindowAUI {
 		File file = fileDialog.showOpenDialog(stage);
 		if(file != null) {
 			try {
-				currentTask = LoadSaveUtil.load(file);
+				currentTask = IOUtils.loadTask(file);
 				refreshJobsPane();
 			} catch(IOException ex) {
 				ApplicationUtils.showException("Error", "Error occurred while loading", ex);
@@ -126,7 +126,7 @@ public class MainWindowViewController implements MainWindowAUI {
 		File file = fileDialog.showSaveDialog(stage);
 		if(file != null) {
 			try {
-				LoadSaveUtil.save(file, currentTask);
+				IOUtils.saveTask(file, currentTask);
 			} catch(IOException ex) {
 				ApplicationUtils.showException("Error", "Error occurred while saving", ex);
 			}
@@ -150,27 +150,21 @@ public class MainWindowViewController implements MainWindowAUI {
 	//region AUI refreshes
 	@Override
 	public void onClassificationFinished(ClassificationUtils.Classification classification) {
-		System.out.println("classification");
-		
 		Platform.runLater(() -> progressDialog.setClassificationResult(classification));
 	}
 	
 	@Override
 	public void onGenerationFinished(int result) {
-		System.out.println("generation");
-		
 		Platform.runLater(() -> progressDialog.setGenerationResult(result));
 	}
 	
 	@Override
 	public void onRunnerResult(int result) {
-		System.out.println("runner");
-		
 		Platform.runLater(() -> progressDialog.setRunResult(result));
 	}
 	
 	@Override
-	public void onFinished() {
+	public void onFinishedOrCanceled() {
 		runBtn.setOpacity(1);
 	}
 	//endregion

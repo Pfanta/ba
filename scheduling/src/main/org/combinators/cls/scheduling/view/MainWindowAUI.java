@@ -21,5 +21,5 @@ public interface MainWindowAUI {
 	/**
 	 Resets
 	 */
-	void onFinished();
+	void onFinishedOrCanceled();
 }
