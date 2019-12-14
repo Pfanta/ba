@@ -11,9 +11,6 @@ import org.combinators.cls.scheduling.model.Stage;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ApplicationUtils {
 	
@@ -57,7 +54,7 @@ public class ApplicationUtils {
 		alert.showAndWait();
 	}
 	
-	/*J1|D-1|M1,5|M2,3|M3,3|M4,2|*/
+	/*J1|-1|M1,1,5|M2,1,3|M3,1,3|M4,1,2|*/
 	public static Job parse(String input) throws IllegalArgumentException {
 		String[] split = input.split("\\|");
 		if(split.length < 3)
@@ -65,21 +62,11 @@ public class ApplicationUtils {
 		
 		Job job = new Job(split[0], Integer.parseInt(split[1]));
 		
-		Set<Machine> allMachines = new HashSet<>();
 		for(int i = 2; i < split.length; i++) {
-			Stage stage = new Stage();
 			String s = split[i];
-			String[] machinesSplit = s.split(";");
-
-			Arrays.stream(machinesSplit).forEach(t -> {
-				String[] l = t.split(",");
-				Machine machine = new Machine(l[0]);
-				stage.addMachine(machine, Integer.parseInt(l[1]));
-				
-				if(!allMachines.add(machine))
-					throw new IllegalArgumentException("Duplicate Machine :" + machine);
-			});
+			String[] machinesSplit = s.split(",");
 			
+			Stage stage = new Stage(new Machine(machinesSplit[0]), Integer.parseInt(machinesSplit[1]), Integer.parseInt(machinesSplit[2]));
 			job.addStage(stage);
 		}
 		

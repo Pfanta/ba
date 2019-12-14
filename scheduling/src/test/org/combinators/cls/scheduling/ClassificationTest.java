@@ -66,7 +66,7 @@ public class ClassificationTest {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flexibleFlowShop4x4_ascending.task").getFile());
 		
 		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
-		assertEquals(5, classification.getMachineCount());
+		assertEquals(4, classification.getMachineCount());
 		assertEquals(4, classification.getJobCount());
 		assertEquals(ShopClass.FFS, classification.getShopClass());
 	}

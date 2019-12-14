@@ -3,7 +3,6 @@ package org.combinators.cls.scheduling.utils;
 import lombok.Getter;
 import org.combinators.cls.scheduling.model.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,12 +48,9 @@ public class ClassificationUtils {
 	private static List<List<Machine>> mapTaskToMachines(Task task) {
 		return task.getJobs().stream()
 				       .map(job -> job.getStages().stream()
-						                   .map(stage -> stage.getMachinesWithTimes().stream()
-								                                 .map(MachineTuple::getMachine)
-								                                 .collect(Collectors.toList()))
-						                   .collect(Collectors.toList()).stream()
-						                   .flatMap(List::stream)
-						                   .collect(Collectors.toList())).collect(Collectors.toList());
+						                   .map(Stage::getMachine)
+						                   .collect(Collectors.toList()))
+				       .collect(Collectors.toList());
 	}
 	
 	/**
@@ -74,7 +70,7 @@ public class ClassificationUtils {
 	 @precondition Task is OpenShop
 	 */
 	private static boolean checkIsJobShop(Task currentTask) {
-		return currentTask.getJobs().stream().noneMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getMachinesWithTimes().stream().anyMatch(machineTuple -> machineTuple.getTime().equals(0))));
+		return currentTask.getJobs().stream().noneMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getTime() == 0));
 	}
 	
 	/**
@@ -92,7 +88,7 @@ public class ClassificationUtils {
 	}
 	
 	private static boolean checkFlexibility(Task currentTask) {
-		return currentTask.getJobs().stream().map(Job::getStages).flatMap(List::stream).anyMatch(stage -> stage.getMachinesWithTimes().size() > 1);
+		return currentTask.getJobs().stream().anyMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getMachineCount() > 1));
 	}
 	
 	/**
@@ -104,12 +100,12 @@ public class ClassificationUtils {
 		if(task == null)
 			return false;
 		
-		ArrayList<Job> jobs = task.getJobs();
+		LinkedList<Job> jobs = task.getJobs();
 		if(jobs == null || jobs.size() == 0)
 			return false;
 		
 		for(Job job : jobs) {
-			if(job == null)
+			if(job == null || job.getName() == null || job.getDeadline() < -1)
 				return false;
 			
 			LinkedList<Stage> stages = job.getStages();
@@ -117,17 +113,12 @@ public class ClassificationUtils {
 				return false;
 			
 			for(Stage stage : stages) {
-				if(stage == null)
+				if(stage == null || stage.getTime() < 0 || stage.getScheduledTime() < -1 || stage.getMachineCount() <= 0)
 					return false;
 				
-				Collection<MachineTuple> machinesWithTimes = stage.getMachinesWithTimes();
-				if(machinesWithTimes == null || machinesWithTimes.size() == 0)
+				Machine machine = stage.getMachine();
+				if(machine == null || machine.getName() == null)
 					return false;
-				
-				for(MachineTuple machineTuple : machinesWithTimes) {
-					if(machineTuple == null || machineTuple.getMachine() == null || machineTuple.getTime() == null)
-						return false;
-				}
 			}
 		}
 		

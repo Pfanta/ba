@@ -76,7 +76,7 @@ public class MainWindowViewController implements MainWindowAUI {
 				y++;
 			}
 			nodes.add(new CustomJFXPlusButton(70 + y * 110, 10 + i * 40, 30, 30, event -> {
-				currentJob.addStage(new Stage());
+				currentJob.addStage(new Stage(null, -1, -1));//FIXME
 				refreshJobsPane();
 			}));
 		}

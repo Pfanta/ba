@@ -1,60 +1,57 @@
 package org.combinators.cls.scheduling.model;
 
 import lombok.Getter;
-
-import java.util.ArrayList;
-import java.util.Collection;
+import lombok.Setter;
 
 public class Stage implements IWritable, ICloneable<Stage> {
 	@Getter
-	private Collection<MachineTuple> machinesWithTimes = new ArrayList<>();
+	private Machine machine;
 	
-	public Stage(Collection<MachineTuple> machinesWithTimes) {
-		this.machinesWithTimes.addAll(machinesWithTimes);
+	/**
+	 Time that the Jo has to be processed on this Machine
+	 */
+	@Getter
+	@Setter
+	private int time;
+	
+	/**
+	 Time when Job is scheduled at this machine
+	 */
+	@Getter
+	@Setter
+	private int scheduledTime;
+	
+	/**
+	 How many identical machines there are to process this job
+	 if machineCount is larger than 1 the job is considered flexible
+	 */
+	@Getter
+	@Setter
+	private int machineCount;
+	
+	public Stage(Machine machine, int machineCount, int time, int scheduledTime) {
+		this.machine = machine;
+		this.machineCount = machineCount;
+		this.time = time;
+		this.scheduledTime = scheduledTime;
 	}
 	
-	public Stage(MachineTuple machineTuple) {
-		this.machinesWithTimes.add(machineTuple);
-	}
-	
-	public Stage() {}
-	
-	public void addMachine(Machine machine, int time) {
-		machinesWithTimes.add(new MachineTuple(machine, time));
-	}
-	
-	private void addMachineTuple(MachineTuple machineTuple) {
-		machinesWithTimes.add(machineTuple);
+	public Stage(Machine machine, int machineCount, int time) {
+		this(machine, machineCount, time, -1);
 	}
 	
 	@Override
 	public String getString() {
-		StringBuilder builder = new StringBuilder();
-		machinesWithTimes.forEach(machineTuple -> builder.append(machineTuple.getString()).append(";"));
-		builder.setLength(builder.length() - 1);
-		return builder.toString();
+		return machineCount + "x " + machine.getString() + "," + time;
 	}
 	
 	@Override
 	public String toString() {
-		if(machinesWithTimes.isEmpty())
-			return "";
-		
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		machinesWithTimes.forEach(s -> {
-			stringBuilder.append(s);
-			stringBuilder.append(',');
-		});
-		stringBuilder.setLength(stringBuilder.length() - 1);
-		
-		return stringBuilder.toString();
+		return machineCount + "x " + machine + "(" + time + ")";
 	}
 	
 	@Override
 	public Stage cloned() {
-		Stage stage = new Stage();
-		this.machinesWithTimes.forEach(machineTuple -> stage.addMachineTuple(machineTuple.cloned()));
-		return stage;
+		return new Stage(this.machine.cloned(), this.time, this.scheduledTime);
 	}
 }

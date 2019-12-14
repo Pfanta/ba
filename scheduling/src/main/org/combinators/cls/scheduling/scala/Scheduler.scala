@@ -1,7 +1,6 @@
 package org.combinators.cls.scheduling.scala
 
 import org.combinators.cls.interpreter._
-import org.combinators.cls.scheduling.model.ShopClass
 import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification
 import org.combinators.cls.types.Constructor
 import org.combinators.cls.types.syntax._
@@ -18,14 +17,14 @@ object Scheduler {
   def run(classification: Classification): java.util.List[String] = {
 
     var targetType: Constructor = 'Scheduler('NONE)
-    classification.getShopClass match {
+    /*classification.getShopClass match {
       case ShopClass.FS => targetType = 'Scheduler('FS)
       case ShopClass.FFS => targetType = 'Scheduler('FFS)
       case ShopClass.JS => targetType = 'Scheduler('JS)
       case ShopClass.FJS => targetType = 'Scheduler('FJS)
       case ShopClass.OS => targetType = 'Scheduler('OS)
       case _ => targetType = 'Scheduler('NONE)
-    }
+    }*/
 
     val inhabitationResult: InhabitationResult[String] = reflectedRepository.inhabit[String](targetType)
     val results = new ListBuffer[String]()
