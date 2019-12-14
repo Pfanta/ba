@@ -6,21 +6,18 @@ import lombok.Setter;
 
 import java.util.LinkedList;
 
-public class Job implements IWritable, ICloneable<Job> {
+public abstract class Job implements IWritable, ICloneable<Job> {
 	@Getter
-	private final LinkedList<Stage> stages = new LinkedList<>();
-	
-	@Getter
-	private final LinkedList<MachineTuple> scheduledMachines = new LinkedList<>();
+	protected final LinkedList<MachineTuple> scheduledMachines = new LinkedList<>();
 	
 	@Getter
 	@Setter
 	@NonNull
-	private String name;
+	protected String name;
 	
 	@Getter
 	@Setter
-	private int deadline;
+	protected int deadline;
 	
 	public Job() {
 		this("", -1);
@@ -35,18 +32,6 @@ public class Job implements IWritable, ICloneable<Job> {
 		this.deadline = deadline;
 	}
 	
-	public void addStage(Stage stage) {
-		stages.add(stage);
-	}
-	
-	@Override
-	public String getString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(name).append('|').append(deadline).append('|');
-		stages.forEach(stage -> builder.append(stage.getString()).append('|'));
-		return builder.toString();
-	}
-	
 	public String getSchedule() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(name).append('|').append(deadline).append('|');
@@ -58,13 +43,5 @@ public class Job implements IWritable, ICloneable<Job> {
 				                                          .append(machineTuple.getTime())
 				                                          .append(")"));
 		return builder.toString();
-	}
-	
-	@Override
-	public Job cloned() {
-		Job job = new Job(this.name, this.deadline);
-		this.stages.forEach(stage -> job.getStages().add(stage.cloned()));
-		this.scheduledMachines.forEach(machineTuple -> job.getScheduledMachines().add(machineTuple.cloned()));
-		return job;
 	}
 }
