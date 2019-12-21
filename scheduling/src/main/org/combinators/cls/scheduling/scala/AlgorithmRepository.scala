@@ -63,24 +63,24 @@ trait AlgorithmRepository {
   @combinator object AlgorithmFS {
     val semanticType: Type = 'Algorithm('FS)
 
-    def apply: String = "System.out.println(\"FS\");"
+    def apply: String = "task.setResult(-1); return task;"
   }
 
   @combinator object AlgorithmFFS {
     val semanticType: Type = 'Algorithm('FFS)
 
-    def apply: String = "System.out.println(\"FFS\");"
+    def apply: String = "task.setResult(-1); return task;"
   }
 
   @combinator object AlgorithmOS {
     val semanticType: Type = 'Algorithm('OS)
 
-    def apply: String = "System.out.println(\"OS\");"
+    def apply: String = "task.setResult(-1); return task;"
   }
 
   @combinator object Fallback {
     val semanticType: Type = 'Algorithm('NONE)
 
-    def apply: String = "System.out.println(\"NONE\");"
+    def apply: String = "task.setResult(-1); return task;"
   }
 }

@@ -22,11 +22,11 @@ trait RunnerRepository {
       s"""|package org.combinators.cls.scheduling;
           |
           |import org.combinators.cls.scheduling.model.Task;
+          |import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification;
 			    |
-			    |public class Runner implements java.util.function.Function<Task, Task> {
-			    | public Task apply(Task task) {
-          |   task.setResult(new java.util.Random().nextInt(50));
-			    |   return task;
+			    |public class Runner implements java.util.function.Function<Classification, Task> {
+			    | public Task apply(Classification classification) {
+          |   $Algorithm
 			    | }
           |}
 			    """.stripMargin

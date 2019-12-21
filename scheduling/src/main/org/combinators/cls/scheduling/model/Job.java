@@ -45,19 +45,6 @@ public class Job implements IWritable, ICloneable<Job> {
 		return builder.toString();
 	}
 	
-	/*public String getSchedule() {
-		StringBuilder builder = new StringBuilder();
-		builder.append(name).append('|').append(deadline).append('|');
-		stages.forEach(stage -> builder
-				                                          .append(stage.getMachine().getName())
-				                                          .append("(t0=")
-				                                          .append(stage.getScheduledTime())
-				                                          .append(" t=")
-				                                          .append(stage.getTime())
-				                                          .append(")"));
-		return builder.toString();
-	}*/
-	
 	@Override
 	public Job cloned() {
 		Job job = new Job(this.name, this.deadline);

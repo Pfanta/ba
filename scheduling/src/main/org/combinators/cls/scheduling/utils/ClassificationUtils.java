@@ -16,8 +16,8 @@ public class ClassificationUtils {
 	 @return Classification for Task including machine- and job-count
 	 */
 	public static Classification classify(Task task) {
-		if(!validate(task))
-			return new Classification(-1, -1, false, ShopClass.NONE); //Invalid Task
+		if (!validate(task))
+			return new Classification(task, -1, -1, false, ShopClass.NONE); //Invalid Task
 		
 		List<List<Machine>> machines = mapTaskToMachines(task);
 		
@@ -25,18 +25,18 @@ public class ClassificationUtils {
 		int machineCount = (int) machines.stream().flatMap(Collection::stream).distinct().count();
 		
 		if(!checkFlexibility(task))
-			if(checkIsOpenShop(machines))
-				if(checkIsJobShop(task))
-					if(checkIsFlowShop(machines))
-						return new Classification(machineCount, jobCount, task.hasDeadlines(), ShopClass.FS);
+			if (checkIsOpenShop(machines))
+				if (checkIsJobShop(task))
+					if (checkIsFlowShop(machines))
+						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FS);
 					else
-						return new Classification(machineCount, jobCount, task.hasDeadlines(), ShopClass.JS);
+						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.JS);
 				else
-					return new Classification(machineCount, jobCount, task.hasDeadlines(), ShopClass.OS);
+					return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.OS);
 			else
-				return new Classification(machineCount, jobCount, task.hasDeadlines(), ShopClass.NONE);
+				return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.NONE);
 		else
-			return new Classification(machineCount, jobCount, task.hasDeadlines(), ShopClass.FFS); //TODO: Flexible
+			return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FFS); //TODO: Flexible
 		
 	}
 	
@@ -115,17 +115,19 @@ public class ClassificationUtils {
 			for(Stage stage : stages) {
 				if(stage == null || stage.getTime() < 0 || stage.getScheduledTime() < -1 || stage.getMachineCount() <= 0)
 					return false;
-				
+
 				Machine machine = stage.getMachine();
-				if(machine == null || machine.getName() == null)
+				if (machine == null || machine.getName() == null)
 					return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
-	public static class Classification {
+
+	public static class Classification implements ICloneable<Classification> {
+		@Getter
+		private final Task task;
 		@Getter
 		private final int machineCount;
 		@Getter
@@ -135,13 +137,14 @@ public class ClassificationUtils {
 		@Getter
 		private final ShopClass shopClass;
 
-		Classification(int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
+		Classification(Task task, int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
+			this.task = task;
 			this.machineCount = machineCount;
 			this.jobCount = jobCount;
 			this.deadlines = deadlines;
 			this.shopClass = shopClass;
 		}
-		
+
 		/**
 		 * @return true for shopClasses FS and FFS
 		 */
@@ -159,10 +162,15 @@ public class ClassificationUtils {
 		@Override
 		public String toString() {
 			return "Classification{" +
-					       "machineCount=" + machineCount +
-					       ", jobCount=" + jobCount +
-					       ", shopClass=" + shopClass +
-					       '}';
+					"machineCount=" + machineCount +
+					", jobCount=" + jobCount +
+					", shopClass=" + shopClass +
+					'}';
+		}
+
+		@Override
+		public Classification cloned() {
+			return new Classification(task.cloned(), machineCount, jobCount, deadlines, shopClass);
 		}
 	}
 }

@@ -7,24 +7,20 @@ import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
 public class GifflerThompson implements Function<ClassificationUtils.Classification, Task> {
     public Task apply(ClassificationUtils.Classification classification) {
         final Task schedule = classification.getTask();
         final int _machines = classification.getMachineCount();
         final int _jobs = classification.getJobCount();
+
         final int[] machineWorkingUntil = new int[_machines]; //Zi
         final int[] jobWorkingUntil = new int[_jobs]; //Rj
         final int[] stepOfJob = new int[_jobs];
 
-        IntStream.range(0, _machines).forEach(i -> {
-            machineWorkingUntil[i]=0;
-        });
-        IntStream.range(0, _jobs).forEach(j -> {
-            jobWorkingUntil[j]=0;
-            stepOfJob[j]=0;
-        });
+//        IntStream.range(0, _jobs).forEach(j -> stepOfJob[j]=0);
+//        IntStream.range(0, _jobs).forEach(j -> jobWorkingUntil[j]=0);
+//        IntStream.range(0, _machines).forEach(i -> machineWorkingUntil[i]=0);
 
         //Iterate #jobs x #machines times
         Collections.nCopies(_machines * _jobs, 0).forEach(o -> {
@@ -32,11 +28,19 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
             int finishTime = Integer.MAX_VALUE;
 
             //Find machine that may finish first
-            for(int m = 0; m < _machines; m++) {
-                for(int j = 0; j < _jobs; j++) {
-                    if(stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == m) {
+            for (int jobIndex = 0; jobIndex < _jobs; jobIndex++) {
+                int time = schedule.getJobs().get(jobIndex).getStages().get(stepOfJob[jobIndex]).getTime();
+                +Math.max(machineWorkingUntil[m], jobWorkingUntil[jobIndex]);
+                if (time < finishTime) {
+                    machineToSchedule = m;
+                    finishTime = time;
+                }
+            }
+            for (int m = 0; m < _machines; m++) {
+                for (int j; j < _jobs; j++) {
+                    if (stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == m) {
                         int time = _time[j][m] + Math.max(machineWorkingUntil[m], jobWorkingUntil[j]);
-                        if(time < finishTime) {
+                        if (time < finishTime) {
                             machineToSchedule = m;
                             finishTime = time;
                         }
@@ -46,12 +50,14 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
 
             //Find all jobs waiting for machine
             LinkedList<Integer> waitingJobsOnMachine = new LinkedList<>();
-            for(int j = 0; j < _jobs; j++)
-                if(stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == machineToSchedule)
+            for (int j = 0; j < _jobs; j++)
+                if (stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == machineToSchedule)
                     waitingJobsOnMachine.add(j);
 
             //choose by heuristic
-            $Heuristic
+            //$Heuristic
+            Collections.shuffle(waitingJobsOnMachine);
+            Job jobToSchedule = waitingJobsOnMachine.getFirst();
 
             //Update & Schedule Task
             int jobLength = _time[jobToSchedule][machineToSchedule];
@@ -59,7 +65,7 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
             stepOfJob[jobToSchedule]++;
             jobWorkingUntil[jobToSchedule] = finishTime;
             machineWorkingUntil[machineToSchedule] = finishTime;
-            schedule[machineToSchedule].add(new Task(jobToSchedule, jobLength, finishTime-jobLength));
+            schedule[machineToSchedule].add(new Task(jobToSchedule, jobLength, finishTime - jobLength));
         });
     }
 }

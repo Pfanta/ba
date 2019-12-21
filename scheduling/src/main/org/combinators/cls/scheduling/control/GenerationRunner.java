@@ -46,21 +46,21 @@ public class GenerationRunner {
 		}
 		
 		private void work() {
-			ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
-			
-			if(!running) return;
-			
-			mainWindowAUI.onClassificationFinished(classification);
-			List<String> results = Scheduler.run(classification);
-			
-			if(!running) return;
-			
-			mainWindowAUI.onGenerationFinished(results.size());
-			int result = RunnerUtils.runResults(task, results);
-			
-			if(!running) return;
-			
-			mainWindowAUI.onRunnerResult(result);
-		}
+            ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
+
+            if (!running) return;
+
+            mainWindowAUI.onClassificationFinished(classification);
+            List<String> results = Scheduler.run(classification);
+
+            if (!running) return;
+
+            mainWindowAUI.onGenerationFinished(results.size());
+            int result = RunnerUtils.runResults(classification, results);
+
+            if (!running) return;
+
+            mainWindowAUI.onRunnerResult(result);
+        }
 	}
 }

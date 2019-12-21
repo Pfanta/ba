@@ -3,8 +3,7 @@ package org.combinators.cls.scheduling;
 import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
-import org.combinators.cls.scheduling.utils.LoadSaveUtil;
-
+import org.combinators.cls.scheduling.utils.IOUtils;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
