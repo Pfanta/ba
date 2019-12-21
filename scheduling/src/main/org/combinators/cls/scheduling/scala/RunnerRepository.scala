@@ -26,7 +26,9 @@ trait RunnerRepository {
 			    |
 			    |public class Runner implements java.util.function.Function<Classification, Task> {
 			    | public Task apply(Classification classification) {
-          |   $Algorithm
+          |   Task task = classification.getTask();
+          |   task.setResult(32);
+          |   return task;
 			    | }
           |}
 			    """.stripMargin

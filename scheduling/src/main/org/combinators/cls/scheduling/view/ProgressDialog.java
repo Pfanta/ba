@@ -11,12 +11,12 @@ import javafx.scene.layout.Pane;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.view.customcontrol.DialogLabel;
 
-public class ProgressDialog extends Dialog<Boolean> {
-
+public class ProgressDialog extends Dialog<ButtonType> {
+	
 	private final JFXProgressBar progressBar;
 	private final Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
 	private boolean finished;
-
+	
 	public ProgressDialog(String function) {
 		super();
 		this.setTitle("Running...");
@@ -52,7 +52,6 @@ public class ProgressDialog extends Dialog<Boolean> {
 				progressBar,
 				labelProgress);
 		
-		this.setResultConverter(dialogButton -> finished && dialogButton == ButtonType.CANCEL);
 		this.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 		this.getDialogPane().setContent(pane);
 	}
@@ -75,7 +74,12 @@ public class ProgressDialog extends Dialog<Boolean> {
 		labelResult.setText("" + result);
 		progressBar.setProgress(1);
 		labelProgress.setText("Finished.");
-		((Button) getDialogPane().lookupButton(ButtonType.CANCEL)).setText("Close");
+		
+		getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
+		getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
+		getDialogPane().getButtonTypes().add(ButtonType.APPLY);
+		
+		((Button) getDialogPane().lookupButton(ButtonType.APPLY)).setText("Show Results");
 		finished = true;
 	}
 }

@@ -1,16 +1,13 @@
 package org.combinators.cls.scheduling.Algorithms;
 
-import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.function.Function;
 
 public class GifflerThompson implements Function<ClassificationUtils.Classification, Task> {
     public Task apply(ClassificationUtils.Classification classification) {
-        final Task schedule = classification.getTask();
+        /*final Task schedule = classification.getTask();
         final int _machines = classification.getMachineCount();
         final int _jobs = classification.getJobCount();
 
@@ -66,6 +63,7 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
             jobWorkingUntil[jobToSchedule] = finishTime;
             machineWorkingUntil[machineToSchedule] = finishTime;
             schedule[machineToSchedule].add(new Task(jobToSchedule, jobLength, finishTime - jobLength));
-        });
+        });*/
+        return null;
     }
 }

@@ -81,6 +81,6 @@ trait AlgorithmRepository {
   @combinator object Fallback {
     val semanticType: Type = 'Algorithm('NONE)
 
-    def apply: String = "task.setResult(-1); return task;"
+    def apply: String = "classification.getTask().setResult(-1); return task;"
   }
 }

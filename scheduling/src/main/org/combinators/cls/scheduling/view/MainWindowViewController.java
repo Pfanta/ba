@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
@@ -24,7 +25,6 @@ import org.combinators.cls.scheduling.view.customcontrol.CustomLabel;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Optional;
 
 public class MainWindowViewController implements MainWindowAUI {
 	private static final int MAX_JOBS_SHOWN = 20;
@@ -138,11 +138,12 @@ public class MainWindowViewController implements MainWindowAUI {
 		generationRunner.run(currentTask);
 		
 		progressDialog = new ProgressDialog(comboBox.getSelectionModel().getSelectedItem()); // TODO: Use value for generation
-		Optional<Boolean> result = progressDialog.showAndWait();
-		result.ifPresent(b -> {
-			if(!b) {
+		progressDialog.showAndWait().ifPresent(b -> {
+			if(b == ButtonType.CANCEL)
 				generationRunner.cancel();
-			}
+			
+			if(b == ButtonType.APPLY)
+				new ResultDialog(generationRunner.getResult()).show();
 		});
 	}
 	//endregion

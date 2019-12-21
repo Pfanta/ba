@@ -1,5 +1,7 @@
 package org.combinators.cls.scheduling.control;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.scala.Scheduler;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
@@ -13,12 +15,16 @@ public class GenerationRunner {
 	private final MainWindowAUI mainWindowAUI;
 	private Worker worker;
 	
+	@Getter
+	@Setter
+	private volatile Task result;
+	
 	public GenerationRunner(MainWindowAUI mainWindowAUI) {
 		this.mainWindowAUI = mainWindowAUI;
 	}
 	
 	public void run(Task task) {
-		worker = new Worker(task);
+		worker = new Worker(task, this);
 		worker.start();
 	}
 	
@@ -28,10 +34,12 @@ public class GenerationRunner {
 	
 	class Worker extends Thread {
 		private final Task task;
+		private GenerationRunner generationRunner;
 		private volatile boolean running;
 		
-		Worker(Task task) {
+		Worker(Task task, GenerationRunner generationRunner) {
 			this.task = task;
+			this.generationRunner = generationRunner;
 		}
 		
 		@Override
@@ -49,18 +57,19 @@ public class GenerationRunner {
             ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 
             if (!running) return;
-
-            mainWindowAUI.onClassificationFinished(classification);
-            List<String> results = Scheduler.run(classification);
-
-            if (!running) return;
-
-            mainWindowAUI.onGenerationFinished(results.size());
-            int result = RunnerUtils.runResults(classification, results);
-
-            if (!running) return;
-
-            mainWindowAUI.onRunnerResult(result);
-        }
+			
+			mainWindowAUI.onClassificationFinished(classification);
+			List<String> results = Scheduler.run(classification);
+			
+			if(!running) return;
+			
+			mainWindowAUI.onGenerationFinished(results.size());
+			Task bestSchedule = RunnerUtils.runResults(classification, results);
+			
+			if(!running) return;
+			
+			generationRunner.setResult(bestSchedule);
+			mainWindowAUI.onRunnerResult(bestSchedule.getResult());
+		}
 	}
 }
