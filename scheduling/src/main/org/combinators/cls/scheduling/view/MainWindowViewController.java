@@ -33,7 +33,6 @@ public class MainWindowViewController implements MainWindowAUI {
 	private static final int MAX_JOBS_SHOWN = 20;
 	private static final int MAX_MACHINES_SHOWN = 15;
 	
-	//TODO: Crash on show results if none available
 	//TODO: show results from Machine perspective
 	
 	@FXML

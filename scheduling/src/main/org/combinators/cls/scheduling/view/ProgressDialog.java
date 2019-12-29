@@ -77,7 +77,9 @@ public class ProgressDialog extends Dialog<ButtonType> {
 		
 		getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
 		getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
-		getDialogPane().getButtonTypes().add(ButtonType.APPLY);
+		
+		if(result > 0 && result < Integer.MAX_VALUE)
+			getDialogPane().getButtonTypes().add(ButtonType.APPLY);
 		
 		((Button) getDialogPane().lookupButton(ButtonType.APPLY)).setText("Show Results");
 		finished = true;
