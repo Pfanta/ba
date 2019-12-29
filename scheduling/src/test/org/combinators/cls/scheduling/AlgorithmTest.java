@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AlgorithmTest {
 	
 	@Test
-	public void testGT() throws IOException {
+	public void testGTLPT() throws IOException {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/jobShop4x4.task").getFile());
 		Function<ClassificationUtils.Classification, Task> function = new GifflerThompson();
 		assertEquals(35, function.apply(ClassificationUtils.classify(task)).getMakespan());

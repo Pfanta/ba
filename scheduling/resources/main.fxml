@@ -11,7 +11,7 @@
             fx:controller="org.combinators.cls.scheduling.view.MainWindowViewController">
 	
 	<!-- Job Page -->
-	<ScrollPane prefHeight="475" prefWidth="600">
+	<ScrollPane prefHeight="475" prefWidth="600" onDragOver="#onDragOver" onDragDropped="#onFileDropped">
 		<Pane fx:id="jobsPane"/>
 	</ScrollPane>
 	

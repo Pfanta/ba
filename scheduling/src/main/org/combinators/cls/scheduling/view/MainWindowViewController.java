@@ -8,6 +8,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
@@ -32,7 +35,6 @@ public class MainWindowViewController implements MainWindowAUI {
 	
 	//TODO: Crash on show results if none available
 	//TODO: show results from Machine perspective
-	//TODO: Drag drop
 	
 	@FXML
 	private Pane jobsPane;
@@ -91,6 +93,21 @@ public class MainWindowViewController implements MainWindowAUI {
 	}
 	
 	//region action Handler
+	public void onDragOver(DragEvent event) {
+		if(event.getDragboard().hasFiles())
+			event.acceptTransferModes(TransferMode.MOVE);
+		event.consume();
+	}
+	
+	public void onFileDropped(DragEvent event) {
+		Dragboard dragboard = event.getDragboard();
+		if(dragboard.hasFiles() && dragboard.getFiles().size() == 1 && dragboard.getFiles().get(0).getName().endsWith(".task"))
+			tryLoadFile(dragboard.getFiles().get(0));
+		
+		event.setDropCompleted(true);
+		event.consume();
+	}
+	
 	public void onGenerateButtonClicked(ActionEvent event) {
 		GenerationUtils.showGenerateDialog().ifPresent(result -> {
 			this.currentTask = GenerationUtils.generateRandomTask(result);
@@ -107,16 +124,8 @@ public class MainWindowViewController implements MainWindowAUI {
 		);
 		
 		File file = fileDialog.showOpenDialog(stage);
-		if(file != null) {
-			try {
-				currentTask = IOUtils.loadTask(file);
-				refreshJobsPane();
-			} catch(IOException ex) {
-				ApplicationUtils.showException("Error", "Error occurred while loading", ex);
-			} catch(IllegalArgumentException ex) {
-				ApplicationUtils.showException("Error", "Error while parsing File", ex);
-			}
-		}
+		if(file != null)
+			tryLoadFile(file);
 	}
 	
 	public void onSaveButtonClicked(ActionEvent event) {
@@ -149,6 +158,17 @@ public class MainWindowViewController implements MainWindowAUI {
 			if(b == ButtonType.APPLY)
 				new ResultDialog(generationRunner.getResult()).show();
 		});
+	}
+	
+	private void tryLoadFile(File file) {
+		try {
+			currentTask = IOUtils.loadTask(file);
+			refreshJobsPane();
+		} catch(IOException ex) {
+			ApplicationUtils.showException("Error", "Error occurred while loading", ex);
+		} catch(IllegalArgumentException ex) {
+			ApplicationUtils.showException("Error", "Error while parsing File", ex);
+		}
 	}
 	//endregion
 	
