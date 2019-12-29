@@ -6,7 +6,6 @@ import org.combinators.cls.scheduling.model.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ClassificationUtils {
 	
@@ -16,18 +15,18 @@ public class ClassificationUtils {
 	 @return Classification for Task including machine- and job-count
 	 */
 	public static Classification classify(Task task) {
-		if (!validate(task))
+		if(!validate(task))
 			return new Classification(task, -1, -1, false, ShopClass.NONE); //Invalid Task
 		
-		List<List<Machine>> machines = mapTaskToMachines(task);
+		List<List<Machine>> machines = task.getMachines();
 		
 		int jobCount = machines.size();
-		int machineCount = (int) machines.stream().flatMap(Collection::stream).distinct().count();
+		int machineCount = task.getAllMachines().size();
 		
 		if(!checkFlexibility(task))
-			if (checkIsOpenShop(machines))
-				if (checkIsJobShop(task))
-					if (checkIsFlowShop(machines))
+			if(checkIsOpenShop(machines))
+				if(checkIsJobShop(task))
+					if(checkIsFlowShop(machines))
 						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FS);
 					else
 						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.JS);
@@ -41,17 +40,10 @@ public class ClassificationUtils {
 	}
 	
 	public static JobMachineTuple getTaskDimensions(Task task) {
-		List<List<Machine>> machines = mapTaskToMachines(task);
+		List<List<Machine>> machines = task.getMachines();
 		return new JobMachineTuple(machines.size(), (int) machines.stream().flatMap(Collection::stream).distinct().count());
 	}
-	
-	private static List<List<Machine>> mapTaskToMachines(Task task) {
-		return task.getJobs().stream()
-				       .map(job -> job.getStages().stream()
-						                   .map(Stage::getMachine)
-						                   .collect(Collectors.toList()))
-				       .collect(Collectors.toList());
-	}
+
 	
 	/**
 	 Checks for given Task to be OpenShop
@@ -70,7 +62,7 @@ public class ClassificationUtils {
 	 @precondition Task is OpenShop
 	 */
 	private static boolean checkIsJobShop(Task currentTask) {
-		return currentTask.getJobs().stream().noneMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getTime() == 0));
+		return currentTask.getJobs().stream().noneMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getDuration() == 0));
 	}
 	
 	/**
@@ -113,11 +105,11 @@ public class ClassificationUtils {
 				return false;
 			
 			for(Stage stage : stages) {
-				if(stage == null || stage.getTime() < 0 || stage.getScheduledTime() < -1 || stage.getMachineCount() <= 0)
+				if(stage == null || stage.getDuration() < 0 || stage.getScheduledTime() < -1 || stage.getMachineCount() <= 0)
 					return false;
-
+				
 				Machine machine = stage.getMachine();
-				if (machine == null || machine.getName() == null)
+				if(machine == null || machine.getName() == null)
 					return false;
 			}
 		}

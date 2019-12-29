@@ -25,12 +25,12 @@ public class VisualizationUtils {
             
             int end = 0;
             for(Stage stage : job.getStages()) {
-                
-                if(stage.getScheduledTime() > end)
-                    html.append("<td colspan=").append(stage.getScheduledTime() - end).append("/>"); //waiting time
-                
-                html.append("<td colspan=").append(stage.getTime()).append(" >").append(stage.getMachine().getName()).append("</td>"); //running time
-                end = stage.getScheduledTime() + stage.getTime();
+	
+	            if(stage.getScheduledTime() > end)
+		            html.append("<td colspan=").append(stage.getScheduledTime() - end).append("/>"); //waiting time
+	
+	            html.append("<td colspan=").append(stage.getDuration()).append(" >").append(stage.getMachine().getName()).append("</td>"); //running time
+	            end = stage.getScheduledTime() + stage.getDuration();
             }
             
             //waiting on end

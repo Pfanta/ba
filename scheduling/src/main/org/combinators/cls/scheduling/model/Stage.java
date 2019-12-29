@@ -12,7 +12,7 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	 */
 	@Getter
 	@Setter
-	private int time;
+	private int duration;
 	
 	/**
 	 Time when Job is scheduled at this machine
@@ -29,29 +29,33 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	@Setter
 	private int machineCount;
 	
-	public Stage(Machine machine, int machineCount, int time, int scheduledTime) {
+	public Stage(Machine machine, int machineCount, int duration, int scheduledTime) {
 		this.machine = machine;
 		this.machineCount = machineCount;
-		this.time = time;
+		this.duration = duration;
 		this.scheduledTime = scheduledTime;
 	}
 	
-	public Stage(Machine machine, int machineCount, int time) {
-		this(machine, machineCount, time, -1);
+	public Stage(Machine machine, int machineCount, int duration) {
+		this(machine, machineCount, duration, -1);
+	}
+	
+	public int getFinishTime() {
+		return scheduledTime + duration;
 	}
 	
 	@Override
 	public String getString() {
-		return machineCount + "x " + machine.getString() + "," + time;
+		return machineCount + "x " + machine.getString() + "," + duration;
 	}
 	
 	@Override
 	public String toString() {
-		return machineCount + "x " + machine + "(" + time + ")";
+		return machineCount + "x " + machine + "(" + duration + ")";
 	}
 	
 	@Override
 	public Stage cloned() {
-		return new Stage(this.machine.cloned(), this.time, this.scheduledTime);
+		return new Stage(this.machine.cloned(), this.machineCount, this.duration, this.scheduledTime);
 	}
 }

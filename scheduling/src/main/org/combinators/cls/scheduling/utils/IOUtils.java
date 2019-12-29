@@ -34,38 +34,4 @@ public class IOUtils {
 		writer.write(html);
 		writer.close();
 	}
-	/*
-	public static void writeRunner(String runnerCode) throws IOException{
-		File file = getRunnerFile();
-		System.out.println(file.getPath());
-		
-		Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
-		writer.write(runnerCode);
-		writer.close();
-	}
-	
-	public static int  compileRunner() throws IOException, InterruptedException{
-		Process process = Runtime.getRuntime().exec("javac -proc:none -classpath " + getClasspath() + " " + getRunnerFile());
-		int e = process.waitFor();
-
-		
-		
-		return e;
-	}
-	
-	public static int invokeRunner(Task task) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, MalformedURLException, ClassNotFoundException {
-		
-		return (int)Runner.class.getDeclaredMethod("run", Task.class).invoke(null, task);
-		return (int) Class.forName("org.combinators.cls.scheduling.out.Runner", false, URLClassLoader.newInstance(new URL[] { getRunnerFile().toURI().toURL()}))
-				             .getDeclaredMethod("run", Task.class)
-				             .invoke(null, task);
-	}
-	
-	private static String getClasspath() {
-		return Runner.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-	}
-	
-	private static File getRunnerFile() {
-		return new File(getClasspath().concat("org/combinators/cls/scheduling/out/Runner.java"));
-	}*/
 }

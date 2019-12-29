@@ -1,69 +1,71 @@
 package org.combinators.cls.scheduling.Algorithms;
 
+import org.combinators.cls.scheduling.model.Job;
+import org.combinators.cls.scheduling.model.Machine;
+import org.combinators.cls.scheduling.model.Stage;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 
+import java.util.*;
 import java.util.function.Function;
+
 
 public class GifflerThompson implements Function<ClassificationUtils.Classification, Task> {
     public Task apply(ClassificationUtils.Classification classification) {
-        /*final Task schedule = classification.getTask();
-        final int _machines = classification.getMachineCount();
-        final int _jobs = classification.getJobCount();
-
-        final int[] machineWorkingUntil = new int[_machines]; //Zi
-        final int[] jobWorkingUntil = new int[_jobs]; //Rj
-        final int[] stepOfJob = new int[_jobs];
-
-//        IntStream.range(0, _jobs).forEach(j -> stepOfJob[j]=0);
-//        IntStream.range(0, _jobs).forEach(j -> jobWorkingUntil[j]=0);
-//        IntStream.range(0, _machines).forEach(i -> machineWorkingUntil[i]=0);
-
+        final Task schedule = classification.getTask();
+        final Map<Machine, Integer> machineWorkingUntil = new HashMap<>(); //Zi
+        final Map<org.combinators.cls.scheduling.model.Job, Integer> jobWorkingUntil = new HashMap<>(); //Rj
+        final Map<Job, Integer> stepOfJob = new HashMap<>();
+    
+        schedule.getAllMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
+        schedule.getJobs().forEach(job -> {
+            jobWorkingUntil.put(job, 0);
+            stepOfJob.put(job, 0);
+        });
+    
         //Iterate #jobs x #machines times
-        Collections.nCopies(_machines * _jobs, 0).forEach(o -> {
-            int machineToSchedule = -1;
+        Collections.nCopies(classification.getMachineCount() * classification.getJobCount(), 0).forEach(o -> {
+            Machine machineToSchedule = null;
             int finishTime = Integer.MAX_VALUE;
-
+        
             //Find machine that may finish first
-            for (int jobIndex = 0; jobIndex < _jobs; jobIndex++) {
-                int time = schedule.getJobs().get(jobIndex).getStages().get(stepOfJob[jobIndex]).getTime();
-                +Math.max(machineWorkingUntil[m], jobWorkingUntil[jobIndex]);
-                if (time < finishTime) {
-                    machineToSchedule = m;
+            for(Job j : schedule.getJobs()) {
+                if(stepOfJob.get(j) >= j.getStages().size())
+                    continue;
+            
+                Stage nextStage = j.getStages().get(stepOfJob.get(j));
+                int time = nextStage.getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachine()), jobWorkingUntil.get(j));
+                if(time < finishTime) {
+                    machineToSchedule = nextStage.getMachine();
                     finishTime = time;
                 }
             }
-            for (int m = 0; m < _machines; m++) {
-                for (int j; j < _jobs; j++) {
-                    if (stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == m) {
-                        int time = _time[j][m] + Math.max(machineWorkingUntil[m], jobWorkingUntil[j]);
-                        if (time < finishTime) {
-                            machineToSchedule = m;
-                            finishTime = time;
-                        }
-                    }
-                }
-            }
-
+        
             //Find all jobs waiting for machine
-            LinkedList<Integer> waitingJobsOnMachine = new LinkedList<>();
-            for (int j = 0; j < _jobs; j++)
-                if (stepOfJob[j] < _machines && _order[j][stepOfJob[j]] == machineToSchedule)
+            LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
+            for(Job j : schedule.getJobs()) {
+                if(stepOfJob.get(j) >= j.getStages().size())
+                    continue;
+            
+                if(j.getStages().get(stepOfJob.get(j)).getMachine().equals(machineToSchedule))
                     waitingJobsOnMachine.add(j);
-
+            }
+        
             //choose by heuristic
-            //$Heuristic
-            Collections.shuffle(waitingJobsOnMachine);
-            Job jobToSchedule = waitingJobsOnMachine.getFirst();
-
-            //Update & Schedule Task
-            int jobLength = _time[jobToSchedule][machineToSchedule];
-            finishTime = jobLength + Math.max(machineWorkingUntil[machineToSchedule], jobWorkingUntil[jobToSchedule]);
-            stepOfJob[jobToSchedule]++;
-            jobWorkingUntil[jobToSchedule] = finishTime;
-            machineWorkingUntil[machineToSchedule] = finishTime;
-            schedule[machineToSchedule].add(new Task(jobToSchedule, jobLength, finishTime - jobLength));
-        });*/
-        return null;
+            //Heuristic
+            waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().mapToInt(Stage::getDuration).sum()));
+            Job jobToSchedule = waitingJobsOnMachine.getLast();
+        
+            //Schedule Task
+            int jobDuration = jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
+            finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
+            jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
+        
+            //Update
+            stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
+            jobWorkingUntil.put(jobToSchedule, finishTime);
+            machineWorkingUntil.put(machineToSchedule, finishTime);
+        });
+        return schedule;
     }
 }

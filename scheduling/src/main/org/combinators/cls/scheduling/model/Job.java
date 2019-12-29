@@ -38,6 +38,11 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	@Override
+	public String toString() {
+		return this.name;
+	}
+	
+	@Override
 	public String getString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(name).append('|').append(deadline).append('|');

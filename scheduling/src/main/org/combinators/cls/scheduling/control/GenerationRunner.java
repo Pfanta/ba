@@ -64,6 +64,7 @@ public class GenerationRunner {
 			if(!running) return;
 			
 			mainWindowAUI.onGenerationFinished(results.size());
+			
 			Task bestSchedule = RunnerUtils.runResults(classification, results);
 			
 			if(!running) return;

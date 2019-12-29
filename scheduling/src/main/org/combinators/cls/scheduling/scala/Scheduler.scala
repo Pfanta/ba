@@ -1,6 +1,7 @@
 package org.combinators.cls.scheduling.scala
 
 import org.combinators.cls.interpreter._
+import org.combinators.cls.scheduling.model.ShopClass
 import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification
 import org.combinators.cls.types.Constructor
 import org.combinators.cls.types.syntax._
@@ -9,22 +10,21 @@ import scala.collection.JavaConverters._
 import scala.collection.mutable.ListBuffer
 
 object Scheduler {
-  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository {}
+  lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.shopClassKinding, classLoader = this.getClass.getClassLoader)
 
   lazy val repository: Repository = new Repository {}
-  lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.kinding, classLoader = this.getClass.getClassLoader)
 
   def run(classification: Classification): java.util.List[String] = {
 
     var targetType: Constructor = 'Scheduler('NONE)
-    /*classification.getShopClass match {
+    classification.getShopClass match {
       case ShopClass.FS => targetType = 'Scheduler('FS)
       case ShopClass.FFS => targetType = 'Scheduler('FFS)
       case ShopClass.JS => targetType = 'Scheduler('JS)
       case ShopClass.FJS => targetType = 'Scheduler('FJS)
       case ShopClass.OS => targetType = 'Scheduler('OS)
       case _ => targetType = 'Scheduler('NONE)
-    }*/
+    }
 
     val inhabitationResult: InhabitationResult[String] = reflectedRepository.inhabit[String](targetType)
     val results = new ListBuffer[String]()
@@ -40,4 +40,7 @@ object Scheduler {
     }
     results.toList.asJava
   }
+
+  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository with TargetRepository {}
+
 }

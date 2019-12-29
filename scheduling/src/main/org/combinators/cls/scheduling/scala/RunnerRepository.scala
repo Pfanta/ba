@@ -7,7 +7,7 @@ import org.combinators.cls.types.{Kinding, Type, Variable}
 trait RunnerRepository {
   lazy val shopClass: Variable = Variable("algorithm")
 
-  lazy val kinding: Kinding = Kinding(shopClass)
+  lazy val shopClassKinding: Kinding = Kinding(shopClass)
     .addOption('FS)
     .addOption('FFS)
     .addOption('JS)
@@ -21,15 +21,17 @@ trait RunnerRepository {
     def apply(Algorithm: String): String =
       s"""|package org.combinators.cls.scheduling;
           |
-          |import org.combinators.cls.scheduling.model.Task;
-          |import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification;
+          |import java.util.*;
+          |import java.util.function.Function;
+          |import org.combinators.cls.scheduling.model.*;
+          |import org.combinators.cls.scheduling.utils.*;
 			    |
-			    |public class Runner implements java.util.function.Function<Classification, Task> {
-			    | public Task apply(Classification classification) {
-          |   Task task = classification.getTask();
-          |   task.setResult(32);
-          |   return task;
-			    | }
+			    |public class Runner implements java.util.function.Function<ClassificationUtils.Classification, Task> {
+			    | public Task apply(ClassificationUtils.Classification classification) {
+          |        $Algorithm
+          |        schedule.setResult(schedule.getMakespan());
+          |        return schedule;
+          |    }
           |}
 			    """.stripMargin
   }
