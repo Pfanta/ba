@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.Algorithms;
+package org.combinators.cls.scheduling.algorithms;
 
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;

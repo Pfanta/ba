@@ -1,7 +1,7 @@
 package org.combinators.cls.scheduling;
 
-import org.combinators.cls.scheduling.Algorithms.GifflerThompson;
-import org.combinators.cls.scheduling.Algorithms.NEH;
+import org.combinators.cls.scheduling.algorithms.GifflerThompson;
+import org.combinators.cls.scheduling.algorithms.NEH;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.IOUtils;

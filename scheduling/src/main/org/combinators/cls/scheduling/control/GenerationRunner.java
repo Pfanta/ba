@@ -35,7 +35,7 @@ public class GenerationRunner {
 	
 	class Worker extends Thread {
 		private final Task task;
-		private GenerationRunner generationRunner;
+		private final GenerationRunner generationRunner;
 		private volatile boolean running;
 		
 		Worker(Task task, GenerationRunner generationRunner) {

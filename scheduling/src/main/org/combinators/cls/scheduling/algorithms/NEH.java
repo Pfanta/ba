@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.Algorithms;
+package org.combinators.cls.scheduling.algorithms;
 
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
@@ -24,7 +24,7 @@ public class NEH implements Function<ClassificationUtils.Classification, Task> {
 		schedule.add(jobs.remove(0));
 		for(Job job : jobs) {
 			int localCmax = Integer.MAX_VALUE;
-			Task localTask = null;
+			Task localTask = new Task();
 			
 			//add next job at each position
 			for(int i = 0; i <= schedule.getJobs().size(); i++) {

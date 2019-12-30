@@ -157,7 +157,7 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 FVlexibalizes given Task
+	 Turns given Task into a flexible one
 	 @param task Task
 	 @return flexible Task
 	 */

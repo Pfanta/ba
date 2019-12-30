@@ -89,6 +89,7 @@ public class ClassificationUtils {
 	 @param task Task to be validated
 	 @return true for valid Task, false otherwise
 	 */
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean validate(Task task) {
 		if(task == null)
 			return false;
