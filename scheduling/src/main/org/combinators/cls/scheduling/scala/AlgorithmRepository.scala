@@ -6,6 +6,42 @@ import org.combinators.cls.types.syntax._
 
 trait AlgorithmRepository {
 
+  @combinator object NEH {
+    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm('FS)
+
+    def apply(FSScheduler: String): String =
+      s"""|   final List<Job> jobs = classification.getTask().getJobs();
+          |
+          |		//sort jobs in descending order
+          |		jobs.sort(Comparator.comparingInt(job -> -job.getStages().stream().mapToInt(Stage::getDuration).sum()));
+          |
+          |		Task schedule = new Task();
+          |		schedule.add(jobs.remove(0));
+          |		for(Job job : jobs) {
+          |			int localCmax = Integer.MAX_VALUE;
+          |			Task localTask = null;
+          |
+          |			//add next job at each position
+          |			for(int i = 0; i <= schedule.getJobs().size(); i++) {
+          |				//copy local best
+          |				Task jobList = schedule.cloned();
+          |				jobList.getJobs().add(i, job);
+          |
+          |				$FSScheduler
+          |
+          |				int max = localSchedule.getMakespan();
+          |				if(max < localCmax) {
+          |					localCmax = max;
+          |					localTask = localSchedule;
+          |				}
+          |			}
+          |
+          |			//update local best
+          |			schedule = localTask;
+          |		}
+          |""".stripMargin
+  }
+
   @combinator object GifflerThompson {
     val semanticType: Type = 'Heuristic =>: 'Algorithm('JS)
 
@@ -59,12 +95,6 @@ trait AlgorithmRepository {
           |            jobWorkingUntil.put(jobToSchedule, finishTime);
           |            machineWorkingUntil.put(machineToSchedule, finishTime);
           |        });""".stripMargin
-  }
-
-  @combinator object AlgorithmFS {
-    val semanticType: Type = 'Algorithm('FS)
-
-    def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
 
   @combinator object AlgorithmFFS {

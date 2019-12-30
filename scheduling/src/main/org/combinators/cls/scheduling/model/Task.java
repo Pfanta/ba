@@ -12,11 +12,19 @@ import java.util.stream.Collectors;
 public class Task implements IWritable, ICloneable<Task> {
 	
 	@Getter
-	private LinkedList<Job> jobs = new LinkedList<>();
+	private LinkedList<Job> jobs;
 	
 	@Getter
 	@Setter
 	private int result;
+	
+	public Task() {
+		this.jobs = new LinkedList<>();
+	}
+	
+	public Task(LinkedList<Job> jobs) {
+		this.jobs = jobs;
+	}
 	
 	public void add(Job job) {
 		jobs.add(job);

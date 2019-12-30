@@ -1,6 +1,7 @@
 package org.combinators.cls.scheduling;
 
 import org.combinators.cls.scheduling.Algorithms.GifflerThompson;
+import org.combinators.cls.scheduling.Algorithms.NEH;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.IOUtils;
@@ -14,9 +15,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class AlgorithmTest {
 	
 	@Test
-	public void testGTLPT() throws IOException {
+	public void testGTLRPT() throws IOException {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/jobShop4x4.task").getFile());
 		Function<ClassificationUtils.Classification, Task> function = new GifflerThompson();
 		assertEquals(27, function.apply(ClassificationUtils.classify(task)).getMakespan());
+	}
+	
+	@Test
+	public void testNEH() throws IOException {
+		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flowShop4x4_ascending.task").getFile());
+		Function<ClassificationUtils.Classification, Task> function = new NEH();
+		assertEquals(25, function.apply(ClassificationUtils.classify(task)).getMakespan());
 	}
 }
