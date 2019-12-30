@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.view;
+package org.combinators.cls.scheduling.view.customDialogs;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
@@ -8,7 +8,6 @@ import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.VisualizationUtils;
 
 public class ResultDialog extends Dialog<Boolean> {
-	
 	public ResultDialog(Task schedule) {
 		super();
 		this.setTitle("Scheduling result");

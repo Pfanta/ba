@@ -98,6 +98,8 @@
 	           styleClass="runBtn"
 	           mnemonicParsing="false"
 	           focusTraversable="false"
+	           onDragOver="#onDragOver"
+	           onDragDropped="#onFileDroppedOnButton"
 	           onAction="#onRunButtonClicked"
 	           text="Run"/>
 	

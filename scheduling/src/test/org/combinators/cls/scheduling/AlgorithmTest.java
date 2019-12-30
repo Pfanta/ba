@@ -17,6 +17,6 @@ public class AlgorithmTest {
 	public void testGTLPT() throws IOException {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/jobShop4x4.task").getFile());
 		Function<ClassificationUtils.Classification, Task> function = new GifflerThompson();
-		assertEquals(35, function.apply(ClassificationUtils.classify(task)).getMakespan());
+		assertEquals(27, function.apply(ClassificationUtils.classify(task)).getMakespan());
 	}
 }

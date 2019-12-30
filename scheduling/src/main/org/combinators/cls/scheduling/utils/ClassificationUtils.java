@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.combinators.cls.scheduling.model.*;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -113,10 +114,15 @@ public class ClassificationUtils {
 					return false;
 			}
 		}
-
+		
 		return true;
 	}
-
+	
+	public static Task findBest(LinkedList<Task> schedules) {
+		schedules.sort(Comparator.comparingInt(Task::getResult));
+		return schedules.getFirst();
+	}
+	
 	public static class Classification implements ICloneable<Classification> {
 		@Getter
 		private final Task task;

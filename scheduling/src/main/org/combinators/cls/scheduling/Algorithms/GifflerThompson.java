@@ -43,26 +43,28 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
         
             //Find all jobs waiting for machine
             LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
-            for(Job j : schedule.getJobs()) {
-                if(stepOfJob.get(j) >= j.getStages().size())
-                    continue;
-            
-                if(j.getStages().get(stepOfJob.get(j)).getMachine().equals(machineToSchedule))
-                    waitingJobsOnMachine.add(j);
-            }
-        
-            //choose by heuristic
-            //Heuristic
-            waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().mapToInt(Stage::getDuration).sum()));
-            Job jobToSchedule = waitingJobsOnMachine.getLast();
-        
-            //Schedule Task
-            int jobDuration = jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
-            finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
-            jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
-        
-            //Update
-            stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
+	        for(Job j : schedule.getJobs()) {
+		        if(stepOfJob.get(j) >= j.getStages().size())
+			        continue;
+		
+		        if(j.getStages().get(stepOfJob.get(j)).getMachine().equals(machineToSchedule))
+			        waitingJobsOnMachine.add(j);
+	        }
+	
+	        //choose by heuristic
+	        //Heuristic
+	        //waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().mapToInt(Stage::getDuration).sum()));
+	        waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().filter(stage -> j.getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
+	        Job jobToSchedule = waitingJobsOnMachine.getLast();
+	
+	
+	        //Schedule Task
+	        int jobDuration = jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
+	        finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
+	        jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
+	
+	        //Update
+	        stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
             jobWorkingUntil.put(jobToSchedule, finishTime);
             machineWorkingUntil.put(machineToSchedule, finishTime);
         });

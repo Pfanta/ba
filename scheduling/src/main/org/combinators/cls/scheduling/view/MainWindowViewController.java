@@ -22,6 +22,8 @@ import org.combinators.cls.scheduling.utils.ApplicationUtils;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
 import org.combinators.cls.scheduling.utils.IOUtils;
+import org.combinators.cls.scheduling.view.customDialogs.ProgressDialog;
+import org.combinators.cls.scheduling.view.customDialogs.ResultDialog;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXPlusButton;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXTextField;
 import org.combinators.cls.scheduling.view.customcontrol.CustomLabel;
@@ -32,8 +34,6 @@ import java.io.IOException;
 public class MainWindowViewController implements MainWindowAUI {
 	private static final int MAX_JOBS_SHOWN = 20;
 	private static final int MAX_MACHINES_SHOWN = 15;
-	
-	//TODO: show results from Machine perspective
 	
 	@FXML
 	private Pane jobsPane;
@@ -105,6 +105,11 @@ public class MainWindowViewController implements MainWindowAUI {
 		
 		event.setDropCompleted(true);
 		event.consume();
+	}
+	
+	public void onFileDroppedOnButton(DragEvent event) {
+		onFileDropped(event);
+		onRunButtonClicked(null);
 	}
 	
 	public void onGenerateButtonClicked(ActionEvent event) {
@@ -183,8 +188,18 @@ public class MainWindowViewController implements MainWindowAUI {
 	}
 	
 	@Override
-	public void onRunnerResult(int result) {
-		Platform.runLater(() -> progressDialog.setRunResult(result));
+	public void onRunnerProgress(float progress) {
+		Platform.runLater(() -> progressDialog.setRunProgress(progress));
+	}
+	
+	@Override
+	public void onRunnerFinished() {
+		Platform.runLater(() -> progressDialog.setRunFinished());
+	}
+	
+	@Override
+	public void onEvaluationResult(int result) {
+		Platform.runLater(() -> progressDialog.setEvaluationResult(result));
 	}
 	
 	@Override

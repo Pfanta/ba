@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.view;
+package org.combinators.cls.scheduling.view.customDialogs;
 
 import com.jfoenix.controls.JFXProgressBar;
 import javafx.geometry.Insets;
@@ -15,7 +15,6 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	
 	private final JFXProgressBar progressBar;
 	private final Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
-	private boolean finished;
 	
 	public ProgressDialog(String function) {
 		super();
@@ -24,18 +23,19 @@ public class ProgressDialog extends Dialog<ButtonType> {
 
 		Pane pane = new Pane();
 		pane.setPadding(new Insets(20, 10, 10, 10));
-
+		
 		labelNumMachines = new DialogLabel(150, 0, Pos.CENTER_RIGHT);
 		labelNumJobs = new DialogLabel(150, 30, Pos.CENTER_RIGHT);
 		labelClassification = new DialogLabel(150, 60, Pos.CENTER_RIGHT);
 		labelNumResults = new DialogLabel(150, 90, Pos.CENTER_RIGHT);
 		labelResult = new DialogLabel(150, 120, Pos.CENTER_RIGHT);
-
+		
 		progressBar = new JFXProgressBar(0);
 		progressBar.setPrefWidth(300);
 		progressBar.setLayoutY(160);
-
-		labelProgress = new DialogLabel("1/3 Classification...", 0, 160, Pos.CENTER);
+		progressBar.setProgress(1F / 5F);
+		
+		labelProgress = new DialogLabel("1/4 Classification...", 0, 160, Pos.CENTER);
 		labelProgress.setPrefWidth(300);
 		
 		pane.getChildren().addAll(
@@ -57,20 +57,29 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	}
 	
 	public void setClassificationResult(ClassificationUtils.Classification classification) {
-		progressBar.setProgress(1F / 3F);
+		progressBar.setProgress(2F / 5F);
 		labelNumMachines.setText("" + classification.getMachineCount());
 		labelNumJobs.setText("" + classification.getJobCount());
 		labelClassification.setText("" + classification.getShopClass());
-		labelProgress.setText("2/3 Generating...");
+		labelProgress.setText("2/4 Generating...");
 	}
 	
 	public void setGenerationResult(int result) {
 		labelNumResults.setText("" + result);
-		progressBar.setProgress(2F / 3F);
-		labelProgress.setText("2/3 Running...");
+		progressBar.setProgress(3F / 5F);
+		labelProgress.setText("3/4 Running...");
 	}
 	
-	public void setRunResult(int result) {
+	public void setRunProgress(float progress) {
+		progressBar.setProgress((4F + progress) / 5F);
+	}
+	
+	public void setRunFinished() {
+		progressBar.setProgress(4F / 5F);
+		labelProgress.setText("4/4 Evaluating...");
+	}
+	
+	public void setEvaluationResult(int result) {
 		labelResult.setText("" + result);
 		progressBar.setProgress(1);
 		labelProgress.setText("Finished.");
@@ -82,6 +91,5 @@ public class ProgressDialog extends Dialog<ButtonType> {
 			getDialogPane().getButtonTypes().add(ButtonType.APPLY);
 		
 		((Button) getDialogPane().lookupButton(ButtonType.APPLY)).setText("Show Results");
-		finished = true;
 	}
 }

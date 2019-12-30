@@ -55,7 +55,7 @@ public class GenerationUtils {
 		dialog.getDialogPane().setContent(grid);
 		Platform.runLater(textField1::requestFocus);
 		
-		dialog.setResultConverter(dialogButton -> new GenerationDialogResult(textField1.getNum(), textField2.getNum(), deadlines.isSelected(), typeBox.getSelectionModel().getSelectedItem()));
+		dialog.setResultConverter(dialogButton -> dialogButton == ButtonType.OK ? new GenerationDialogResult(textField1.getNum(), textField2.getNum(), deadlines.isSelected(), typeBox.getSelectionModel().getSelectedItem()) : null);
 		
 		return dialog.showAndWait();
 	}

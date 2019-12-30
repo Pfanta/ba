@@ -8,6 +8,7 @@ import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.RunnerUtils;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class GenerationRunner {
@@ -54,9 +55,9 @@ public class GenerationRunner {
 		}
 		
 		private void work() {
-            ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
-
-            if (!running) return;
+			ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
+			
+			if(!running) return;
 			
 			mainWindowAUI.onClassificationFinished(classification);
 			List<String> results = Scheduler.run(classification);
@@ -64,13 +65,17 @@ public class GenerationRunner {
 			if(!running) return;
 			
 			mainWindowAUI.onGenerationFinished(results.size());
+			LinkedList<Task> schedules = RunnerUtils.runResults(classification, results, mainWindowAUI);
 			
-			Task bestSchedule = RunnerUtils.runResults(classification, results);
+			if(!running) return;
+			
+			mainWindowAUI.onRunnerFinished();
+			Task bestSchedule = ClassificationUtils.findBest(schedules);
 			
 			if(!running) return;
 			
 			generationRunner.setResult(bestSchedule);
-			mainWindowAUI.onRunnerResult(bestSchedule.getResult());
+			mainWindowAUI.onEvaluationResult(bestSchedule.getResult());
 		}
 	}
 }

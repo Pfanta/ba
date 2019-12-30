@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Job implements IWritable, ICloneable<Job> {
@@ -23,7 +24,7 @@ public class Job implements IWritable, ICloneable<Job> {
 	public Job() {
 		this("", -1);
 	}
-
+	
 	public Job(String name) {
 		this(name, -1);
 	}
@@ -31,6 +32,12 @@ public class Job implements IWritable, ICloneable<Job> {
 	public Job(String name, int deadline) {
 		this.name = name;
 		this.deadline = deadline;
+	}
+	
+	public Job(String name, int deadline, Stage... stages) {
+		this.name = name;
+		this.deadline = deadline;
+		this.stages.addAll(Arrays.asList(stages));
 	}
 	
 	public void addStage(Stage stage) {

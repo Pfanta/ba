@@ -14,9 +14,19 @@ public interface MainWindowAUI {
 	void onGenerationFinished(int results);
 	
 	/**
+	 @param progress runner progress
+	 */
+	void onRunnerProgress(float progress);
+	
+	/**
+	 *
+	 */
+	void onRunnerFinished();
+	
+	/**
 	 @param result result value for target Function e.g. finish time for function C_max
 	 */
-	void onRunnerResult(int result);
+	void onEvaluationResult(int result);
 	
 	/**
 	 Resets
