@@ -50,8 +50,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'FlowShopScheduler
 
     def apply: String =
-      s"""|       /* ########## FLOWSHOP SCHEDULER MODULE ########## */
-          |				Task localSchedule = jobList.cloned();
+      s"""|       Task localSchedule = jobList.cloned();
           |				Map<Machine, Integer> machineWorkingUntil = new HashMap<>();
           |				localSchedule.getAllMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
           |
@@ -65,7 +64,6 @@ trait HeuristicRepository {
           |						machineWorkingUntil.put(stage.getMachine(), scheduleTime);
           |					}
           |				}
-          |				/* ########## ########## ########## ########## */
           |""".stripMargin
   }
 

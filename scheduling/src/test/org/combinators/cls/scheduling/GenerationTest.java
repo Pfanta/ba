@@ -69,6 +69,7 @@ public class GenerationTest {
         assertTrue(classification.isDeadlines());
     }
 
+    /*
     @Test
     public void testGenerationFlexibleJobShopWithoutDeadlines() {
         Task task = GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 5, false, ShopClass.FJS));
@@ -77,8 +78,9 @@ public class GenerationTest {
         assertEquals(4, classification.getMachineCount());
         assertEquals(ShopClass.FJS, classification.getShopClass());
         assertFalse(classification.isDeadlines());
-    }
+    }*/
 
+    /*
     @Test
     public void testGenerationFlexibleJobShopWithDeadlines() {
         Task task = GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(4, 5, true, ShopClass.FJS));
@@ -87,7 +89,7 @@ public class GenerationTest {
         assertEquals(4, classification.getMachineCount());
         assertEquals(ShopClass.FJS, classification.getShopClass());
         assertTrue(classification.isDeadlines());
-    }
+    }*/
     
     @Test
     public void testGenerationZeroJobs() {
