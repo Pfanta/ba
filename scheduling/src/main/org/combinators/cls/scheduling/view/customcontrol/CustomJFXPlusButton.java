@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-
 public class CustomJFXPlusButton extends JFXButton {
 	public CustomJFXPlusButton(int layoutX, int layoutY, int prefWidth, int prefHeight, EventHandler<ActionEvent> handler) {
 		super("+");

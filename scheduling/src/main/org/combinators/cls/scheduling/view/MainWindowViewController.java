@@ -8,16 +8,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.JobMachineTuple;
-import org.combinators.cls.scheduling.model.Stage;
-import org.combinators.cls.scheduling.model.Task;
+import org.combinators.cls.scheduling.model.*;
 import org.combinators.cls.scheduling.utils.ApplicationUtils;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
@@ -71,22 +69,52 @@ public class MainWindowViewController implements MainWindowAUI {
 			return;
 		}
 		
-		for(int i = 0; i < currentTask.getJobs().size(); i++) {
-			nodes.add(new CustomLabel("Job " + i, 10, 10 + i * 40, 50, 30));
+		for(int i = 0; i < currentTask.getJobs().size(); i++) { //FIXME Update buggy; Refresh buggy
+			nodes.add(new CustomLabel(currentTask.getJobs().get(i).getName(), 10, 10 + i * 40, 50, 30));
 			
 			int y = 0;
 			final Job currentJob = currentTask.getJobs().get(i);
 			for(Stage stage : currentJob.getStages()) {
-				nodes.add(new CustomJFXTextField(stage.toString(), 60 + y * 110, 10 + i * 40, 100, 30));//TODO: Display Stages
+				TextField textFieldMachineCount = new CustomJFXTextField(stage.getMachineCount(), 60 + y * 130, 10 + i * 40, 20, 30);
+				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
+						textFieldMachineCount.setText(oldValue);
+					else
+						stage.setMachineCount(Integer.parseInt(newValue));
+				});
+				
+				TextField textFieldMachine = new CustomJFXTextField(stage.getMachine().toString(), 60 + y * 130 + 30, 10 + i * 40, 50, 30);
+				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+					if(newValue.isEmpty())
+						textFieldMachine.setText(oldValue);
+					else
+						stage.getMachine().setName(newValue);
+				});
+				
+				TextField textFieldMachineTime = new CustomJFXTextField(stage.getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
+				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
+						textFieldMachineTime.setText(oldValue);
+					else
+						stage.setDuration(Integer.parseInt(newValue));
+				});
+				
+				nodes.addAll(textFieldMachineCount,
+						new CustomLabel("x", 60 + y * 130 + 20, 10 + i * 40, 10, 30),
+						textFieldMachine,
+						new CustomLabel(":", 60 + y * 130 + 80, 10 + i * 40, 5, 30),
+						textFieldMachineTime,
+						new CustomLabel("\u2192", 60 + y * 130 + 105, 10 + i * 40, 25, 30, 18));
 				y++;
 			}
-			nodes.add(new CustomJFXPlusButton(70 + y * 110, 10 + i * 40, 30, 30, event -> {
-				currentJob.addStage(new Stage(null, -1, -1));//FIXME
+			nodes.remove(nodes.size() - 1);
+			nodes.add(new CustomJFXPlusButton(70 + y * 130, 10 + i * 40, 30, 30, event -> {
+				currentJob.addStage(new Stage(new Machine("M0"), 0, 0));
 				refreshJobsPane();
 			}));
 		}
 		nodes.add(new CustomJFXPlusButton(10, 10 + currentTask.getJobs().size() * 40, 30, 30, event -> {
-			currentTask.add(new Job());
+			currentTask.add(new Job("J" + currentTask.getJobs().size(), -1, new Stage(new Machine("M0"), 0, 0)));
 			refreshJobsPane();
 		}));
 	}

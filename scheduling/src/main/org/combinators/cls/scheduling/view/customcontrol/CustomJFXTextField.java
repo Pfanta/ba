@@ -8,5 +8,10 @@ public class CustomJFXTextField extends JFXTextField {
 		setLayoutX(layoutX);
 		setLayoutY(layoutY);
 		setPrefSize(prefWidth, prefHeight);
+		focusedProperty().addListener((observable, oldValue, newValue) -> selectAll());
+	}
+	
+	public CustomJFXTextField(int text, int layoutX, int layoutY, int prefWidth, int prefHeight) {
+		this(Integer.toString(text), layoutX, layoutY, prefWidth, prefHeight);
 	}
 }
