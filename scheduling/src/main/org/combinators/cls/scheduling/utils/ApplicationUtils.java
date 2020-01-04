@@ -5,20 +5,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class ApplicationUtils {
 	
+	private static final int MAX_DIALOGS = 5;
+	private static int openDialogs = 0;
+	
 	public static void showException(String title, String content, Exception ex) {
 		Platform.runLater(() -> showExceptionDialog(title, content, ex));
 	}
 	
 	private static void showExceptionDialog(String title, String content, Exception ex) {
+		if(++openDialogs >= MAX_DIALOGS)
+			return;
+		
 		Alert alert = new Alert(Alert.AlertType.ERROR);
 		alert.setTitle(title);
 		alert.setHeaderText(content);
@@ -41,6 +44,8 @@ public class ApplicationUtils {
 		
 		alert.getDialogPane().setExpandableContent(expContent);
 		alert.showAndWait();
+		
+		openDialogs = 0;
 	}
 	
 	public static void showWarning(String title, String content) {
@@ -48,28 +53,14 @@ public class ApplicationUtils {
 	}
 	
 	private static void showWarningDialog(String title, String content) {
+		if(++openDialogs >= MAX_DIALOGS)
+			return;
+		
 		Alert alert = new Alert(Alert.AlertType.WARNING);
 		alert.setTitle(title);
 		alert.setHeaderText(content);
 		alert.showAndWait();
-	}
-	
-	/*J1|-1|M1,1,5|M2,1,3|M3,1,3|M4,1,2|*/
-	public static Job parse(String input) throws IllegalArgumentException {
-		String[] split = input.split("\\|");
-		if(split.length < 3)
-			throw new IllegalArgumentException("Not a valid String: " + input);
 		
-		Job job = new Job(split[0], Integer.parseInt(split[1]));
-		
-		for(int i = 2; i < split.length; i++) {
-			String s = split[i];
-			String[] machinesSplit = s.split(",");
-			
-			Stage stage = new Stage(new Machine(machinesSplit[0]), Integer.parseInt(machinesSplit[1]), Integer.parseInt(machinesSplit[2]));
-			job.addStage(stage);
-		}
-		
-		return job;
+		openDialogs = 0;
 	}
 }
