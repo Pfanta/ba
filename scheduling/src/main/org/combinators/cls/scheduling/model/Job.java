@@ -6,11 +6,13 @@ import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Job implements IWritable, ICloneable<Job> {
-
+	
 	@Getter
-	private final LinkedList<Stage> stages = new LinkedList<>();
+	private final LinkedList<Route> routes = new LinkedList<>();
 	
 	@Getter
 	@Setter
@@ -34,14 +36,25 @@ public class Job implements IWritable, ICloneable<Job> {
 		this.deadline = deadline;
 	}
 	
-	public Job(String name, int deadline, Stage... stages) {
+	public Job(String name, int deadline, Route... routes) {
 		this.name = name;
 		this.deadline = deadline;
-		this.stages.addAll(Arrays.asList(stages));
+		this.routes.addAll(Arrays.asList(routes));
 	}
 	
-	public void addStage(Stage stage) {
-		stages.add(stage);
+	public void addRoute(Route route) {
+		this.routes.add(route);
+	}
+	
+	public Route getScheduledRoute() {
+		return routes.get(0);
+	}
+	
+	/**
+	 @return returns an ordered list of the machines in the order to be scheduled. Only works for non-flexible job- and open shop
+	 */
+	public List<Machine> getMachines() {
+		return this.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).collect(Collectors.toList());
 	}
 	
 	@Override
@@ -53,14 +66,14 @@ public class Job implements IWritable, ICloneable<Job> {
 	public String getString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append(name).append('|').append(deadline).append('|');
-		stages.forEach(stage -> builder.append(stage.getString()).append('|'));
+		routes.get(0).getStages().forEach(stage -> builder.append(stage.getString()).append('|'));
 		return builder.toString();
 	}
 	
 	@Override
 	public Job cloned() {
 		Job job = new Job(this.name, this.deadline);
-		this.stages.forEach(stage -> job.getStages().add(stage.cloned()));
+		this.routes.forEach(route -> job.getRoutes().add(route.cloned()));
 		return job;
 	}
 }

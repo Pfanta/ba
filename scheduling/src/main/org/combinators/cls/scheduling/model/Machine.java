@@ -6,12 +6,43 @@ import lombok.Setter;
 import java.util.Objects;
 
 public class Machine implements Comparable<Machine>, IWritable, ICloneable<Machine> {
+	/**
+	 Unique name of the machine
+	 */
 	@Getter
 	@Setter
 	private String name;
 	
-	public Machine(String name) {
+	/**
+	 Time when Job is scheduled at this machine
+	 */
+	@Getter
+	@Setter
+	private int scheduledTime;
+	
+	/**
+	 Duration for Job on this machine
+	 */
+	@Getter
+	@Setter
+	private int duration;
+	
+	public Machine(String name, int duration, int scheduledTime) {
 		this.name = name;
+		this.duration = duration;
+		this.scheduledTime = scheduledTime;
+	}
+	
+	public Machine(String name, int duration) {
+		this(name, duration, -1);
+	}
+	
+	public Machine(String name) {
+		this(name, -1, -1);
+	}
+	
+	public int getFinishTime() {
+		return scheduledTime + duration;
 	}
 	
 	@Override

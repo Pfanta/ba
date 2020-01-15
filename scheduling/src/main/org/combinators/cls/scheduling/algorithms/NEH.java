@@ -18,7 +18,7 @@ public class NEH implements Function<ClassificationUtils.Classification, Task> {
 		final List<Job> jobs = classification.getTask().getJobs();
 		
 		//sort jobs in descending order
-		jobs.sort(Comparator.comparingInt(job -> -job.getStages().stream().mapToInt(Stage::getDuration).sum()));
+		jobs.sort(Comparator.comparingInt(job -> -job.getRoutes().get(0).getStages().stream().mapToInt(Stage::getDuration).sum()));
 		
 		Task schedule = new Task();
 		schedule.add(jobs.remove(0));
@@ -38,13 +38,13 @@ public class NEH implements Function<ClassificationUtils.Classification, Task> {
 				localSchedule.getAllMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
 				
 				for(Job jobIndex : localSchedule.getJobs()) {
-					for(int machineIndex = 0; machineIndex < jobIndex.getStages().size(); machineIndex++) {
-						Stage stage = jobIndex.getStages().get(machineIndex);
-						int t1 = machineIndex == 0 ? 0 : jobIndex.getStages().get(machineIndex - 1).getFinishTime();
-						int t2 = machineWorkingUntil.get(stage.getMachine());
+					for(int machineIndex = 0; machineIndex < jobIndex.getRoutes().get(0).getStages().size(); machineIndex++) {
+						Stage stage = jobIndex.getRoutes().get(0).getStages().get(machineIndex);
+						int t1 = machineIndex == 0 ? 0 : jobIndex.getRoutes().get(0).getStages().get(machineIndex - 1).getFinishTime();
+						int t2 = machineWorkingUntil.get(stage.getMachines().get(0));
 						int scheduleTime = Math.max(t1, t2);
 						stage.setScheduledTime(scheduleTime);
-						machineWorkingUntil.put(stage.getMachine(), scheduleTime);
+						machineWorkingUntil.put(stage.getMachines().get(0), scheduleTime);
 					}
 				}
 				/* ########## ########## ########## ########## */

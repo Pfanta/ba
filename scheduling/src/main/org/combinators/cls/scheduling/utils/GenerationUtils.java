@@ -13,7 +13,6 @@ import org.combinators.cls.scheduling.model.*;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Random;
 
@@ -93,20 +92,24 @@ public class GenerationUtils {
 	 @return Task
 	 */
 	private static Task generateRandomFlowShop(int numMachines, int numJobs, boolean deadlines) {
-		LinkedList<Machine> machines = new LinkedList<>();
 		Task task = new Task();
-		
-		for(int i = 0; i < numMachines; i++) {
-			machines.add(new Machine("M" + i));
-		}
 		
 		for(int i = 0; i < numJobs; i++) {
 			Job job = new Job("J" + i);
+			
+			Route route = new Route();
+			job.addRoute(route);
+			job.setScheduledRoute(route);
+			
 			int totalTime = 0;
-			for (int j = 0; j < numMachines; j++) {
+			for(int j = 0; j < numMachines; j++) {
 				int time = random.nextInt(MAX_MACHINE_TIME - MIN_MACHINE_TIME) + MIN_MACHINE_TIME;
 				totalTime += time;
-				job.addStage(new Stage(machines.get(j), 1, time));
+				
+				Machine machine = new Machine("M" + j, time);
+				Stage stage = new Stage(machine);
+				stage.setScheduledMachine(machine);
+				route.addStage(stage);
 			}
 			if (deadlines)
 				job.setDeadline(totalTime + random.nextInt(MAX_DEADLINE_PLUS) * numMachines);
@@ -128,7 +131,7 @@ public class GenerationUtils {
 		Task task = generateRandomFlowShop(numMachines, numJobs, deadlines);
 		
 		do {
-			task.getJobs().forEach(job -> Collections.shuffle(job.getStages()));
+			task.getJobs().forEach(job -> Collections.shuffle(job.getScheduledRoute().getStages()));
 		} while(!ClassificationUtils.classify(task).isStrictlyJobShop());
 		
 		return task;

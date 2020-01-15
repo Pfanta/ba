@@ -30,43 +30,43 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
         
             //Find machine that may finish first
             for(Job j : schedule.getJobs()) {
-                if(stepOfJob.get(j) >= j.getStages().size())
-                    continue;
-            
-                Stage nextStage = j.getStages().get(stepOfJob.get(j));
-                int time = nextStage.getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachine()), jobWorkingUntil.get(j));
-                if(time < finishTime) {
-                    machineToSchedule = nextStage.getMachine();
-                    finishTime = time;
-                }
+	            if(stepOfJob.get(j) >= j.getRoutes().get(0).getStages().size())
+		            continue;
+	
+	            Stage nextStage = j.getRoutes().get(0).getStages().get(stepOfJob.get(j));
+	            int time = nextStage.getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachines().get(0)), jobWorkingUntil.get(j));
+	            if(time < finishTime) {
+		            machineToSchedule = nextStage.getMachines().get(0);
+		            finishTime = time;
+	            }
             }
         
             //Find all jobs waiting for machine
             LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
 	        for(Job j : schedule.getJobs()) {
-		        if(stepOfJob.get(j) >= j.getStages().size())
+		        if(stepOfJob.get(j) >= j.getRoutes().get(0).getStages().size())
 			        continue;
 		
-		        if(j.getStages().get(stepOfJob.get(j)).getMachine().equals(machineToSchedule))
+		        if(j.getRoutes().get(0).getStages().get(stepOfJob.get(j)).getMachines().get(0).equals(machineToSchedule))
 			        waitingJobsOnMachine.add(j);
 	        }
 	
 	        //choose by heuristic
 	        //Heuristic
 	        //waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().mapToInt(Stage::getDuration).sum()));
-	        waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().filter(stage -> j.getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
+	        waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getRoutes().get(0).getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
 	        Job jobToSchedule = waitingJobsOnMachine.getLast();
 	
 	
 	        //Schedule Task
-	        int jobDuration = jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
+	        int jobDuration = jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
 	        finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
-	        jobToSchedule.getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
+	        jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
 	
 	        //Update
 	        stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
-            jobWorkingUntil.put(jobToSchedule, finishTime);
-            machineWorkingUntil.put(machineToSchedule, finishTime);
+	        jobWorkingUntil.put(jobToSchedule, finishTime);
+	        machineWorkingUntil.put(machineToSchedule, finishTime);
         });
         return schedule;
     }

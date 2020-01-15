@@ -1,61 +1,41 @@
 package org.combinators.cls.scheduling.model;
 
 import lombok.Getter;
-import lombok.Setter;
+
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class Stage implements IWritable, ICloneable<Stage> {
 	@Getter
-	private Machine machine;
+	private final LinkedList<Machine> machines;
 	
-	/**
-	 Time that the Jo has to be processed on this Machine
-	 */
-	@Getter
-	@Setter
-	private int duration;
-	
-	/**
-	 Time when Job is scheduled at this machine
-	 */
-	@Getter
-	@Setter
-	private int scheduledTime;
-	
-	/**
-	 How many identical machines there are to process this job
-	 if machineCount is larger than 1 the job is considered flexible
-	 */
-	@Getter
-	@Setter
-	private int machineCount;
-	
-	public Stage(Machine machine, int machineCount, int duration, int scheduledTime) {
-		this.machine = machine;
-		this.machineCount = machineCount;
-		this.duration = duration;
-		this.scheduledTime = scheduledTime;
+	public Stage(Machine... machines) {
+		this.machines = new LinkedList<>();
+		this.machines.addAll(Arrays.asList(machines));
 	}
 	
-	public Stage(Machine machine, int machineCount, int duration) {
-		this(machine, machineCount, duration, -1);
+	public Stage() {
+		this.machines = new LinkedList<>();
 	}
 	
-	public int getFinishTime() {
-		return scheduledTime + duration;
+	public Machine getScheduledMachine() {
+		return machines.get(0);
 	}
 	
 	@Override
 	public String getString() {
-		return machineCount + "x " + machine.getString() + "," + duration;
+		return machines.size() + "x " + machines.get(0).getString() + "," + 42;//FIXME
 	}
 	
 	@Override
 	public String toString() {
-		return machineCount + "x " + machine + "(" + duration + ")";
+		return machines.size() + "x " + machines.get(0) + "(" + 42 + ")";//FIXME
 	}
 	
 	@Override
 	public Stage cloned() {
-		return new Stage(this.machine.cloned(), this.machineCount, this.duration, this.scheduledTime);
+		Stage stage = new Stage();
+		machines.forEach(machine -> stage.getMachines().add(machine.cloned()));
+		return stage;
 	}
 }

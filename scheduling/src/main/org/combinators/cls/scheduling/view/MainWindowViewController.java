@@ -74,32 +74,32 @@ public class MainWindowViewController implements MainWindowAUI {
 			
 			int y = 0;
 			final Job currentJob = currentTask.getJobs().get(i);
-			for(Stage stage : currentJob.getStages()) {
-				TextField textFieldMachineCount = new CustomJFXTextField(stage.getMachineCount(), 60 + y * 130, 10 + i * 40, 20, 30);
-				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
-					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
-						textFieldMachineCount.setText(oldValue);
-					else
-						stage.setMachineCount(Integer.parseInt(newValue));
-				});
+			for(Stage stage : currentJob.getRoutes().get(0).getStages()) {
+//				TextField textFieldMachineCount = new CustomJFXTextField(stage.getMachineCount(), 60 + y * 130, 10 + i * 40, 20, 30);
+//				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+//					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
+//						textFieldMachineCount.setText(oldValue);
+//					else
+//						stage.setMachineCount(Integer.parseInt(newValue));
+//				});
 				
-				TextField textFieldMachine = new CustomJFXTextField(stage.getMachine().toString(), 60 + y * 130 + 30, 10 + i * 40, 50, 30);
-				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+				TextField textFieldMachine = new CustomJFXTextField(stage.getMachines().get(0).toString(), 60 + y * 130 + 30, 10 + i * 40, 50, 30);
+				textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
 					if(newValue.isEmpty())
 						textFieldMachine.setText(oldValue);
 					else
-						stage.getMachine().setName(newValue);
+						stage.getMachines().get(0).setName(newValue);
 				});
 				
-				TextField textFieldMachineTime = new CustomJFXTextField(stage.getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
-				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
+				TextField textFieldMachineTime = new CustomJFXTextField(stage.getScheduledMachine().getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
+				textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
 					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
 						textFieldMachineTime.setText(oldValue);
 					else
-						stage.setDuration(Integer.parseInt(newValue));
+						stage.getScheduledMachine().setDuration(Integer.parseInt(newValue));
 				});
 				
-				nodes.addAll(textFieldMachineCount,
+				nodes.addAll(//textFieldMachineCount,
 						new CustomLabel("x", 60 + y * 130 + 20, 10 + i * 40, 10, 30),
 						textFieldMachine,
 						new CustomLabel(":", 60 + y * 130 + 80, 10 + i * 40, 5, 30),
@@ -109,12 +109,12 @@ public class MainWindowViewController implements MainWindowAUI {
 			}
 			nodes.remove(nodes.size() - 1);
 			nodes.add(new CustomJFXPlusButton(70 + y * 130, 10 + i * 40, 30, 30, event -> {
-				currentJob.addStage(new Stage(new Machine("M0"), 0, 0));
+				currentJob.getRoutes().get(0).addStage(new Stage(new Machine("M0")));
 				refreshJobsPane();
 			}));
 		}
 		nodes.add(new CustomJFXPlusButton(10, 10 + currentTask.getJobs().size() * 40, 30, 30, event -> {
-			currentTask.add(new Job("J" + currentTask.getJobs().size(), -1, new Stage(new Machine("M0"), 0, 0)));
+			currentTask.add(new Job("J" + currentTask.getJobs().size(), -1, new Route(new Stage(new Machine("M0")))));
 			refreshJobsPane();
 		}));
 	}

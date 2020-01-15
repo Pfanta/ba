@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ClassificationUtils {
 	
@@ -19,10 +20,10 @@ public class ClassificationUtils {
 		if(!validate(task))
 			return new Classification(task, -1, -1, false, ShopClass.NONE); //Invalid Task
 		
-		List<List<Machine>> machines = task.getMachines();
+		List<List<Machine>> machines = getMachines(task);
 		
 		int jobCount = machines.size();
-		int machineCount = task.getAllMachines().size();
+		int machineCount = (int) machines.stream().flatMap(Collection::stream).distinct().count();
 		
 		if(!checkFlexibility(task))
 			if(checkIsOpenShop(machines))
@@ -41,10 +42,14 @@ public class ClassificationUtils {
 	}
 	
 	public static JobMachineTuple getTaskDimensions(Task task) {
-		List<List<Machine>> machines = task.getMachines();
+		List<List<Machine>> machines = getMachines(task);
 		return new JobMachineTuple(machines.size(), (int) machines.stream().flatMap(Collection::stream).distinct().count());
 	}
-
+	
+	private static List<List<Machine>> getMachines(Task task) {
+		return task.getJobs().stream().map(Job::getMachines).collect(Collectors.toList());
+	}
+	
 	
 	/**
 	 Checks for given Task to be OpenShop
@@ -57,13 +62,20 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Checks for given Task to be JobShop
+	 Checks for given Task to be JobShop: Just one route for each job and no duration=0
 	 @param currentTask Task to be classified
 	 @return true if model matches
 	 @precondition Task is OpenShop
 	 */
+	@SuppressWarnings("RedundantIfStatement")
 	private static boolean checkIsJobShop(Task currentTask) {
-		return currentTask.getJobs().stream().noneMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getDuration() == 0));
+		if(currentTask.getJobs().stream().anyMatch(job -> job.getRoutes().size() != 1))
+			return false;
+		
+		if(currentTask.getJobs().stream().anyMatch(job -> job.getScheduledRoute().getStages().stream().anyMatch(stage -> stage.getScheduledMachine().getDuration() == 0)))
+			return false;
+		
+		return true;
 	}
 	
 	/**
@@ -81,7 +93,7 @@ public class ClassificationUtils {
 	}
 	
 	private static boolean checkFlexibility(Task currentTask) {
-		return currentTask.getJobs().stream().anyMatch(job -> job.getStages().stream().anyMatch(stage -> stage.getMachineCount() > 1));
+		return currentTask.getJobs().stream().anyMatch(job -> job.getRoutes().stream().anyMatch(route -> route.getStages().stream().anyMatch(stage -> stage.getMachines().size() > 1)));
 	}
 	
 	/**
@@ -102,17 +114,26 @@ public class ClassificationUtils {
 			if(job == null || job.getName() == null || job.getDeadline() < -1)
 				return false;
 			
-			LinkedList<Stage> stages = job.getStages();
-			if(stages == null || stages.size() == 0)
+			LinkedList<Route> routes = job.getRoutes();
+			if(routes == null || routes.size() == 0)
 				return false;
 			
-			for(Stage stage : stages) {
-				if(stage == null || stage.getDuration() < 0 || stage.getScheduledTime() < -1 || stage.getMachineCount() <= 0)
+			for(Route route : routes) {
+				LinkedList<Stage> stages = route.getStages();
+				if(stages == null || stages.size() == 0)
 					return false;
 				
-				Machine machine = stage.getMachine();
-				if(machine == null || machine.getName() == null)
-					return false;
+				for(Stage stage : stages) {
+					if(stage == null || stage.getMachines().size() == 0)
+						return false;
+					
+					LinkedList<Machine> machines = stage.getMachines();
+					
+					for(Machine machine : machines) {
+						if(machine == null || machine.getName() == null || machine.getDuration() < 0 || machine.getScheduledTime() < -1)
+							return false;
+					}
+				}
 			}
 		}
 		

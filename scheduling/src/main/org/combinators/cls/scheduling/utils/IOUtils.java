@@ -1,8 +1,6 @@
 package org.combinators.cls.scheduling.utils;
 
 import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
 import org.combinators.cls.scheduling.model.Task;
 
 import java.io.BufferedWriter;
@@ -40,7 +38,7 @@ public class IOUtils {
 	
 	/*J1|-1|M1,1,5|M2,1,3|M3,1,3|M4,1,2|*/
 	public static Job parse(String input) throws IllegalArgumentException {
-		String[] split = input.split("\\|");
+		/*String[] split = input.split("\\|");
 		if(split.length < 3)
 			throw new IllegalArgumentException("Not a valid String: " + input);
 		
@@ -50,10 +48,11 @@ public class IOUtils {
 			String s = split[i];
 			String[] machinesSplit = s.split(",");
 			
-			Stage stage = new Stage(new Machine(machinesSplit[0]), Integer.parseInt(machinesSplit[1]), Integer.parseInt(machinesSplit[2]));
+			Stage stage = new Stage(new Machine(machinesSplit[0], Integer.parseInt(machinesSplit[1]), Integer.parseInt(machinesSplit[2]));
 			job.addStage(stage);
 		}
 		
-		return job;
+		return job;*/
+		throw new UnsupportedOperationException(); //FIXME
 	}
 }

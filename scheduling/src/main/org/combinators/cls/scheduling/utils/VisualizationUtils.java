@@ -1,11 +1,6 @@
 package org.combinators.cls.scheduling.utils;
 
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
 import org.combinators.cls.scheduling.model.Task;
-
-import java.util.*;
 
 public class VisualizationUtils {
 	private final static String BG_COLOR = "#AAAAAA";
@@ -16,12 +11,13 @@ public class VisualizationUtils {
 	 @return HTML string representation
 	 */
 	public static String taskToHTMLGanttChart(Task task) {
-		return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
+		throw new UnsupportedOperationException();
+		/*return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
 				       taskToMachineChart(task) +
 				       taskToJobChart(task) +
-				       "</body></html>";
+				       "</body></html>";*/
 	}
-	
+	/*
 	private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
 		final StringBuilder html = new StringBuilder("<table><caption>Scheduling result</caption><tr><th>Machine</th>");
@@ -104,5 +100,5 @@ public class VisualizationUtils {
 		
 		html.append("</table>");
 		return html.toString();
-	}
+	}*/
 }
