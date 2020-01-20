@@ -17,20 +17,20 @@ import java.util.Optional;
 import java.util.Random;
 
 public class GenerationUtils {
-
+	
 	private static final int DEFAULT_MACHINES_COUNT = 4;
 	private static final int DEFAULT_JOBS_COUNT = 4;
 	private static final int MIN_MACHINE_TIME = 1;
-	private static final int MAX_MACHINE_TIME = 15;
+	private static final int MAX_MACHINE_TIME = 10;
 	private static final int MAX_DEADLINE_PLUS = 10;
 	private static final Random random = new Random();
-
+	
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
 		Dialog<GenerationDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Generation Dialog");
 		dialog.setHeaderText("Generate random scheduling problem");
 		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
+		
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
