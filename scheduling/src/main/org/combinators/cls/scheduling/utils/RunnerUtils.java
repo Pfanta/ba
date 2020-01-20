@@ -23,6 +23,8 @@ public class RunnerUtils {
 			callback.onRunnerProgress((float) i / (float) runners.size());
 		}
 		
+		results.forEach(t -> System.out.println(t.getResult()));
+		
 		return results;
 	}
 }

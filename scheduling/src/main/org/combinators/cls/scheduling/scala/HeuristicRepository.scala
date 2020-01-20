@@ -26,7 +26,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getLast();""".stripMargin
   }
 
@@ -34,7 +34,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 

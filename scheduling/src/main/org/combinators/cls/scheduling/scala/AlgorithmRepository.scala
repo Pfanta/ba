@@ -13,7 +13,7 @@ trait AlgorithmRepository {
       s"""|   final LinkedList<Job> jobs = classification.getTask().getJobs();
           |
           |		//sort jobs in descending order
-          |		jobs.sort(Comparator.comparingInt(job -> -job.getRoutes().getFirst().getStages().stream().mapToInt(stage -> stage.getScheduledMachine().getDuration()).sum()));
+          |		jobs.sort(Comparator.comparingInt(job -> -job.getScheduledRoute().getStages().stream().mapToInt(stage -> stage.getScheduledMachine().getDuration()).sum()));
           |
           |		//initialize local schedule with first job (the job with the longest makespan)
           |		Task schedule = new Task();
@@ -45,6 +45,28 @@ trait AlgorithmRepository {
           |""".stripMargin
   }
 
+  @combinator object SimpleDispatchingRulesFlowShop {
+    val semanticType: Type = 'Heuristic =>: 'FlowShopScheduler =>: 'Algorithm('FS)
+
+    def apply(Heuristic: String, FSScheduler: String): String =
+      s"""|   Task schedule = classification.getTask();
+          |		LinkedList<Job> waitingJobsOnMachine = schedule.getJobs();
+          |
+          |   Map<Job, Integer> stepOfJob = new HashMap<>();
+          |		waitingJobsOnMachine.forEach(j -> stepOfJob.put(j,0));
+          |
+          |		Task jobList = new Task();
+          |   while(!waitingJobsOnMachine.isEmpty()) {
+          |     $Heuristic
+          |     waitingJobsOnMachine.remove(jobToSchedule);
+          |			jobList.add(jobToSchedule);
+          |   }
+          |
+          |   $FSScheduler
+          |
+          |   schedule = localSchedule;""".stripMargin
+  }
+
   @combinator object GifflerThompson {
     val semanticType: Type = 'Heuristic =>: 'Algorithm('JS)
 
@@ -67,10 +89,10 @@ trait AlgorithmRepository {
           |
           |            //Find machine that may finish first
           |            for(Job j : schedule.getJobs()) {
-          |	            if(stepOfJob.get(j) >= j.getRoutes().get(0).getStages().size())
+          |	            if(stepOfJob.get(j) >= j.getScheduledRoute().getStages().size())
           |		            continue;
           |
-          |	            Stage nextStage = j.getRoutes().get(0).getStages().get(stepOfJob.get(j));
+          |	            Stage nextStage = j.getScheduledRoute().getStages().get(stepOfJob.get(j));
           |	            int time = nextStage.getScheduledMachine().getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachines().get(0)), jobWorkingUntil.get(j));
           |	            if(time < finishTime) {
           |		            machineToSchedule = nextStage.getMachines().get(0);
@@ -81,19 +103,19 @@ trait AlgorithmRepository {
           |            //Find all jobs waiting for machine
           |            LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
           |	        for(Job j : schedule.getJobs()) {
-          |		        if(stepOfJob.get(j) >= j.getRoutes().get(0).getStages().size())
+          |		        if(stepOfJob.get(j) >= j.getScheduledRoute().getStages().size())
           |			        continue;
           |
-          |		        if(j.getRoutes().get(0).getStages().get(stepOfJob.get(j)).getMachines().get(0).equals(machineToSchedule))
+          |		        if(j.getScheduledRoute().getStages().get(stepOfJob.get(j)).getMachines().get(0).equals(machineToSchedule))
           |			        waitingJobsOnMachine.add(j);
           |	        }
           |
           |	        //choose by heuristic
           |	        $Heuristic
           |
-          |	        int jobDuration = jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().getDuration();
+          |	        int jobDuration = jobToSchedule.getScheduledRoute().getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().getDuration();
           |	        finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
-          |	        jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().setScheduledTime(finishTime - jobDuration);
+          |	        jobToSchedule.getScheduledRoute().getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().setScheduledTime(finishTime - jobDuration);
           |
           |	        //Update
           |	        stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
