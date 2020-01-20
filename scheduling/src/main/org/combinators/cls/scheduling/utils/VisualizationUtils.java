@@ -1,9 +1,8 @@
 package org.combinators.cls.scheduling.utils;
 
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
-import org.combinators.cls.scheduling.model.Task;
+import org.combinators.cls.scheduling.model.*;
+
+import java.util.*;
 
 public class VisualizationUtils {
 	private final static String BG_COLOR = "#AAAAAA";
@@ -15,12 +14,12 @@ public class VisualizationUtils {
 	 */
 	public static String taskToHTMLGanttChart(Task task) {
 		return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
-				       //taskToMachineChart(task) +
+				       taskToMachineChart(task) +
 				       taskToJobChart(task) +
 				       "</body></html>";
 	}
 	
-	/*private static String taskToMachineChart(Task task) {
+	private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
 		final StringBuilder html = new StringBuilder("<table><caption>Scheduling result</caption><tr><th>Machine</th>");
 		final List<Machine> allMachines = task.getJobs().getFirst().getMachines();
@@ -31,9 +30,9 @@ public class VisualizationUtils {
 		for(Machine machine : allMachines) {
 			LinkedList<Job> jobList = new LinkedList<>();
 			
-			task.getJobs().forEach(job -> job.getStages().stream().filter(stage -> stage.getMachine().equals(machine)).findFirst().ifPresent(stage -> jobList.add(new Job(job.getName(), job.getDeadline(), stage.cloned()))));
+			task.getJobs().forEach(job -> job.getScheduledRoute().getStages().stream().filter(stage -> stage.getScheduledMachine().equals(machine)).findFirst().ifPresent(stage -> jobList.add(new Job(job.getName(), job.getDeadline(), new Route(stage.cloned())))));
 			
-			jobList.sort(Comparator.comparingInt(job -> job.getStages().getFirst().getScheduledTime()));
+			jobList.sort(Comparator.comparingInt(job -> job.getScheduledRoute().getStages().getFirst().getScheduledMachine().getScheduledTime()));
 			machineMap.put(machine, jobList);
 		}
 		
@@ -50,12 +49,12 @@ public class VisualizationUtils {
 			
 			int end = 0;
 			for(Job job : jobs) {
-				Stage stage = job.getStages().getFirst();
-				if(stage.getScheduledTime() > end)
-					html.append("<td colspan=").append(stage.getScheduledTime() - end).append("/>"); //waiting time
+				Machine jobMachine = job.getScheduledRoute().getStages().getFirst().getScheduledMachine();
+				if(jobMachine.getScheduledTime() > end)
+					html.append("<td colspan=").append(jobMachine.getScheduledTime() - end).append("/>"); //waiting time
 				
-				html.append("<td bgcolor=" + BG_COLOR + " colspan=").append(stage.getDuration()).append(" >").append(job.getName()).append("</td>"); //running time
-				end = stage.getScheduledTime() + stage.getDuration();
+				html.append("<td bgcolor=" + BG_COLOR + " colspan=").append(jobMachine.getDuration()).append(" >").append(job.getName()).append("</td>"); //running time
+				end = jobMachine.getScheduledTime() + jobMachine.getDuration();
 			}
 			
 			//waiting on end
@@ -67,7 +66,7 @@ public class VisualizationUtils {
 		
 		html.append("</table>");
 		return html.toString();
-	}*/
+	}
 	
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();
