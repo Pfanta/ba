@@ -51,7 +51,7 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	/**
-	 @return returns an ordered list of the machines in the order to be scheduled. Only works for non-flexible job- and open shop
+	 @return returns an ordered list of the machines in the order to be scheduled. Only works for non-flexible job- and open shops
 	 */
 	public List<Machine> getMachines() {
 		return this.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).collect(Collectors.toList());

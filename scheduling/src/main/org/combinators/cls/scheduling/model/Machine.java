@@ -42,7 +42,7 @@ public class Machine implements Comparable<Machine>, IWritable, ICloneable<Machi
 	}
 	
 	public int getFinishTime() {
-		return scheduledTime + duration;
+		return scheduledTime == -1 ? -1 : scheduledTime + duration;
 	}
 	
 	@Override
@@ -75,6 +75,6 @@ public class Machine implements Comparable<Machine>, IWritable, ICloneable<Machi
 	
 	@Override
 	public Machine cloned() {
-		return new Machine(this.name);
+		return new Machine(this.name, this.duration, this.scheduledTime);
 	}
 }

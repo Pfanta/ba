@@ -99,7 +99,6 @@ public class GenerationUtils {
 			
 			Route route = new Route();
 			job.addRoute(route);
-			job.setScheduledRoute(route);
 			
 			int totalTime = 0;
 			for(int j = 0; j < numMachines; j++) {
@@ -108,7 +107,6 @@ public class GenerationUtils {
 				
 				Machine machine = new Machine("M" + j, time);
 				Stage stage = new Stage(machine);
-				stage.setScheduledMachine(machine);
 				route.addStage(stage);
 			}
 			if (deadlines)

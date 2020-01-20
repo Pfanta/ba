@@ -1,5 +1,8 @@
 package org.combinators.cls.scheduling.utils;
 
+import org.combinators.cls.scheduling.model.Job;
+import org.combinators.cls.scheduling.model.Machine;
+import org.combinators.cls.scheduling.model.Stage;
 import org.combinators.cls.scheduling.model.Task;
 
 public class VisualizationUtils {
@@ -11,17 +14,16 @@ public class VisualizationUtils {
 	 @return HTML string representation
 	 */
 	public static String taskToHTMLGanttChart(Task task) {
-		throw new UnsupportedOperationException();
-		/*return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
-				       taskToMachineChart(task) +
+		return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
+				       //taskToMachineChart(task) +
 				       taskToJobChart(task) +
-				       "</body></html>";*/
+				       "</body></html>";
 	}
-	/*
-	private static String taskToMachineChart(Task task) {
+	
+	/*private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
 		final StringBuilder html = new StringBuilder("<table><caption>Scheduling result</caption><tr><th>Machine</th>");
-		final List<Machine> allMachines = task.getAllMachines();
+		final List<Machine> allMachines = task.getJobs().getFirst().getMachines();
 		final Map<Machine, List<Job>> machineMap = new HashMap<>();
 		
 		//transform to Machine ordering
@@ -65,7 +67,7 @@ public class VisualizationUtils {
 		
 		html.append("</table>");
 		return html.toString();
-	}
+	}*/
 	
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();
@@ -82,13 +84,14 @@ public class VisualizationUtils {
 			html.append("<tr><td>").append(job.getName()).append("</td><td>").append(job.getDeadline()).append("</td>");
 			
 			int end = 0;
-			for(Stage stage : job.getStages()) {
+			for(Stage stage : job.getScheduledRoute().getStages()) {
+				Machine scheduledMachine = stage.getScheduledMachine();
 				
-				if(stage.getScheduledTime() > end)
-					html.append("<td colspan=").append(stage.getScheduledTime() - end).append("/>"); //waiting time
+				if(scheduledMachine.getScheduledTime() > end)
+					html.append("<td colspan=").append(scheduledMachine.getScheduledTime() - end).append("/>"); //waiting time
 				
-				html.append("<td bgcolor=" + BG_COLOR + " colspan=").append(stage.getDuration()).append(" >").append(stage.getMachine().getName()).append("</td>"); //running time
-				end = stage.getScheduledTime() + stage.getDuration();
+				html.append("<td bgcolor=" + BG_COLOR + " colspan=").append(scheduledMachine.getDuration()).append(" >").append(scheduledMachine.getName()).append("</td>"); //running time
+				end = scheduledMachine.getScheduledTime() + scheduledMachine.getDuration();
 			}
 			
 			//waiting on end
@@ -100,5 +103,5 @@ public class VisualizationUtils {
 		
 		html.append("</table>");
 		return html.toString();
-	}*/
+	}
 }

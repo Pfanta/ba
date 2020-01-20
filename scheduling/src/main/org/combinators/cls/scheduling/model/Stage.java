@@ -19,17 +19,17 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	}
 	
 	public Machine getScheduledMachine() {
-		return machines.get(0);
+		return machines.getFirst();
 	}
 	
 	@Override
 	public String getString() {
-		return machines.size() + "x " + machines.get(0).getString() + "," + 42;//FIXME
+		return machines.size() + "x " + machines.getFirst().getString() + "," + machines.getFirst().getFinishTime();
 	}
 	
 	@Override
 	public String toString() {
-		return machines.size() + "x " + machines.get(0) + "(" + 42 + ")";//FIXME
+		return machines.size() + "x " + machines.getFirst() + "(" + machines.getFirst().getDuration() + ")";
 	}
 	
 	@Override

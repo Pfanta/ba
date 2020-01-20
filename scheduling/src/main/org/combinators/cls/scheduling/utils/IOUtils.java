@@ -1,7 +1,6 @@
 package org.combinators.cls.scheduling.utils;
 
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Task;
+import org.combinators.cls.scheduling.model.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -36,23 +35,31 @@ public class IOUtils {
 		writer.close();
 	}
 	
-	/*J1|-1|M1,1,5|M2,1,3|M3,1,3|M4,1,2|*/
+	/**
+	 Parses non-flexible flow- or job-shop from String with format e.g.
+	 J1|-1|M1,5|M2,3|M3,3|M4,2|
+	 @param input string to parse
+	 @return Job
+	 @throws IllegalArgumentException IllegalArgumentException
+	 */
 	public static Job parse(String input) throws IllegalArgumentException {
-		/*String[] split = input.split("\\|");
+		String[] split = input.split("\\|");
 		if(split.length < 3)
 			throw new IllegalArgumentException("Not a valid String: " + input);
 		
+		
 		Job job = new Job(split[0], Integer.parseInt(split[1]));
+		Route route = new Route();
+		job.addRoute(route);
 		
 		for(int i = 2; i < split.length; i++) {
 			String s = split[i];
 			String[] machinesSplit = s.split(",");
 			
-			Stage stage = new Stage(new Machine(machinesSplit[0], Integer.parseInt(machinesSplit[1]), Integer.parseInt(machinesSplit[2]));
-			job.addStage(stage);
+			Stage stage = new Stage(new Machine(machinesSplit[0], Integer.parseInt(machinesSplit[1])));
+			route.addStage(stage);
 		}
 		
-		return job;*/
-		throw new UnsupportedOperationException(); //FIXME
+		return job;
 	}
 }

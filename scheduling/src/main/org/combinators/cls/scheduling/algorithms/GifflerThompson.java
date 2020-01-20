@@ -17,11 +17,11 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
         final Map<org.combinators.cls.scheduling.model.Job, Integer> jobWorkingUntil = new HashMap<>(); //Rj
         final Map<Job, Integer> stepOfJob = new HashMap<>();
     
-        schedule.getAllMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
-        schedule.getJobs().forEach(job -> {
-            jobWorkingUntil.put(job, 0);
-            stepOfJob.put(job, 0);
-        });
+        schedule.getJobs().getFirst().getMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
+	    schedule.getJobs().forEach(job -> {
+		    jobWorkingUntil.put(job, 0);
+		    stepOfJob.put(job, 0);
+	    });
     
         //Iterate #jobs x #machines times
         Collections.nCopies(classification.getMachineCount() * classification.getJobCount(), 0).forEach(o -> {
@@ -34,7 +34,7 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
 		            continue;
 	
 	            Stage nextStage = j.getRoutes().get(0).getStages().get(stepOfJob.get(j));
-	            int time = nextStage.getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachines().get(0)), jobWorkingUntil.get(j));
+	            int time = nextStage.getScheduledMachine().getDuration() + Math.max(machineWorkingUntil.get(nextStage.getMachines().get(0)), jobWorkingUntil.get(j));
 	            if(time < finishTime) {
 		            machineToSchedule = nextStage.getMachines().get(0);
 		            finishTime = time;
@@ -42,7 +42,7 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
             }
         
             //Find all jobs waiting for machine
-            LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
+	        LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
 	        for(Job j : schedule.getJobs()) {
 		        if(stepOfJob.get(j) >= j.getRoutes().get(0).getStages().size())
 			        continue;
@@ -52,16 +52,14 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
 	        }
 	
 	        //choose by heuristic
-	        //Heuristic
-	        //waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getStages().stream().mapToInt(Stage::getDuration).sum()));
-	        waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getRoutes().get(0).getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
+	        waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 	        Job jobToSchedule = waitingJobsOnMachine.getLast();
 	
 	
 	        //Schedule Task
-	        int jobDuration = jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getDuration();
+	        int jobDuration = jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().getDuration();
 	        finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
-	        jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).setScheduledTime(finishTime - jobDuration);
+	        jobToSchedule.getRoutes().get(0).getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().setScheduledTime(finishTime - jobDuration);
 	
 	        //Update
 	        stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);

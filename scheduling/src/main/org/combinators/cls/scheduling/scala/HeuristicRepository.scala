@@ -9,7 +9,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().mapToInt(Stage::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getLast();""".stripMargin
   }
 
@@ -17,7 +17,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().mapToInt(Stage::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 
@@ -26,7 +26,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getRoutes().get(0).getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getLast();""".stripMargin
   }
 
@@ -34,7 +34,7 @@ trait HeuristicRepository {
     val semanticType: Type = 'Heuristic
 
     def apply: String =
-      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getRoutes().get(0).getStages().indexOf(stage) > stepOfJob.get(j)).mapToInt(Stage::getDuration).sum()));
+      s"""|waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
           |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 
@@ -52,16 +52,21 @@ trait HeuristicRepository {
     def apply: String =
       s"""|       Task localSchedule = jobList.cloned();
           |				Map<Machine, Integer> machineWorkingUntil = new HashMap<>();
-          |				localSchedule.getAllMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
+          |				localSchedule.getJobs().getFirst().getMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
           |
-          |				for(Job jobIndex : localSchedule.getJobs()) {
-          |					for(int machineIndex = 0; machineIndex < jobIndex.getRoutes().get(0).getStages().size(); machineIndex++) {
-          |						Stage stage = jobIndex.getRoutes().get(0).getStages().get(machineIndex);
-          |						int t1 = machineIndex == 0 ? 0 : jobIndex.getRoutes().get(0).getStages().get(machineIndex - 1).getFinishTime();
-          |						int t2 = machineWorkingUntil.get(stage.getMachines().get(0));
+          |				for(Job jobToSchedule : localSchedule.getJobs()) {
+          |					for(int machineIndex = 0; machineIndex < jobToSchedule.getScheduledRoute().getStages().size(); machineIndex++) {
+          |						Machine machine = jobToSchedule.getScheduledRoute().getStages().get(machineIndex).getScheduledMachine();
+          |
+          |						//finishtime of job
+          |						int t1 = machineIndex == 0 ? 0 : jobToSchedule.getScheduledRoute().getStages().get(machineIndex - 1).getScheduledMachine().getFinishTime();
+          |
+          |						//finishtime of machine
+          |						int t2 = machineWorkingUntil.get(machine);
           |						int scheduleTime = Math.max(t1, t2);
-          |						stage.setScheduledTime(scheduleTime);
-          |						machineWorkingUntil.put(stage.getMachines().get(0), scheduleTime);
+          |
+          |						machine.setScheduledTime(scheduleTime);
+          |						machineWorkingUntil.put(machine, machine.getFinishTime());
           |					}
           |				}
           |""".stripMargin

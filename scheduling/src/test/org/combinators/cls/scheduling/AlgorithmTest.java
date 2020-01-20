@@ -25,6 +25,6 @@ public class AlgorithmTest {
 	public void testNEH() throws IOException {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flowShop4x4_ascending.task").getFile());
 		Function<ClassificationUtils.Classification, Task> function = new NEH();
-		assertEquals(25, function.apply(ClassificationUtils.classify(task)).getMakespan());
+		assertEquals(30, function.apply(ClassificationUtils.classify(task)).getMakespan());
 	}
 }
