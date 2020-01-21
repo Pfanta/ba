@@ -41,6 +41,6 @@ object Scheduler {
     results.toList.asJava
   }
 
-  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository with TargetRepository {}
+  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository {}
 
 }
