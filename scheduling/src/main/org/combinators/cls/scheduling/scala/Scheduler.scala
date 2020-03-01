@@ -52,6 +52,6 @@ object Scheduler {
     results
   }
 
-  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository with TargetRepository {}
+  trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository {}
 
 }

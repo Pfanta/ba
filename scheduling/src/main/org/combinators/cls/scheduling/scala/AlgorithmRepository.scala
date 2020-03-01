@@ -83,7 +83,7 @@ trait AlgorithmRepository {
           |        });
           |
           |        //Iterate #jobs x #machines times
-          |        Collections.nCopies(classification.getMachineCount() * classification.getJobCount(), 0).forEach(o -> {
+          |        for (int i = 0; i < classification.getMachineCount() * classification.getJobCount(); i++) {
           |            Machine machineToSchedule = null;
           |            int finishTime = Integer.MAX_VALUE;
           |
@@ -121,7 +121,7 @@ trait AlgorithmRepository {
           |	        stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
           |	        jobWorkingUntil.put(jobToSchedule, finishTime);
           |	        machineWorkingUntil.put(machineToSchedule, finishTime);
-          |        });""".stripMargin
+          |        }""".stripMargin
   }
 
   @combinator object AlgorithmFFS {
