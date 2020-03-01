@@ -21,7 +21,7 @@ public class VisualizationUtils {
 	
 	private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
-		final StringBuilder html = new StringBuilder("<table><caption>Scheduling result</caption><tr><th>Machine</th>");
+		final StringBuilder html = new StringBuilder("<table><caption>Machine View</caption><tr><th>Machine</th>");
 		final List<Machine> allMachines = task.getJobs().getFirst().getMachines();
 		final Map<Machine, List<Job>> machineMap = new HashMap<>();
 		
@@ -70,7 +70,7 @@ public class VisualizationUtils {
 	
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();
-		final StringBuilder html = new StringBuilder("<table><caption>Scheduling result</caption><tr><th>Job</th><th>Deadline</th>");
+		final StringBuilder html = new StringBuilder("<table><caption>Job View</caption><tr><th>Job</th><th>Deadline</th>");
 		
 		//make header
 		for(int i = 1; i <= cmax; i++) {

@@ -21,7 +21,7 @@ public class GenerationUtils {
 	private static final int DEFAULT_MACHINES_COUNT = 4;
 	private static final int DEFAULT_JOBS_COUNT = 4;
 	private static final int MIN_MACHINE_TIME = 1;
-	private static final int MAX_MACHINE_TIME = 10;
+	private static final int MAX_MACHINE_TIME = 6;
 	private static final int MAX_DEADLINE_PLUS = 10;
 	private static final Random random = new Random();
 	

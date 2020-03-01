@@ -6,10 +6,12 @@ import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.scala.Scheduler;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.RunnerUtils;
+import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
-import java.util.LinkedList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class GenerationRunner {
 	
@@ -18,7 +20,11 @@ public class GenerationRunner {
 	
 	@Getter
 	@Setter
-	private volatile Task result;
+	private volatile Tuple<String, Task> result;
+	
+	@Getter
+	@Setter
+	private volatile List<Tuple<String, Task>> results;
 	
 	public GenerationRunner(MainWindowAUI mainWindowAUI) {
 		this.mainWindowAUI = mainWindowAUI;
@@ -60,22 +66,22 @@ public class GenerationRunner {
 			if(!running) return;
 			
 			mainWindowAUI.onClassificationFinished(classification);
-			List<String> results = Scheduler.run(classification);
+			Map<String, String> runnerResults = Scheduler.run(classification);
 			
 			if(!running) return;
 			
-			mainWindowAUI.onGenerationFinished(results.size());
-			LinkedList<Task> schedules = RunnerUtils.runResults(classification, results, mainWindowAUI);
+			mainWindowAUI.onGenerationFinished(runnerResults.size());
+			results = RunnerUtils.runResults(classification, runnerResults, mainWindowAUI);
 			
 			if(!running) return;
 			
 			mainWindowAUI.onRunnerFinished();
-			Task bestSchedule = ClassificationUtils.findBest(schedules);
+			results.sort(Comparator.comparingInt(t -> t.getSecond().getResult()));
 			
 			if(!running) return;
 			
-			generationRunner.setResult(bestSchedule);
-			mainWindowAUI.onEvaluationResult(bestSchedule.getResult());
+			generationRunner.setResult(results.get(0));
+			mainWindowAUI.onEvaluationResult(result.getSecond().getResult());
 		}
 	}
 }

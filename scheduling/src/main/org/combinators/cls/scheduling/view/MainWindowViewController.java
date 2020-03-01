@@ -16,10 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
 import org.combinators.cls.scheduling.model.*;
-import org.combinators.cls.scheduling.utils.ApplicationUtils;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
-import org.combinators.cls.scheduling.utils.GenerationUtils;
-import org.combinators.cls.scheduling.utils.IOUtils;
+import org.combinators.cls.scheduling.utils.*;
 import org.combinators.cls.scheduling.view.customDialogs.ProgressDialog;
 import org.combinators.cls.scheduling.view.customDialogs.ResultDialog;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXPlusButton;
@@ -187,8 +184,13 @@ public class MainWindowViewController implements MainWindowAUI {
 			if(b == ButtonType.CANCEL)
 				generationRunner.cancel();
 			
-			if(b == ButtonType.APPLY)
+			else if(b == ButtonType.NO)
 				new ResultDialog(generationRunner.getResult()).show();
+			
+			else if(b == ButtonType.YES)
+				for(Tuple<String, Task> result : generationRunner.getResults()) {
+					new ResultDialog(result).show();
+				}
 		});
 	}
 	

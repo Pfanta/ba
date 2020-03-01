@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class Route implements ICloneable<Route> {
 	@Getter
-	LinkedList<Stage> stages;
+	private LinkedList<Stage> stages;
 	
 	public Route(Stage... stages) {
 		this.stages = new LinkedList<>();

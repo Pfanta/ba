@@ -1,5 +1,6 @@
 package org.combinators.cls.scheduling.scala
 
+import org.combinators.cls.inhabitation.Tree
 import org.combinators.cls.interpreter._
 import org.combinators.cls.scheduling.model.ShopClass
 import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification
@@ -7,14 +8,15 @@ import org.combinators.cls.types.Constructor
 import org.combinators.cls.types.syntax._
 
 import scala.collection.JavaConverters._
-import scala.collection.mutable.ListBuffer
 
 object Scheduler {
   lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.shopClassKinding, classLoader = this.getClass.getClassLoader)
 
   lazy val repository: Repository = new Repository {}
 
-  def run(classification: Classification): java.util.List[String] = {
+  var tree: Seq[Tree] = _
+
+  def run(classification: Classification): java.util.Map[String, String] = {
 
     var targetType: Constructor = 'Scheduler('NONE)
     classification.getShopClass match {
@@ -27,18 +29,27 @@ object Scheduler {
     }
 
     val inhabitationResult: InhabitationResult[String] = reflectedRepository.inhabit[String](targetType)
-    val results = new ListBuffer[String]()
+    val results = new java.util.TreeMap[String, String]()
     var b = true
     var i = 0
     while (b) {
       try {
-        results += inhabitationResult.interpretedTerms.index(i)
+
+        var heuristic = ""
+        val l1 = seqAsJavaList(inhabitationResult.terms.index(i).arguments).get(0)
+        if (l1.name.equals("NEH"))
+          heuristic = l1.name
+        else
+          heuristic = seqAsJavaList(l1.arguments).get(0).name
+
+        results.put(heuristic, inhabitationResult.interpretedTerms.index(i))
+
         i += 1
       } catch {
         case _: java.lang.IndexOutOfBoundsException => b = false
       }
     }
-    results.toList.asJava
+    results
   }
 
   trait Repository extends RunnerRepository with AlgorithmRepository with HeuristicRepository with TargetRepository {}

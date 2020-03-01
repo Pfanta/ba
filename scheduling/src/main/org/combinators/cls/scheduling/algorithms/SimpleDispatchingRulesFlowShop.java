@@ -22,7 +22,7 @@ public class SimpleDispatchingRulesFlowShop {
 		Task jobList = new Task();
 		while(!waitingJobsOnMachine.isEmpty()) {
 			/* ########## HEURISTIC ########## */
-			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getRoutes().get(0).getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 			Job jobToSchedule = waitingJobsOnMachine.getFirst();
 			/* ########## ########## ########## */
 			

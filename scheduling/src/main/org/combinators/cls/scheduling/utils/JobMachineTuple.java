@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.model;
+package org.combinators.cls.scheduling.utils;
 
 import lombok.Getter;
 import lombok.Setter;
