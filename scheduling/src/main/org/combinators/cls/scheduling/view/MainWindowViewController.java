@@ -36,6 +36,8 @@ public class MainWindowViewController implements MainWindowAUI {
 	private JFXComboBox<String> comboBox;
 	@FXML
 	private JFXButton runBtn;
+	@FXML
+	private JFXButton benchmarkBtn;
 	
 	private javafx.stage.Stage stage;
 	private ProgressDialog progressDialog;
@@ -194,6 +196,13 @@ public class MainWindowViewController implements MainWindowAUI {
 		});
 	}
 	
+	public void onBenchmarkButtonClicked(ActionEvent actionEvent) {
+		BenchmarkUtils.showBenchmarkDialog().ifPresent(result -> {
+			benchmarkBtn.setOpacity(.5);
+			generationRunner.runBenchmark(result.getNumJobs(), result.getNumMachines(), result.getNumInstances());
+		});
+	}
+	
 	private void tryLoadFile(File file) {
 		try {
 			currentTask = IOUtils.loadTask(file);
@@ -219,7 +228,8 @@ public class MainWindowViewController implements MainWindowAUI {
 	
 	@Override
 	public void onRunnerProgress(float progress) {
-		Platform.runLater(() -> progressDialog.setRunProgress(progress));
+		if(progressDialog != null)
+			Platform.runLater(() -> progressDialog.setRunProgress(progress));
 	}
 	
 	@Override
@@ -235,6 +245,7 @@ public class MainWindowViewController implements MainWindowAUI {
 	@Override
 	public void onFinishedOrCanceled() {
 		runBtn.setOpacity(1);
+		benchmarkBtn.setOpacity(1);
 	}
 	//endregion
 }

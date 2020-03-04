@@ -39,7 +39,7 @@ public class GenerationUtils {
 		NumberTextField textField1 = new NumberTextField(DEFAULT_MACHINES_COUNT);
 		NumberTextField textField2 = new NumberTextField(DEFAULT_JOBS_COUNT);
 		JFXComboBox<ShopClass> typeBox = new JFXComboBox<>();
-		typeBox.getItems().addAll(ShopClass.FS, ShopClass.FFS, ShopClass.JS);
+		typeBox.getItems().addAll(ShopClass.FS, ShopClass.JS);
 		typeBox.getSelectionModel().select(0);
 		JFXCheckBox deadlines = new JFXCheckBox("Deadlines");
 		
@@ -64,20 +64,20 @@ public class GenerationUtils {
 	 @return Task
 	 */
 	public static Task generateRandomTask(GenerationDialogResult result) {
-		if (result.getJobCount() <= 0 || result.getMachineCount() <= 0 || result.getShopClass().equals(ShopClass.NONE))
+		if(result.getNumJobs() <= 0 || result.getNumMachines() <= 0 || result.getShopClass().equals(ShopClass.NONE))
 			throw new IllegalArgumentException();
-
-		switch (result.getShopClass()) {
+		
+		switch(result.getShopClass()) {
 			case FS:
-				return generateRandomFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+				return generateRandomFlowShop(result.getNumMachines(), result.getNumJobs(), result.isDeadlines());
 			case JS:
-				return generateRandomJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+				return generateRandomJobShop(result.getNumMachines(), result.getNumJobs(), result.isDeadlines());
 			
 			case FFS:
-				return generateRandomFlexibleFlowShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+				return generateRandomFlexibleFlowShop(result.getNumMachines(), result.getNumJobs(), result.isDeadlines());
 			
 			case FJS:
-				return generateRandomFlexibleJobShop(result.getMachineCount(), result.getJobCount(), result.isDeadlines());
+				return generateRandomFlexibleJobShop(result.getNumMachines(), result.getNumJobs(), result.isDeadlines());
 			
 			default:
 				return new Task();
@@ -169,17 +169,17 @@ public class GenerationUtils {
 	
 	public static class GenerationDialogResult {
 		@Getter
-		private int machineCount;
+		private int numMachines;
 		@Getter
-		private int jobCount;
+		private int numJobs;
 		@Getter
 		private boolean deadlines;
 		@Getter
 		private ShopClass shopClass;
-
-		public GenerationDialogResult(int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
-			this.machineCount = machineCount;
-			this.jobCount = jobCount;
+		
+		public GenerationDialogResult(int numMachines, int numJobs, boolean deadlines, ShopClass shopClass) {
+			this.numMachines = numMachines;
+			this.numJobs = numJobs;
 			this.deadlines = deadlines;
 			this.shopClass = shopClass;
 		}

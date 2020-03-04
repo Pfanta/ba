@@ -3,12 +3,11 @@
 <?import com.jfoenix.controls.*?>
 <?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import java.lang.String?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="800.0"
-            xmlns="http://javafx.com/javafx/10.0.2-internal"
-            fx:controller="org.combinators.cls.scheduling.view.MainWindowViewController">
+<Pane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="800.0"
+      xmlns="http://javafx.com/javafx/10.0.2-internal"
+      fx:controller="org.combinators.cls.scheduling.view.MainWindowViewController">
 	
 	<!-- Job Page -->
 	<ScrollPane prefHeight="475" prefWidth="600" onDragOver="#onDragOver" onDragDropped="#onFileDropped">
@@ -55,7 +54,7 @@
 	             text="Condition 3"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="370"
+	           layoutY="335"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -65,7 +64,7 @@
 	           text="Generate"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="405"
+	           layoutY="370"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -75,7 +74,7 @@
 	           text="Load"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="440"
+	           layoutY="405"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -85,14 +84,14 @@
 	           text="Save"/>
 	
 	<JFXProgressBar layoutX="705"
-	                layoutY="370"
+	                layoutY="335"
 	                prefHeight="95"
 	                prefWidth="85"
 	/>
 	
 	<JFXButton fx:id="runBtn"
 	           layoutX="705"
-	           layoutY="370"
+	           layoutY="335"
 	           prefHeight="95"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -103,6 +102,23 @@
 	           onAction="#onRunButtonClicked"
 	           text="Run"/>
 	
+	<JFXProgressBar layoutX="610"
+	                layoutY="440"
+	                prefHeight="25"
+	                prefWidth="180"
+	/>
+	
+	<JFXButton fx:id="benchmarkBtn"
+	           layoutX="610"
+	           layoutY="440"
+	           prefHeight="25"
+	           prefWidth="180"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           focusTraversable="false"
+	           onAction="#onBenchmarkButtonClicked"
+	           text="Benchmark"/>
+	
 	<!-- Bottom Bar -->
 	<Separator layoutY="475" prefWidth="800"/>
-</AnchorPane>
+</Pane>
