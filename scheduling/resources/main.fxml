@@ -102,7 +102,8 @@
 	           onAction="#onRunButtonClicked"
 	           text="Run"/>
 	
-	<JFXProgressBar layoutX="610"
+	<JFXProgressBar fx:id="benchmarkProgressBar"
+	                layoutX="610"
 	                layoutY="440"
 	                prefHeight="25"
 	                prefWidth="180"

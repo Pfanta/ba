@@ -2,12 +2,14 @@ package org.combinators.cls.scheduling.view;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXProgressBar;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -29,7 +31,7 @@ import java.io.IOException;
 public class MainWindowViewController implements MainWindowAUI {
 	private static final int MAX_JOBS_SHOWN = 20;
 	private static final int MAX_MACHINES_SHOWN = 15;
-	
+
 	@FXML
 	private Pane jobsPane;
 	@FXML
@@ -38,13 +40,15 @@ public class MainWindowViewController implements MainWindowAUI {
 	private JFXButton runBtn;
 	@FXML
 	private JFXButton benchmarkBtn;
-	
+	@FXML
+	private JFXProgressBar benchmarkProgressBar;
+
 	private javafx.stage.Stage stage;
 	private ProgressDialog progressDialog;
-	
+
 	/* org.combinators.cls.scheduling.model */
 	private Task currentTask;
-	
+
 	/* org.combinators.cls.scheduling.control */
 	private GenerationRunner generationRunner;
 	
@@ -60,20 +64,20 @@ public class MainWindowViewController implements MainWindowAUI {
 	private void refreshJobsPane() {
 		ObservableList<Node> nodes = jobsPane.getChildren();
 		nodes.clear();
-		
+
 		//Catch too large tasks
 		JobMachineTuple tuple = ClassificationUtils.getTaskDimensions(currentTask);
-		if(tuple.getJobCount() > MAX_JOBS_SHOWN || tuple.getMachineCount() > MAX_MACHINES_SHOWN) {
+		if (tuple.getJobCount() > MAX_JOBS_SHOWN || tuple.getMachineCount() > MAX_MACHINES_SHOWN) {
 			nodes.add(new CustomLabel("Dimensions of Task too large to visualize.", 50, 50));
 			return;
 		}
-		
-		for(int i = 0; i < currentTask.getJobs().size(); i++) { //FIXME Update buggy; Refresh buggy
+
+		for (int i = 0; i < currentTask.getJobs().size(); i++) {
 			nodes.add(new CustomLabel(currentTask.getJobs().get(i).getName(), 10, 10 + i * 40, 50, 30));
-			
+
 			int y = 0;
 			final Job currentJob = currentTask.getJobs().get(i);
-			for(Stage stage : currentJob.getRoutes().get(0).getStages()) {
+			for (Stage stage : currentJob.getRoutes().get(0).getStages()) {
 //				TextField textFieldMachineCount = new CustomJFXTextField(stage.getMachineCount(), 60 + y * 130, 10 + i * 40, 20, 30);
 //				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
 //					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
@@ -220,18 +224,24 @@ public class MainWindowViewController implements MainWindowAUI {
 	public void onClassificationFinished(ClassificationUtils.Classification classification) {
 		Platform.runLater(() -> progressDialog.setClassificationResult(classification));
 	}
-	
+
 	@Override
 	public void onGenerationFinished(int result) {
 		Platform.runLater(() -> progressDialog.setGenerationResult(result));
 	}
-	
+
+	@Override
+	public void onBenchmarkProgress(float progress) {
+		System.out.println(progress);
+		Platform.runLater(() -> benchmarkProgressBar.setProgress(progress));
+	}
+
 	@Override
 	public void onRunnerProgress(float progress) {
-		if(progressDialog != null)
+		if (progressDialog != null)
 			Platform.runLater(() -> progressDialog.setRunProgress(progress));
 	}
-	
+
 	@Override
 	public void onRunnerFinished() {
 		Platform.runLater(() -> progressDialog.setRunFinished());
@@ -244,8 +254,11 @@ public class MainWindowViewController implements MainWindowAUI {
 	
 	@Override
 	public void onFinishedOrCanceled() {
-		runBtn.setOpacity(1);
-		benchmarkBtn.setOpacity(1);
+		Platform.runLater(() -> {
+			runBtn.setOpacity(1);
+			benchmarkBtn.setOpacity(1);
+			benchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+		});
 	}
 	//endregion
 }

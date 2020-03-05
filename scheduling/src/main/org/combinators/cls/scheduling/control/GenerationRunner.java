@@ -48,7 +48,11 @@ public class GenerationRunner {
 	
 	abstract static class AbstractWorker extends Thread {
 		protected volatile boolean running;
-		
+
+		AbstractWorker() {
+			this.setDaemon(true);
+		}
+
 		void cancel() {
 			running = false;
 		}
@@ -59,6 +63,7 @@ public class GenerationRunner {
 		private final Task task;
 		
 		Worker(Task task, GenerationRunner generationRunner) {
+			super();
 			this.generationRunner = generationRunner;
 			this.task = task;
 		}
@@ -102,6 +107,7 @@ public class GenerationRunner {
 		private final List<Task> tasks;
 		
 		BenchmarkWorker(int numJobs, int numMachines, int numInstances) {
+			super();
 			this.numJobs = numJobs;
 			this.numMachines = numMachines;
 			this.numInstances = numInstances;
@@ -120,27 +126,31 @@ public class GenerationRunner {
 			int i = 1;
 			Map<String, Integer> values = new TreeMap<>();
 			for(Task task : tasks) {
-				if(!running)
+				if (!running)
 					return;
-				
-				System.out.println("--- Iteration " + i++ + " von " + numInstances + " ---");
-				
+
+				System.out.println("--- Iteration " + i + " von " + numInstances + " ---");
+
 				//run heuristics
 				Map<String, Integer> localValues = runTask(task);
-				
+
+				mainWindowAUI.onBenchmarkProgress((2F * i - 1) / (2F * numInstances));
+
 				//calculate optimal schedule
 				localValues.put("OPT", BenchmarkUtils.getOptimalFlowShopSchedule(task));
-				
+
+				mainWindowAUI.onBenchmarkProgress((2F * i) / (2F * numInstances));
+
 				//update Values in  results
-				for(Map.Entry<String, Integer> entry : localValues.entrySet()) {
+				for (Map.Entry<String, Integer> entry : localValues.entrySet()) {
 					//catch non-existing values
 					Integer val = values.get(entry.getKey());
 					int oldValue = val != null ? val : 0;
-					
+
 					//aggregate results in corresponding map entry
 					values.put(entry.getKey(), entry.getValue() + oldValue);
 				}
-				
+				i++;
 			}
 			
 			//set results

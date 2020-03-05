@@ -71,5 +71,4 @@ trait HeuristicRepository {
           |				}
           |""".stripMargin
   }
-
 }
