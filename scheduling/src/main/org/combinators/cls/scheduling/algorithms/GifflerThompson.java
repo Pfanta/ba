@@ -45,8 +45,8 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
 			}
         
             //Find all jobs waiting for machine
-	        LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
-	        for(Job j : schedule.getJobs()) {
+			LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
+			for (Job j : schedule.getJobs()) {
 				if (stepOfJob.get(j) >= j.getScheduledRoute().getStages().size())
 					continue;
 
@@ -55,7 +55,8 @@ public class GifflerThompson implements Function<ClassificationUtils.Classificat
 			}
 
 			//choose by heuristic
-			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) >= stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+			//waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 			Job jobToSchedule = waitingJobsOnMachine.getLast();
 
 
