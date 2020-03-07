@@ -7,22 +7,50 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 public class IOUtils {
 
 	private static final String HTML_LOCATION = "C:\\";
-
+	
 	public static Task loadTask(String file) throws IOException {
 		return loadTask(new File(file));
 	}
-
+	
 	public static Task loadTask(File file) throws IOException {
 		Task task = new Task();
 		Files.lines(file.toPath()).forEach(s -> task.add(parse(s)));
 		
 		return task;
 	}
-
+	
+	public static List<Tuple<Task, Integer>> loadTaillard(File file) throws IOException {
+		List<Tuple<Task, Integer>> list = new LinkedList<>();
+		
+		Files.lines(file.toPath()).forEach(line -> {
+			Integer[] values = Arrays.stream(line.split(",")).map(Integer::parseInt).toArray(Integer[]::new);
+			
+			LinkedList<Job> jobs = new LinkedList<>();
+			
+			for(int i = 1; i <= 20; i++) {
+				Route route = new Route();
+				route.addStage(new Stage(new Machine("M1", values[i])));
+				route.addStage(new Stage(new Machine("M2", values[i + 20])));
+				route.addStage(new Stage(new Machine("M3", values[i + 40])));
+				route.addStage(new Stage(new Machine("M4", values[i + 60])));
+				route.addStage(new Stage(new Machine("M5", values[i + 80])));
+				jobs.add(new Job("J" + i, -1, route));
+			}
+			
+			list.add(new Tuple<>(new Task(jobs), values[0]));
+		});
+		
+		
+		return list;
+	}
+	
 	public static void saveTask(File file, Task currentTask) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(currentTask.getString());

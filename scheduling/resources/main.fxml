@@ -54,7 +54,7 @@
 	             text="Condition 3"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="335"
+	           layoutY="300"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -64,7 +64,7 @@
 	           text="Generate"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="370"
+	           layoutY="335"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -74,7 +74,7 @@
 	           text="Load"/>
 	
 	<JFXButton layoutX="610"
-	           layoutY="405"
+	           layoutY="370"
 	           prefHeight="25"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -84,14 +84,14 @@
 	           text="Save"/>
 	
 	<JFXProgressBar layoutX="705"
-	                layoutY="335"
+	                layoutY="300"
 	                prefHeight="95"
 	                prefWidth="85"
 	/>
 	
 	<JFXButton fx:id="runBtn"
 	           layoutX="705"
-	           layoutY="335"
+	           layoutY="300"
 	           prefHeight="95"
 	           prefWidth="85"
 	           styleClass="runBtn"
@@ -104,14 +104,14 @@
 	
 	<JFXProgressBar fx:id="benchmarkProgressBar"
 	                layoutX="610"
-	                layoutY="440"
+	                layoutY="405"
 	                prefHeight="25"
 	                prefWidth="180"
 	/>
 	
 	<JFXButton fx:id="benchmarkBtn"
 	           layoutX="610"
-	           layoutY="440"
+	           layoutY="405"
 	           prefHeight="25"
 	           prefWidth="180"
 	           styleClass="runBtn"
@@ -119,6 +119,24 @@
 	           focusTraversable="false"
 	           onAction="#onBenchmarkButtonClicked"
 	           text="Benchmark"/>
+	
+	<JFXProgressBar fx:id="taillardenchmarkProgressBar"
+	                layoutX="610"
+	                layoutY="440"
+	                prefHeight="25"
+	                prefWidth="180"
+	/>
+	
+	<JFXButton fx:id="taillardBenchmarkBtn"
+	           layoutX="610"
+	           layoutY="440"
+	           prefHeight="25"
+	           prefWidth="180"
+	           styleClass="runBtn"
+	           mnemonicParsing="false"
+	           focusTraversable="false"
+	           onAction="#onTaillardBenchmarkButtonClicked"
+	           text="Taillard Benchmark"/>
 	
 	<!-- Bottom Bar -->
 	<Separator layoutY="475" prefWidth="800"/>

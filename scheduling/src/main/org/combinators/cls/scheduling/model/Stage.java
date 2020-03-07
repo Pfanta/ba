@@ -24,7 +24,7 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	
 	@Override
 	public String getString() {
-		return /*machines.size() + "x " + */machines.getFirst().getString() + "," + machines.getFirst().getFinishTime();
+		return /*machines.size() + "x " + */machines.getFirst().getString() + "," + machines.getFirst().getDuration() + "," + machines.getFirst().getFinishTime();
 	}
 	
 	@Override

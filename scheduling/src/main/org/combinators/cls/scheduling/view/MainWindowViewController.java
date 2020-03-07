@@ -50,13 +50,17 @@ public class MainWindowViewController implements MainWindowAUI {
     @FXML
     private JFXButton benchmarkBtn;
     @FXML
+    private JFXButton taillardBenchmarkBtn;
+    @FXML
     private JFXProgressBar benchmarkProgressBar;
-
+    @FXML
+    private JFXProgressBar taillardenchmarkProgressBar;
+    
     /**
-     * Windows man stage
+     Windows man stage
      */
     private javafx.stage.Stage stage;
-
+    
     /**
      * ProgressDialog that is shown while running task
      *
@@ -294,7 +298,16 @@ public class MainWindowViewController implements MainWindowAUI {
             generationRunner.runBenchmark(result.getNumJobs(), result.getNumMachines(), result.getNumInstances());
         });
     }
-
+    
+    public void onTaillardBenchmarkButtonClicked(ActionEvent event) {
+        try {
+            taillardBenchmarkBtn.setOpacity(.5);
+            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x5.taillard").getFile())));
+        } catch(IOException e) {
+            ApplicationUtils.showException("Error", "Error occurred while loading", e);
+        }
+    }
+    
     private void tryLoadFile(File file) {
         try {
             currentTask = IOUtils.loadTask(file);
@@ -320,8 +333,10 @@ public class MainWindowViewController implements MainWindowAUI {
 
     @Override
     public void onBenchmarkProgress(float progress) {
-        System.out.println(progress);
-        Platform.runLater(() -> benchmarkProgressBar.setProgress(progress));
+        Platform.runLater(() -> {
+            benchmarkProgressBar.setProgress(progress);
+            taillardenchmarkProgressBar.setProgress(progress);
+        });
     }
 
     @Override
@@ -345,7 +360,9 @@ public class MainWindowViewController implements MainWindowAUI {
         Platform.runLater(() -> {
             runBtn.setOpacity(1);
             benchmarkBtn.setOpacity(1);
+            taillardBenchmarkBtn.setOpacity(1);
             benchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            taillardenchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
         });
     }
     //endregion

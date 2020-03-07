@@ -38,6 +38,13 @@ trait HeuristicRepository {
           |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 
+  @combinator object FCFS {
+    val semanticType: Type = 'Heuristic
+
+    def apply: String =
+      s"""|Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
+  }
+
   @combinator object RANDOM {
     val semanticType: Type = 'Heuristic
 

@@ -42,13 +42,21 @@ public class GenerationRunner {
 		worker.start();
 	}
 	
+	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances) {
+		instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
+		System.out.println("--------------------------------------------------");
+		worker = new TaillardBenchmarkWorker(instances);
+		worker.start();
+	}
+	
 	public void cancel() {
 		worker.cancel();
 	}
 	
+	
 	abstract static class AbstractWorker extends Thread {
 		protected volatile boolean running;
-
+		
 		AbstractWorker() {
 			this.setDaemon(true);
 		}
@@ -163,7 +171,7 @@ public class GenerationRunner {
 			}
 		}
 		
-		private Map<String, Integer> runTask(Task task) {
+		protected Map<String, Integer> runTask(Task task) {
 			//reclassify task
 			ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
 			
@@ -177,6 +185,60 @@ public class GenerationRunner {
 			Map<String, Integer> values = new TreeMap<>();
 			results.forEach(t -> values.put(t.getFirst(), t.getSecond().getResult()));
 			return values;
+		}
+	}
+	
+	class TaillardBenchmarkWorker extends BenchmarkWorker {
+		private final List<Tuple<Task, Integer>> tasks;
+		
+		TaillardBenchmarkWorker(List<Tuple<Task, Integer>> tasks) {
+			super(20, 5, 10);
+			this.tasks = tasks;
+		}
+		
+		@Override
+		public void run() {
+			this.running = true;
+			work();
+			mainWindowAUI.onFinishedOrCanceled();
+		}
+		
+		private void work() {
+			int i = 1;
+			Map<String, Double> values = new TreeMap<>();
+			for(Tuple<Task, Integer> task : tasks) {
+				if(!running)
+					return;
+				
+				System.out.println("--- Iteration " + i + " von " + 10 + " ---");
+				
+				//run heuristics
+				Map<String, Integer> localValues = runTask(task.getFirst());
+				
+				mainWindowAUI.onBenchmarkProgress(i / 10F);
+				
+				//update Values in  results
+				for(Map.Entry<String, Integer> entry : localValues.entrySet()) {
+					//catch non-existing values
+					Double oldValue = values.get(entry.getKey());
+					oldValue = oldValue != null ? oldValue : 0;
+					
+					//aggregate results in corresponding map entry
+					double newValue = (entry.getValue() - task.getSecond()) / (double) task.getSecond();
+					
+					values.put(entry.getKey(), newValue + oldValue);
+				}
+				i++;
+			}
+			
+			//set results
+			benchmarkResults = new TreeMap<>();
+			System.out.println("--- RESULTS ---");
+			for(Map.Entry<String, Double> entry : values.entrySet()) {
+				//average values from numInstances
+				benchmarkResults.put(entry.getKey(), (entry.getValue() / 10D));
+				System.out.println(entry.getKey() + " : " + (entry.getValue() / 10D) * 100 + "%");
+			}
 		}
 	}
 }
