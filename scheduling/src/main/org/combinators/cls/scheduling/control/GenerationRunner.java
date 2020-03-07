@@ -42,11 +42,13 @@ public class GenerationRunner {
 		worker.start();
 	}
 	
-	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances) {
+	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances) throws InterruptedException {
 		instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
 		System.out.println("--------------------------------------------------");
+		
 		worker = new TaillardBenchmarkWorker(instances);
 		worker.start();
+		worker.join();
 	}
 	
 	public void cancel() {
@@ -192,7 +194,7 @@ public class GenerationRunner {
 		private final List<Tuple<Task, Integer>> tasks;
 		
 		TaillardBenchmarkWorker(List<Tuple<Task, Integer>> tasks) {
-			super(20, 5, 10);
+			super(-1, -1, 10);
 			this.tasks = tasks;
 		}
 		

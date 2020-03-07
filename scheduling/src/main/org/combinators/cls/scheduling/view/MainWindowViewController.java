@@ -300,12 +300,21 @@ public class MainWindowViewController implements MainWindowAUI {
     }
     
     public void onTaillardBenchmarkButtonClicked(ActionEvent event) {
-        try {
-            taillardBenchmarkBtn.setOpacity(.5);
-            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x5.taillard").getFile())));
-        } catch(IOException e) {
-            ApplicationUtils.showException("Error", "Error occurred while loading", e);
-        }
+        taillardBenchmarkBtn.setOpacity(.5);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x5.taillard").getFile())));
+                    generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x10.taillard").getFile())));
+                    generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x20.taillard").getFile())));
+                } catch(IOException e) {
+                    ApplicationUtils.showException("Error", "Error occurred while loading", e);
+                } catch(InterruptedException e) {
+                    ApplicationUtils.showException("Error", "Error occurred while running benchmark", e);
+                }
+            }
+        }).start();
     }
     
     private void tryLoadFile(File file) {

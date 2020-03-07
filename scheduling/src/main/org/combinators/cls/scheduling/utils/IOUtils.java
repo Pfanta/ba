@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IOUtils {
 
@@ -29,23 +30,25 @@ public class IOUtils {
 	public static List<Tuple<Task, Integer>> loadTaillard(File file) throws IOException {
 		List<Tuple<Task, Integer>> list = new LinkedList<>();
 		
-		Files.lines(file.toPath()).forEach(line -> {
-			Integer[] values = Arrays.stream(line.split(",")).map(Integer::parseInt).toArray(Integer[]::new);
+		List<String> lines = Files.lines(file.toPath()).collect(Collectors.toList());
+		int[] opt = Arrays.stream(lines.get(0).split(",")).mapToInt(Integer::parseInt).toArray();
+		int numJobs = (lines.size() - 11) / 10;
+		
+		for(int instance = 0; instance < 10; instance++) {
+			int[][] values = lines.subList(instance * (numJobs + 1) + 2, instance * (numJobs + 1) + 2 + numJobs).stream().map(s -> Arrays.stream(s.split(",")).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
 			
 			LinkedList<Job> jobs = new LinkedList<>();
 			
-			for(int i = 1; i <= 20; i++) {
+			for(int job = 0; job < values[3].length; job++) {
 				Route route = new Route();
-				route.addStage(new Stage(new Machine("M1", values[i])));
-				route.addStage(new Stage(new Machine("M2", values[i + 20])));
-				route.addStage(new Stage(new Machine("M3", values[i + 40])));
-				route.addStage(new Stage(new Machine("M4", values[i + 60])));
-				route.addStage(new Stage(new Machine("M5", values[i + 80])));
-				jobs.add(new Job("J" + i, -1, route));
+				for(int machine = 0; machine < values.length; machine++) {
+					route.addStage(new Stage(new Machine("M" + machine, values[machine][job])));
+				}
+				jobs.add(new Job("J" + job, -1, route));
 			}
 			
-			list.add(new Tuple<>(new Task(jobs), values[0]));
-		});
+			list.add(new Tuple<>(new Task(jobs), opt[instance]));
+		}
 		
 		
 		return list;
