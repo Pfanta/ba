@@ -235,9 +235,9 @@ public class GenerationRunner {
 			benchmarkResults = new TreeMap<>();
 			System.out.println("--- RESULTS ---");
 			for(Map.Entry<String, Double> entry : values.entrySet()) {
-				//average values from numInstances
-				benchmarkResults.put(entry.getKey(), (entry.getValue() / 10D));
-				System.out.println(entry.getKey() + " : " + (entry.getValue() / 10D) * 100 + "%");
+				//average values from numInstances and round down to two decimal places
+				benchmarkResults.put(entry.getKey(), Math.round(entry.getValue() * 1000) / 100D);
+				System.out.println(entry.getKey() + " : " + Math.round(entry.getValue() * 1000) / 100D + "%");
 			}
 		}
 	}
