@@ -39,6 +39,8 @@ object Scheduler {
         val l1 = seqAsJavaList(inhabitationResult.terms.index(i).arguments).get(0)
         if (l1.name.equals("NEH"))
           heuristic = l1.name
+        else if (l1.name.equals("RandomPermutationFlowShop"))
+          heuristic = "Iterated Random"
         else
           heuristic = seqAsJavaList(l1.arguments).get(0).name
 

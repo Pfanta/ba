@@ -67,6 +67,27 @@ trait AlgorithmRepository {
           |   schedule = localSchedule;""".stripMargin
   }
 
+  @combinator object RandomPermutationFlowShop {
+    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm('FS)
+
+    def apply(FSScheduler: String): String =
+      s"""|   Task schedule = classification.getTask();
+          |
+          |		Task localBest = new Task();
+          |		localBest.setResult(Integer.MAX_VALUE);
+          |		Task jobList = new Task(schedule.getJobs());
+          |		for(int i = 0; i < 50000; i++) {
+          |			Collections.shuffle(jobList.getJobs());
+          |
+          |			$FSScheduler
+          |
+          |			localSchedule.setResult(localSchedule.getMakespan());
+          |			if(localSchedule.getResult() < localBest.getResult())
+          |				localBest = localSchedule;
+          |		}
+          |		schedule = localBest;""".stripMargin
+  }
+
   @combinator object GifflerThompson {
     val semanticType: Type = 'Heuristic =>: 'Algorithm('JS)
 

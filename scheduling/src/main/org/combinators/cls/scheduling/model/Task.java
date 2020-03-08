@@ -9,18 +9,16 @@ import java.util.OptionalInt;
 public class Task implements IWritable, ICloneable<Task> {
 	
 	@Getter
-	private LinkedList<Job> jobs;
+	private LinkedList<Job> jobs = new LinkedList<>();
 	
 	@Getter
 	@Setter
 	private int result;
 	
-	public Task() {
-		this.jobs = new LinkedList<>();
-	}
+	public Task() {}
 	
 	public Task(LinkedList<Job> jobs) {
-		this.jobs = jobs;
+		this.jobs.addAll(jobs);
 	}
 	
 	public void add(Job job) {
