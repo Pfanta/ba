@@ -16,17 +16,17 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class BenchmarkUtils {
-	
+
 	private static final int DEFAULT_MACHINES_COUNT = 5;
-	private static final int DEFAULT_JOBS_COUNT = 20;
+	private static final int DEFAULT_JOBS_COUNT = 9;
 	private static final int DEFAULT_INSTANCES_COUNT = 10;
-	
+
 	public static Optional<BenchmarkDialogResult> showBenchmarkDialog() {
 		Dialog<BenchmarkDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Benchmark Dialog");
 		dialog.setHeaderText("Generate random scheduling problems for benchmark");
 		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		
+
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -57,17 +57,17 @@ public class BenchmarkUtils {
 	}
 	
 	public static int getOptimalFlowShopSchedule(Task task) {
-		if(task.getJobs().size() > 10) //Safety
+		if (task.getJobs().size() >= 10) //Safety
 			return -1;
-		
+
 		LinkedList<Job> jobs = new LinkedList<>(task.getJobs());
-		
+
 		int[] indexes = new int[jobs.size()];
 		IntStream.range(0, indexes.length).forEach(i -> indexes[i] = 0);
-		
+
 		int i = 0, result = Integer.MAX_VALUE;
-		while(i < indexes.length) {
-			if(indexes[i] < i) {
+		while (i < indexes.length) {
+			if (indexes[i] < i) {
 				Collections.swap(jobs, i % 2 == 0 ? 0 : indexes[i], i);
 				
 				Task schedule = scheduleFlowShop(new Task(jobs));

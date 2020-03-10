@@ -133,9 +133,11 @@ public class GenerationRunner {
 		}
 		
 		private void work() {
+			boolean small = tasks.get(0).getJobs().size() < 10;
 			int i = 1;
 			Map<String, Integer> values = new TreeMap<>();
-			for(Task task : tasks) {
+			Map<String, Double> relValues = new TreeMap<>();
+			for (Task task : tasks) {
 				if (!running)
 					return;
 
@@ -147,18 +149,22 @@ public class GenerationRunner {
 				mainWindowAUI.onBenchmarkProgress((2F * i - 1) / (2F * numInstances));
 
 				//calculate optimal schedule
-				localValues.put("OPT", BenchmarkUtils.getOptimalFlowShopSchedule(task));
+				int opt = small ? BenchmarkUtils.getOptimalFlowShopSchedule(task) : -1;
+				localValues.put("OPT", opt);
 
 				mainWindowAUI.onBenchmarkProgress((2F * i) / (2F * numInstances));
 
 				//update Values in  results
 				for (Map.Entry<String, Integer> entry : localValues.entrySet()) {
-					//catch non-existing values
-					Integer val = values.get(entry.getKey());
-					int oldValue = val != null ? val : 0;
+					Integer oldValue = values.get(entry.getKey());
+					oldValue = oldValue != null ? oldValue : 0;
+
+					Double oldRelValue = relValues.get(entry.getKey());
+					oldRelValue = oldRelValue != null ? oldRelValue : 0;
 
 					//aggregate results in corresponding map entry
 					values.put(entry.getKey(), entry.getValue() + oldValue);
+					relValues.put(entry.getKey(), (entry.getValue() - opt) / (double) opt + oldRelValue);
 				}
 				i++;
 			}
@@ -168,8 +174,9 @@ public class GenerationRunner {
 			System.out.println("--- RESULTS ---");
 			for(Map.Entry<String, Integer> entry : values.entrySet()) {
 				//average values from numInstances
-				benchmarkResults.put(entry.getKey(), ((double) entry.getValue() / (double) numInstances));
-				System.out.println(entry.getKey() + " : " + ((double) entry.getValue() / (double) numInstances));
+				benchmarkResults.put(entry.getKey(), (entry.getValue() / (double) numInstances));
+				System.out.print(entry.getKey() + " : " + (entry.getValue() / (double) numInstances));
+				System.out.println(" : " + Math.round((relValues.get(entry.getKey()) / numInstances) * 1000) / 10D + "%");
 			}
 		}
 		
