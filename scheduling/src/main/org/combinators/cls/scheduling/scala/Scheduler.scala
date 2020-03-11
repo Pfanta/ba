@@ -10,10 +10,8 @@ import org.combinators.cls.types.syntax._
 import scala.collection.JavaConverters._
 
 object Scheduler {
-  lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.shopClassKinding, classLoader = this.getClass.getClassLoader)
-
   lazy val repository: Repository = new Repository {}
-
+  lazy val reflectedRepository: ReflectedRepository[Repository] = ReflectedRepository(repository, substitutionSpace = repository.shopClassKinding, classLoader = this.getClass.getClassLoader)
   var tree: Seq[Tree] = _
 
   def run(classification: Classification): java.util.Map[String, String] = {

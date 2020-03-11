@@ -41,17 +41,7 @@
 	<JFXCheckBox layoutX="620"
 	             layoutY="130"
 	             focusTraversable="false"
-	             text="Condition 1"/>
-	
-	<JFXCheckBox layoutX="620"
-	             layoutY="160"
-	             focusTraversable="false"
-	             text="Condition 2"/>
-	
-	<JFXCheckBox layoutX="620"
-	             layoutY="190"
-	             focusTraversable="false"
-	             text="Condition 3"/>
+	             text="permu"/>
 	
 	<JFXButton layoutX="610"
 	           layoutY="300"

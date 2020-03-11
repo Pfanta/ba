@@ -1,11 +1,14 @@
 package org.combinators.cls.scheduling.utils;
 
+import com.jfoenix.controls.JFXCheckBox;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
@@ -20,13 +23,13 @@ public class BenchmarkUtils {
 	private static final int DEFAULT_MACHINES_COUNT = 5;
 	private static final int DEFAULT_JOBS_COUNT = 9;
 	private static final int DEFAULT_INSTANCES_COUNT = 10;
-
+	
 	public static Optional<BenchmarkDialogResult> showBenchmarkDialog() {
 		Dialog<BenchmarkDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Benchmark Dialog");
 		dialog.setHeaderText("Generate random scheduling problems for benchmark");
 		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-
+		
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setVgap(10);
@@ -56,12 +59,44 @@ public class BenchmarkUtils {
 		return dialog.showAndWait();
 	}
 	
+	public static Optional<Boolean[]> showTaillardBenchmarkDialog() {
+		Dialog<Boolean[]> dialog = new Dialog<>();
+		dialog.setTitle("Taillard Benchmark Dialog");
+		dialog.setHeaderText("Run Taillard benchmark");
+		dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+		
+		List<JFXCheckBox> checkboxes = Arrays.asList(
+				new JFXCheckBox("20x5"),
+				new JFXCheckBox("20x10"),
+				new JFXCheckBox("20x20"),
+				new JFXCheckBox("50x5"),
+				new JFXCheckBox("50x10"),
+				new JFXCheckBox("50x20"),
+				new JFXCheckBox("100x5"),
+				new JFXCheckBox("100x10"),
+				new JFXCheckBox("100x20"),
+				new JFXCheckBox("200x10"),
+				new JFXCheckBox("200x20"),
+				new JFXCheckBox("500x20")
+		);
+		checkboxes.forEach(c -> c.setPadding(new Insets(10, 0, 0, 0)));
+		
+		VBox vbox = new VBox();
+		vbox.setPadding(new Insets(20, 10, 10, 10));
+		vbox.getChildren().addAll(checkboxes);
+		dialog.getDialogPane().setContent(vbox);
+		
+		dialog.setResultConverter(dialogButton -> dialogButton == ButtonType.OK ? checkboxes.stream().map(CheckBox::isSelected).toArray(Boolean[]::new) : null);
+		
+		return dialog.showAndWait();
+	}
+	
 	public static int getOptimalFlowShopSchedule(Task task) {
-		if (task.getJobs().size() >= 10) //Safety
+		if(task.getJobs().size() >= 10) //Safety
 			return -1;
-
+		
 		LinkedList<Job> jobs = new LinkedList<>(task.getJobs());
-
+		
 		int[] indexes = new int[jobs.size()];
 		IntStream.range(0, indexes.length).forEach(i -> indexes[i] = 0);
 

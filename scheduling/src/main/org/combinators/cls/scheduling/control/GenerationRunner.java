@@ -43,7 +43,7 @@ public class GenerationRunner {
 	}
 	
 	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances) throws InterruptedException {
-		instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
+		//instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
 		System.out.println("--------------------------------------------------");
 		
 		worker = new TaillardBenchmarkWorker(instances);
@@ -138,30 +138,32 @@ public class GenerationRunner {
 			Map<String, Integer> values = new TreeMap<>();
 			Map<String, Double> relValues = new TreeMap<>();
 			for (Task task : tasks) {
-				if (!running)
+				if(!running)
 					return;
-
+				
+				long t1 = System.currentTimeMillis();
 				System.out.println("--- Iteration " + i + " von " + numInstances + " ---");
-
+				
 				//run heuristics
 				Map<String, Integer> localValues = runTask(task);
-
+				
 				mainWindowAUI.onBenchmarkProgress((2F * i - 1) / (2F * numInstances));
-
+				
 				//calculate optimal schedule
 				int opt = small ? BenchmarkUtils.getOptimalFlowShopSchedule(task) : -1;
 				localValues.put("OPT", opt);
-
+				
 				mainWindowAUI.onBenchmarkProgress((2F * i) / (2F * numInstances));
-
+				System.out.println("t = " + (System.currentTimeMillis() - t1) / 1000D + "s");
+				
 				//update Values in  results
-				for (Map.Entry<String, Integer> entry : localValues.entrySet()) {
+				for(Map.Entry<String, Integer> entry : localValues.entrySet()) {
 					Integer oldValue = values.get(entry.getKey());
 					oldValue = oldValue != null ? oldValue : 0;
-
+					
 					Double oldRelValue = relValues.get(entry.getKey());
 					oldRelValue = oldRelValue != null ? oldRelValue : 0;
-
+					
 					//aggregate results in corresponding map entry
 					values.put(entry.getKey(), entry.getValue() + oldValue);
 					relValues.put(entry.getKey(), (entry.getValue() - opt) / (double) opt + oldRelValue);
