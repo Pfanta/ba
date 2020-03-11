@@ -8,6 +8,9 @@ import org.combinators.cls.scheduling.scala.Scheduler;
 import org.combinators.cls.scheduling.utils.*;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -42,13 +45,21 @@ public class GenerationRunner {
 		worker.start();
 	}
 	
-	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances) throws InterruptedException {
+	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances, String saveFilePath) throws InterruptedException {
 		//instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
 		System.out.println("--------------------------------------------------");
 		
 		worker = new TaillardBenchmarkWorker(instances);
 		worker.start();
 		worker.join();
+		
+		for(Map.Entry<String, Double> entry : benchmarkResults.entrySet()) {
+			try {
+				Files.write(Paths.get(saveFilePath), (entry.getKey() + " : " + entry.getValue() + "%").getBytes());
+			} catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void cancel() {

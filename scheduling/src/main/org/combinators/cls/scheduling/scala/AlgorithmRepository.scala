@@ -4,10 +4,10 @@ import org.combinators.cls.interpreter.combinator
 import org.combinators.cls.types.Type
 import org.combinators.cls.types.syntax._
 
-trait AlgorithmRepository {
+trait AlgorithmRepository extends RunnerRepository {
 
   @combinator object NEH {
-    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm('FS)
+    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm :&: problemClass.flowShop
 
     def apply(FSScheduler: String): String =
       s"""|   final LinkedList<Job> jobs = classification.getTask().getJobs();
@@ -46,7 +46,7 @@ trait AlgorithmRepository {
   }
 
   @combinator object SimpleDispatchingRulesFlowShop {
-    val semanticType: Type = 'Heuristic =>: 'FlowShopScheduler =>: 'Algorithm('FS)
+    val semanticType: Type = 'Heuristic =>: 'FlowShopScheduler =>: 'Algorithm :&: problemClass.flowShop
 
     def apply(Heuristic: String, FSScheduler: String): String =
       s"""|   Task schedule = classification.getTask();
@@ -68,7 +68,7 @@ trait AlgorithmRepository {
   }
 
   @combinator object RandomPermutationFlowShop {
-    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm('FS)
+    val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm :&: problemClass.flowShop
 
     def apply(FSScheduler: String): String =
       s"""|   Task schedule = classification.getTask();
@@ -89,7 +89,7 @@ trait AlgorithmRepository {
   }
 
   @combinator object GifflerThompson {
-    val semanticType: Type = 'Heuristic =>: 'Algorithm('JS)
+    val semanticType: Type = 'Heuristic =>: 'Algorithm :&: problemClass.jobShop
 
     def apply(Heuristic: String): String =
       s"""|        final Task schedule = classification.getTask();
@@ -146,19 +146,19 @@ trait AlgorithmRepository {
   }
 
   @combinator object AlgorithmFFS {
-    val semanticType: Type = 'Algorithm('FFS)
+    val semanticType: Type = 'Algorithm :&: problemClass.flexibleFlowShop
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
 
   @combinator object AlgorithmOS {
-    val semanticType: Type = 'Algorithm('OS)
+    val semanticType: Type = 'Algorithm :&: problemClass.flexibleJobShop
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
 
   @combinator object Fallback {
-    val semanticType: Type = 'Algorithm('NONE)
+    val semanticType: Type = 'Algorithm :&: problemClass.none
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }

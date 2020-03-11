@@ -5,18 +5,29 @@ import org.combinators.cls.types.syntax._
 import org.combinators.cls.types.{Kinding, Type, Variable}
 
 trait RunnerRepository {
-  lazy val shopClass: Variable = Variable("algorithm")
 
+  lazy val shopClass: Variable = Variable("shopClass")
   lazy val shopClassKinding: Kinding = Kinding(shopClass)
-    .addOption('FS)
-    .addOption('FFS)
-    .addOption('JS)
-    .addOption('FJS)
-    .addOption('OS)
-    .addOption('NONE)
+    .addOption(problemClass.flowShop)
+    .addOption(problemClass.flexibleFlowShop)
+    .addOption(problemClass.jobShop)
+    .addOption(problemClass.flexibleJobShop)
+    .addOption(problemClass.openShop)
+    .addOption(problemClass.none)
+
+  object problemClass {
+    val flowShop: Type = 'FS
+    val flexibleFlowShop: Type = 'FFS
+    val jobShop: Type = 'JS
+    val flexibleJobShop: Type = 'FJS
+    val openShop: Type = 'OS
+    val none: Type = 'NONE
+
+    def apply(part: Type): Type = 'ProblemClass(part)
+  }
 
   @combinator object Scheduler {
-    val semanticType: Type = 'Algorithm(shopClass) =>: 'Scheduler(shopClass)
+    val semanticType: Type = 'Algorithm :&: shopClass =>: 'Scheduler(shopClass)
 
     def apply(Algorithm: String): String =
       s"""|package org.combinators.cls.scheduling;

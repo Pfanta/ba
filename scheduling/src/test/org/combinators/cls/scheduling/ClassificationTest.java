@@ -62,7 +62,7 @@ public class ClassificationTest {
 		assertEquals(ShopClass.OS, classification.getShopClass());
 	}
 	
-	@Test
+	/*@Test
 	public void testClassificationFlexibleFlowShop() throws IOException {
 		Task task = IOUtils.loadTask(getClass().getResource("/tasks/flexibleFlowShop4x4_ascending.task").getFile());
 		
@@ -70,7 +70,7 @@ public class ClassificationTest {
 		assertEquals(4, classification.getMachineCount());
 		assertEquals(4, classification.getJobCount());
 		assertEquals(ShopClass.FFS, classification.getShopClass());
-	}
+	}*/
 	/*
 	@Test
 	public void testClassificationFlexibleJobShop() throws IOException {
