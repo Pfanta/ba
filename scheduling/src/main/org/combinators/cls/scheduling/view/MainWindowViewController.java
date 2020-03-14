@@ -157,8 +157,8 @@ public class MainWindowViewController implements MainWindowAUI {
             }));
         }
         nodes.add(new CustomJFXPlusButton(10, 10 + currentTask.getJobs().size() * 40, 30, 30, event -> {
-            currentTask.add(new Job("J" + currentTask.getJobs().size(), -1, new Route(new Stage(new Machine("M0")))));
-            refreshJobsPane();
+            currentTask.add(new Job("J" + currentTask.getJobs().size(), -1, 0, new Route(new Stage(new Machine("M0")))));
+	        refreshJobsPane();
         }));
     }
 
@@ -307,29 +307,29 @@ public class MainWindowViewController implements MainWindowAUI {
                 public void run() {
                     try {
                         if(result[0])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x5.taillard").getFile())), getClass().getResource("/results/20x5.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x5.taillard").getFile()), new File("G:\\20x5.taillard"));
                         if(result[1])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x10.taillard").getFile())), getClass().getResource("/results/20x10.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x10.taillard").getFile()), new File("G:\\20x10.taillard"));
                         if(result[2])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/20x20.taillard").getFile())), getClass().getResource("/results/20x20.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x20.taillard").getFile()), new File("G:\\20x20.taillard"));
                         if(result[3])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/50x5.taillard").getFile())), getClass().getResource("/results/50x5.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/50x5.taillard").getFile()), new File("G:\\50x5.taillard"));
                         if(result[4])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/50x10.taillard").getFile())), getClass().getResource("/results/50x10.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/50x10.taillard").getFile()), new File("G:\\50x10.taillard"));
                         if(result[5])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/50x20.taillard").getFile())), getClass().getResource("/results/50x20.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/50x20.taillard").getFile()), new File("G:\\50x20.taillard"));
                         if(result[6])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/100x5.taillard").getFile())), getClass().getResource("/results/100x5.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/100x5.taillard").getFile()), new File("G:\\100x5.taillard"));
                         if(result[7])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/100x10.taillard").getFile())), getClass().getResource("/results/100x10.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/100x10.taillard").getFile()), new File("G:\\100x10.taillard"));
                         if(result[8])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/100x20.taillard").getFile())), getClass().getResource("/results/100x20.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/100x20.taillard").getFile()), new File("G:\\100x20.taillard"));
                         if(result[9])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/200x10.taillard").getFile())), getClass().getResource("/results/200x10.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/200x10.taillard").getFile()), new File("G:\\200x10.taillard"));
                         if(result[10])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/200x20.taillard").getFile())), getClass().getResource("/results/200x20.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/200x20.taillard").getFile()), new File("G:\\200x20.taillard"));
                         if(result[11])
-                            generationRunner.runTaillardBenchmark(IOUtils.loadTaillard(new File(getClass().getResource("/tasks/500x20.taillard").getFile())), getClass().getResource("/results/500x20.taillard").getPath());
+	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/500x20.taillard").getFile()), new File("G:\\500x20.taillard"));
                     } catch(IOException e) {
                         ApplicationUtils.showException("Error", "Error occurred while loading", e);
                     } catch(InterruptedException e) {

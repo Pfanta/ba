@@ -23,22 +23,28 @@ public class Job implements IWritable, ICloneable<Job> {
 	@Setter
 	private int deadline;
 	
+	@Getter
+	@Setter
+	private int releaseDate;
+	
 	public Job() {
-		this("", -1);
+		this("", -1, 0);
 	}
 	
 	public Job(String name) {
-		this(name, -1);
+		this(name, -1, 0);
 	}
 	
-	public Job(String name, int deadline) {
+	public Job(String name, int deadline, int releaseDate) {
 		this.name = name;
 		this.deadline = deadline;
+		this.releaseDate = releaseDate;
 	}
 	
-	public Job(String name, int deadline, Route... routes) {
+	public Job(String name, int deadline, int releaseDate, Route... routes) {
 		this.name = name;
 		this.deadline = deadline;
+		this.releaseDate = releaseDate;
 		this.routes.addAll(Arrays.asList(routes));
 	}
 	
@@ -72,7 +78,7 @@ public class Job implements IWritable, ICloneable<Job> {
 	
 	@Override
 	public Job cloned() {
-		Job job = new Job(this.name, this.deadline);
+		Job job = new Job(this.name, this.deadline, 0);
 		this.routes.forEach(route -> job.getRoutes().add(route.cloned()));
 		return job;
 	}

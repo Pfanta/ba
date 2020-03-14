@@ -44,7 +44,7 @@ public class IOUtils {
 				for(int machine = 0; machine < values.length; machine++) {
 					route.addStage(new Stage(new Machine("M" + machine, values[machine][job])));
 				}
-				jobs.add(new Job("J" + job, -1, route));
+				jobs.add(new Job("J" + job, -1, 0, route));
 			}
 			
 			list.add(new Tuple<>(new Task(jobs), opt[instance]));
@@ -79,7 +79,7 @@ public class IOUtils {
 			throw new IllegalArgumentException("Not a valid String: " + input);
 		
 		
-		Job job = new Job(split[0], Integer.parseInt(split[1]));
+		Job job = new Job(split[0], Integer.parseInt(split[1]), 0);
 		Route route = new Route();
 		job.addRoute(route);
 		

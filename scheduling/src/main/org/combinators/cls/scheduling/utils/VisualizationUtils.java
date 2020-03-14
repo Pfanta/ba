@@ -30,7 +30,7 @@ public class VisualizationUtils {
 		for(Machine machine : allMachines) {
 			LinkedList<Job> jobList = new LinkedList<>();
 			
-			task.getJobs().forEach(job -> job.getScheduledRoute().getStages().stream().filter(stage -> stage.getScheduledMachine().equals(machine)).findFirst().ifPresent(stage -> jobList.add(new Job(job.getName(), job.getDeadline(), new Route(stage.cloned())))));
+			task.getJobs().forEach(job -> job.getScheduledRoute().getStages().stream().filter(stage -> stage.getScheduledMachine().equals(machine)).findFirst().ifPresent(stage -> jobList.add(new Job(job.getName(), job.getDeadline(), 0, new Route(stage.cloned())))));
 			
 			jobList.sort(Comparator.comparingInt(job -> job.getScheduledRoute().getStages().getFirst().getScheduledMachine().getScheduledTime()));
 			machineMap.put(machine, jobList);

@@ -8,9 +8,9 @@ import org.combinators.cls.scheduling.scala.Scheduler;
 import org.combinators.cls.scheduling.utils.*;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -45,27 +45,25 @@ public class GenerationRunner {
 		worker.start();
 	}
 	
-	public void runTaillardBenchmark(List<Tuple<Task, Integer>> instances, String saveFilePath) throws InterruptedException {
+	public void runTaillardBenchmark(File inputFile, File outputFile) throws InterruptedException, IOException {
 		//instances.forEach(t -> System.out.println(t.getSecond() + " | " + t.getFirst().getString()));
 		System.out.println("--------------------------------------------------");
 		
-		worker = new TaillardBenchmarkWorker(instances);
+		worker = new TaillardBenchmarkWorker(IOUtils.loadTaillard(inputFile));
 		worker.start();
 		worker.join();
 		
+		FileWriter writer = new FileWriter(outputFile);
 		for(Map.Entry<String, Double> entry : benchmarkResults.entrySet()) {
-			try {
-				Files.write(Paths.get(saveFilePath), (entry.getKey() + " : " + entry.getValue() + "%").getBytes());
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
+			writer.write(entry.getKey() + " : " + entry.getValue() + "%\n");
 		}
+		writer.flush();
+		writer.close();
 	}
 	
 	public void cancel() {
 		worker.cancel();
 	}
-	
 	
 	abstract static class AbstractWorker extends Thread {
 		protected volatile boolean running;
