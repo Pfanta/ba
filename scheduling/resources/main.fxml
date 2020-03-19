@@ -110,7 +110,7 @@
 	           onAction="#onBenchmarkButtonClicked"
 	           text="Benchmark"/>
 	
-	<JFXProgressBar fx:id="taillardenchmarkProgressBar"
+	<JFXProgressBar fx:id="taillardBenchmarkProgressBar"
 	                layoutX="610"
 	                layoutY="440"
 	                prefHeight="25"

@@ -43,10 +43,10 @@ public class NEH implements Function<ClassificationUtils.Classification, Task> {
 					for(int machineIndex = 0; machineIndex < jobToSchedule.getScheduledRoute().getStages().size(); machineIndex++) {
 						Machine machine = jobToSchedule.getScheduledRoute().getStages().get(machineIndex).getScheduledMachine();
 						
-						//finishtime of job
+						//finish time of job
 						int t1 = machineIndex == 0 ? 0 : jobToSchedule.getScheduledRoute().getStages().get(machineIndex - 1).getScheduledMachine().getFinishTime();
 						
-						//finishtime of machine
+						//finish time of machine
 						int t2 = machineWorkingUntil.get(machine);
 						int scheduleTime = Math.max(t1, t2);
 						

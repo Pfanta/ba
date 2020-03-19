@@ -42,13 +42,6 @@ public class Job implements IWritable, ICloneable<Job> {
 	private int releaseDate;
 	
 	/**
-	 Creates a job with empty name, no deadline and releaseDate 0
-	 */
-	public Job() {
-		this("", -1, 0);
-	}
-	
-	/**
 	 Creates a job with given name, no deadline and releaseDate 0
 	 @param name The job's name
 	 */

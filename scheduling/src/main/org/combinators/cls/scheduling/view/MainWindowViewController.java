@@ -54,7 +54,7 @@ public class MainWindowViewController implements MainWindowAUI {
     @FXML
     private JFXProgressBar benchmarkProgressBar;
     @FXML
-    private JFXProgressBar taillardenchmarkProgressBar;
+    private JFXProgressBar taillardBenchmarkProgressBar;
     
     /**
      Windows man stage
@@ -367,7 +367,7 @@ public class MainWindowViewController implements MainWindowAUI {
     public void onBenchmarkProgress(float progress) {
         Platform.runLater(() -> {
             benchmarkProgressBar.setProgress(progress);
-            taillardenchmarkProgressBar.setProgress(progress);
+            taillardBenchmarkProgressBar.setProgress(progress);
         });
     }
 
@@ -394,7 +394,7 @@ public class MainWindowViewController implements MainWindowAUI {
             benchmarkBtn.setOpacity(1);
             taillardBenchmarkBtn.setOpacity(1);
             benchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            taillardenchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            taillardBenchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
         });
     }
     //endregion
