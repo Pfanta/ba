@@ -13,14 +13,25 @@ import org.combinators.cls.scheduling.view.customcontrol.DialogLabel;
 
 public class ProgressDialog extends Dialog<ButtonType> {
 	
+	/**
+	 Progress indicator
+	 */
 	private final JFXProgressBar progressBar;
+	
+	/**
+	 Result label
+	 */
 	private final Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
 	
+	/**
+	 Creates a new dialog and shows results
+	 @param function Target function
+	 */
 	public ProgressDialog(String function) {
 		super();
 		this.setTitle("Running...");
 		this.setHeaderText("");
-
+		
 		Pane pane = new Pane();
 		pane.setPadding(new Insets(20, 10, 10, 10));
 		
@@ -56,6 +67,10 @@ public class ProgressDialog extends Dialog<ButtonType> {
 		this.getDialogPane().setContent(pane);
 	}
 	
+	/**
+	 Updates classification result
+	 @param classification Classification
+	 */
 	public void setClassificationResult(Classification classification) {
 		progressBar.setProgress(2F / 5F);
 		labelNumMachines.setText("" + classification.getMachineCount());
@@ -64,21 +79,35 @@ public class ProgressDialog extends Dialog<ButtonType> {
 		labelProgress.setText("2/4 Generating...");
 	}
 	
+	/**
+	 Updates generation result
+	 @param result Generation result
+	 */
 	public void setGenerationResult(int result) {
 		labelNumResults.setText("" + result);
 		progressBar.setProgress(3F / 5F);
 		labelProgress.setText("3/4 Running...");
 	}
 	
+	/**
+	 Updates run progress
+	 @param progress Progress from 0 to 1
+	 */
 	public void setRunProgress(float progress) {
 		progressBar.setProgress((4F + progress) / 5F);
 	}
 	
+	/**
+	 Indicates that running the task has finished
+	 */
 	public void setRunFinished() {
 		progressBar.setProgress(4F / 5F);
 		labelProgress.setText("4/4 Evaluating...");
 	}
 	
+	/**
+	 Indicates that result evaluation has finished
+	 */
 	public void setEvaluationResult(int result) {
 		labelResult.setText("" + result);
 		progressBar.setProgress(1);
