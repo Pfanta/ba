@@ -2,11 +2,13 @@ package org.combinators.cls.scheduling.control;
 
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.IOUtils;
+import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,5 +80,13 @@ public class GenerationRunner {
 	public void cancel() {
 		if(worker != null)
 			worker.cancel();
+	}
+	
+	/**
+	 Returns worker results
+	 @return Worker results
+	 */
+	public List<Tuple<String, Task>> getResults() {
+		return worker.getSchedulingResults();
 	}
 }

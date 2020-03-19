@@ -1,9 +1,9 @@
 package org.combinators.cls.scheduling.algorithms;
 
+import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
 import org.combinators.cls.scheduling.model.Task;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-public class NEH implements Function<ClassificationUtils.Classification, Task> {
-	public Task apply(ClassificationUtils.Classification classification) {
+public class NEH implements Function<Classification, Task> {
+	public Task apply(Classification classification) {
 		final LinkedList<Job> jobs = classification.getTask().getJobs();
 		
 		//sort jobs in descending order

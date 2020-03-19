@@ -8,23 +8,51 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import lombok.Getter;
 import org.combinators.cls.scheduling.model.*;
+import org.combinators.cls.scheduling.view.customDialogs.GenerationDialogResult;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ Utils for task generation */
 public class GenerationUtils {
-	
+	/**
+	 Default value for machine count
+	 */
 	private static final int DEFAULT_MACHINES_COUNT = 4;
+	
+	/**
+	 Default value for job count
+	 */
 	private static final int DEFAULT_JOBS_COUNT = 4;
+	
+	/**
+	 Lower bound for random machine times
+	 */
 	private static final int MIN_MACHINE_TIME = 1;
+	
+	/**
+	 Upper bound for random machine times
+	 */
 	private static final int MAX_MACHINE_TIME = 6;
+	
+	/**
+	 Maximum the deadline may exceed no-delay makespan
+	 */
 	private static final int MAX_DEADLINE_PLUS = 10;
+	
+	/**
+	 Instance of random number generator
+	 */
 	private static final Random random = new Random();
 	
+	/**
+	 Shows generation dialog
+	 @return Container containing questioned values
+	 */
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
 		Dialog<GenerationDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Generation Dialog");
@@ -60,8 +88,9 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 @param result GenerationDialogResult
-	 @return Task
+	 Generates a random task
+	 @param result Generation dialog result
+	 @return Task Generated task
 	 */
 	public static Task generateRandomTask(GenerationDialogResult result) {
 		if(result.getNumJobs() <= 0 || result.getNumMachines() <= 0 || result.getShopClass().equals(ShopClass.NONE))
@@ -111,10 +140,10 @@ public class GenerationUtils {
 			}
 			if (deadlines)
 				job.setDeadline(totalTime + random.nextInt(MAX_DEADLINE_PLUS) * numMachines);
-
+			
 			task.add(job);
 		}
-
+		
 		return task;
 	}
 	
@@ -165,23 +194,5 @@ public class GenerationUtils {
 	private static Task makeFlexible(Task task) {
 		//TODO
 		return task;
-	}
-	
-	public static class GenerationDialogResult {
-		@Getter
-		private int numMachines;
-		@Getter
-		private int numJobs;
-		@Getter
-		private boolean deadlines;
-		@Getter
-		private ShopClass shopClass;
-		
-		public GenerationDialogResult(int numMachines, int numJobs, boolean deadlines, ShopClass shopClass) {
-			this.numMachines = numMachines;
-			this.numJobs = numJobs;
-			this.deadlines = deadlines;
-			this.shopClass = shopClass;
-		}
 	}
 }

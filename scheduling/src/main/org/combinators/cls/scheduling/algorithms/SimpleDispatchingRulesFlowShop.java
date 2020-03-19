@@ -1,10 +1,6 @@
 package org.combinators.cls.scheduling.algorithms;
 
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
-import org.combinators.cls.scheduling.model.Task;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
+import org.combinators.cls.scheduling.model.*;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class SimpleDispatchingRulesFlowShop {
-	public Task apply(ClassificationUtils.Classification classification) {
+	public Task apply(Classification classification) {
 		Task schedule = classification.getTask();
 		LinkedList<Job> waitingJobsOnMachine = schedule.getJobs();
 		

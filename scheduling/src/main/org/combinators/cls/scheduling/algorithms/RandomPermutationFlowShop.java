@@ -1,16 +1,16 @@
 package org.combinators.cls.scheduling.algorithms;
 
+import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
 import org.combinators.cls.scheduling.model.Task;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RandomPermutationFlowShop {
-	public Task apply(ClassificationUtils.Classification classification) {
+	public Task apply(Classification classification) {
 		Task schedule = classification.getTask();
 		
 		Task localBest = new Task();

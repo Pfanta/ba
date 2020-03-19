@@ -1,6 +1,5 @@
 package org.combinators.cls.scheduling.utils;
 
-import lombok.Getter;
 import org.combinators.cls.scheduling.model.*;
 
 import java.util.Collection;
@@ -8,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ Utils for classifying tasks */
 public class ClassificationUtils {
 	
 	/**
@@ -40,11 +41,21 @@ public class ClassificationUtils {
 		
 	}
 	
-	public static JobMachineTuple getTaskDimensions(Task task) {
+	/**
+	 Returns the dimensions of a task
+	 @param task task to be classified
+	 @return Dimensions of the task: Number of machines (first) and number of jobs (second)
+	 */
+	public static Tuple<Integer, Integer> getTaskDimensions(Task task) {
 		List<List<Machine>> machines = getMachines(task);
-		return new JobMachineTuple(machines.size(), (int) machines.stream().flatMap(Collection::stream).distinct().count());
+		return new Tuple<>(machines.size(), (int) machines.stream().flatMap(Collection::stream).distinct().count());
 	}
 	
+	/**
+	 Returns all machines in the given task
+	 @param task task to be classified
+	 @return All machines in the task
+	 */
 	private static List<List<Machine>> getMachines(Task task) {
 		return task.getJobs().stream().map(Job::getMachines).collect(Collectors.toList());
 	}
@@ -91,8 +102,13 @@ public class ClassificationUtils {
 		return true;
 	}
 	
-	private static boolean checkFlexibility(Task currentTask) {
-		return currentTask.getJobs().stream().anyMatch(job -> job.getRoutes().stream().anyMatch(route -> route.getStages().stream().anyMatch(stage -> stage.getMachines().size() > 1)));
+	/**
+	 Checks wether the given task is fleible or not
+	 @param task Task to be classified
+	 @return false if the task has no Stage with more than one machine, true otherwise
+	 */
+	private static boolean checkFlexibility(Task task) {
+		return task.getJobs().stream().anyMatch(job -> job.getRoutes().stream().anyMatch(route -> route.getStages().stream().anyMatch(stage -> stage.getMachines().size() > 1)));
 	}
 	
 	/**
@@ -135,56 +151,6 @@ public class ClassificationUtils {
 				}
 			}
 		}
-		
 		return true;
-	}
-	
-	public static class Classification implements ICloneable<Classification> {
-		@Getter
-		private final Task task;
-		@Getter
-		private final int machineCount;
-		@Getter
-		private final int jobCount;
-		@Getter
-		private final boolean deadlines;
-		@Getter
-		private final ShopClass shopClass;
-
-		Classification(Task task, int machineCount, int jobCount, boolean deadlines, ShopClass shopClass) {
-			this.task = task;
-			this.machineCount = machineCount;
-			this.jobCount = jobCount;
-			this.deadlines = deadlines;
-			this.shopClass = shopClass;
-		}
-
-		/**
-		 * @return true for shopClasses FS and FFS
-		 */
-		public boolean isStrictlyFlowShop() {
-			return this.shopClass.equals(ShopClass.FS) || this.shopClass.equals(ShopClass.FFS);
-		}
-
-		/**
-		 @return true for shopClasses JS and FJS
-		 */
-		public boolean isStrictlyJobShop() {
-			return this.shopClass.equals(ShopClass.JS) || this.shopClass.equals(ShopClass.FJS);
-		}
-
-		@Override
-		public String toString() {
-			return "Classification{" +
-					"machineCount=" + machineCount +
-					", jobCount=" + jobCount +
-					", shopClass=" + shopClass +
-					'}';
-		}
-
-		@Override
-		public Classification cloned() {
-			return new Classification(task.cloned(), machineCount, jobCount, deadlines, shopClass);
-		}
 	}
 }

@@ -32,13 +32,13 @@ import java.io.IOException;
  * ViewController for MainWindow GUI
  */
 public class MainWindowViewController implements MainWindowAUI {
-    /**
+    /*
      * Thresholds for Visualizing Tasks in GUI, too large values make long scrollbars and affect performance
      */
     private static final int MAX_JOBS_SHOWN = 20;
     private static final int MAX_MACHINES_SHOWN = 15;
-
-    /**
+    
+    /*
      * Attributes for accessing view components declared in .fxml file
      */
     @FXML
@@ -57,7 +57,7 @@ public class MainWindowViewController implements MainWindowAUI {
     private JFXProgressBar taillardBenchmarkProgressBar;
     
     /**
-     Windows man stage
+     Windows main stage
      */
     private javafx.stage.Stage stage;
     
@@ -103,29 +103,21 @@ public class MainWindowViewController implements MainWindowAUI {
     private void refreshJobsPane() {
         ObservableList<Node> nodes = jobsPane.getChildren();
         nodes.clear();
-
+    
         //Catch too large tasks
-        JobMachineTuple tuple = ClassificationUtils.getTaskDimensions(currentTask);
-        if (tuple.getJobCount() > MAX_JOBS_SHOWN || tuple.getMachineCount() > MAX_MACHINES_SHOWN) {
+        Tuple<Integer, Integer> tuple = ClassificationUtils.getTaskDimensions(currentTask);
+        if(tuple.getFirst() > MAX_MACHINES_SHOWN || tuple.getSecond() > MAX_JOBS_SHOWN) {
             nodes.add(new CustomLabel("Dimensions of Task too large to visualize.", 50, 50));
             return;
         }
-
+    
         //Show all Jobs in own row
-        for (int i = 0; i < currentTask.getJobs().size(); i++) {
+        for(int i = 0; i < currentTask.getJobs().size(); i++) {
             nodes.add(new CustomLabel(currentTask.getJobs().get(i).getName(), 10, 10 + i * 40, 50, 30));
-
+        
             int y = 0;
             final Job currentJob = currentTask.getJobs().get(i);
             for (Stage stage : currentJob.getRoutes().get(0).getStages()) {
-//				TextField textFieldMachineCount = new CustomJFXTextField(stage.getMachineCount(), 60 + y * 130, 10 + i * 40, 20, 30);
-//				textFieldMachineCount.textProperty().addListener((observable, oldValue, newValue) -> {
-//					if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
-//						textFieldMachineCount.setText(oldValue);
-//					else
-//						stage.setMachineCount(Integer.parseInt(newValue));
-//				});
-
                 TextField textFieldMachine = new CustomJFXTextField(stage.getMachines().get(0).toString(), 60 + y * 130 + 30, 10 + i * 40, 50, 30);
                 textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
                     if(newValue.isEmpty())
@@ -133,7 +125,7 @@ public class MainWindowViewController implements MainWindowAUI {
                     else
                         stage.getMachines().get(0).setName(newValue);
                 });
-
+    
                 TextField textFieldMachineTime = new CustomJFXTextField(stage.getScheduledMachine().getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
                 textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
                     if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
@@ -141,12 +133,10 @@ public class MainWindowViewController implements MainWindowAUI {
                     else
                         stage.getScheduledMachine().setDuration(Integer.parseInt(newValue));
                 });
-
-                nodes.addAll(//textFieldMachineCount,
-                        new CustomLabel("x", 60 + y * 130 + 20, 10 + i * 40, 10, 30),
-                        textFieldMachine,
-                        new CustomLabel(":", 60 + y * 130 + 80, 10 + i * 40, 5, 30),
-                        textFieldMachineTime,
+    
+                nodes.addAll(
+                        new CustomLabel("x", 60 + y * 130 + 20, 10 + i * 40, 10, 30), textFieldMachine,
+                        new CustomLabel(":", 60 + y * 130 + 80, 10 + i * 40, 5, 30), textFieldMachineTime,
                         new CustomLabel("\u2192", 60 + y * 130 + 105, 10 + i * 40, 25, 30, 18));
                 y++;
             }
@@ -163,11 +153,10 @@ public class MainWindowViewController implements MainWindowAUI {
     }
 
     //region action Handler
-
+    
     /**
-     * Event handler for drag&drop .task files into the program
-     *
-     * @param event dragEvent
+     Event handler for drag&drop .task files into the program
+     @param event DragEvent
      */
     public void onDragOver(DragEvent event) {
         if (event.getDragboard().hasFiles())
@@ -178,7 +167,7 @@ public class MainWindowViewController implements MainWindowAUI {
     /**
      * Event handler for drag&drop .task files into the program
      *
-     * @param event dragEvent
+     * @param event DragEvent
      */
     public void onFileDropped(DragEvent event) {
         Dragboard dragboard = event.getDragboard();
@@ -194,7 +183,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * called if the file is dropped directly over the run button.
      * Loads the file and immediately starts execution
      *
-     * @param event dragEvent
+     * @param event DragEvent
      */
     public void onFileDroppedOnButton(DragEvent event) {
         onFileDropped(event);
@@ -205,7 +194,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Called when the user clicked "Generate".
      * Opens the generation dialog.
      *
-     * @param event clickEvent
+     * @param event ClickEvent
      * @see org.combinators.cls.scheduling.utils.GenerationUtils
      */
     public void onGenerateButtonClicked(ActionEvent event) {
@@ -219,7 +208,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Called when the user clicked "Load".
      * Opens a fileChooser to select .task file.
      *
-     * @param event clickEvent
+     * @param event ClickEvent
      */
     public void onLoadButtonClicked(ActionEvent event) {
         FileChooser fileDialog = new FileChooser();
@@ -238,7 +227,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Called when the user clicked "Save".
      * Opens a fileChooser to select destination folder and saves current task.
      *
-     * @param event clickEvent
+     * @param event ClickEvent
      */
     public void onSaveButtonClicked(ActionEvent event) {
         if (!ClassificationUtils.validate(currentTask)) {
@@ -263,7 +252,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Starts the execution of current task.
      * Opens the progress dialog.
      *
-     * @param event clickEvent
+     * @param event ClickEvent
      * @see org.combinators.cls.scheduling.view.customDialogs.ProgressDialog
      */
     public void onRunButtonClicked(ActionEvent event) {
@@ -276,7 +265,7 @@ public class MainWindowViewController implements MainWindowAUI {
                 generationRunner.cancel();
 
             else if (b == ButtonType.NO)
-                new ResultDialog(generationRunner.getResult()).show();
+                new ResultDialog(generationRunner.getResults().get(0)).show();
 
             else if (b == ButtonType.YES)
                 for (Tuple<String, Task> result : generationRunner.getResults()) {
@@ -289,8 +278,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Called when the user clicked "Benchmark".
      * Opens the benchmark dialog and starts the execution of a benchmark.
      *
-     * @param event clickEvent
-     * @see org.combinators.cls.scheduling.view.customDialogs.ProgressDialog
+     * @param event ClickEvent
      */
     public void onBenchmarkButtonClicked(ActionEvent event) {
         BenchmarkUtils.showBenchmarkDialog().ifPresent(result -> {
@@ -299,6 +287,11 @@ public class MainWindowViewController implements MainWindowAUI {
         });
     }
     
+    /**
+     Called when the user clicked "Taillard Benchmark".
+     Opens the taillard benchmark dialog and starts the execution of a benchmark.
+     @param event ClickEvent
+     */
     public void onTaillardBenchmarkButtonClicked(ActionEvent event) {
         BenchmarkUtils.showTaillardBenchmarkDialog().ifPresent(result -> {
             taillardBenchmarkBtn.setOpacity(.5);
@@ -307,9 +300,9 @@ public class MainWindowViewController implements MainWindowAUI {
                 public void run() {
                     try {
                         if(result[0])
-	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x5.taillard").getFile()), new File("G:\\20x5.taillard"));
+                            generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x5.taillard").getFile()), new File("G:\\20x5.taillard"));
                         if(result[1])
-	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x10.taillard").getFile()), new File("G:\\20x10.taillard"));
+                            generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x10.taillard").getFile()), new File("G:\\20x10.taillard"));
                         if(result[2])
 	                        generationRunner.runTaillardBenchmark(new File(getClass().getResource("/tasks/20x20.taillard").getFile()), new File("G:\\20x20.taillard"));
                         if(result[3])
@@ -354,10 +347,10 @@ public class MainWindowViewController implements MainWindowAUI {
 
     //region AUI refreshes
     @Override
-    public void onClassificationFinished(ClassificationUtils.Classification classification) {
+    public void onClassificationFinished(Classification classification) {
         Platform.runLater(() -> progressDialog.setClassificationResult(classification));
     }
-
+    
     @Override
     public void onGenerationFinished(int result) {
         Platform.runLater(() -> progressDialog.setGenerationResult(result));

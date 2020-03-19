@@ -2,8 +2,7 @@ package org.combinators.cls.scheduling.scala
 
 import org.combinators.cls.inhabitation.Tree
 import org.combinators.cls.interpreter._
-import org.combinators.cls.scheduling.model.ShopClass
-import org.combinators.cls.scheduling.utils.ClassificationUtils.Classification
+import org.combinators.cls.scheduling.model.{Classification, ShopClass}
 import org.combinators.cls.types.Constructor
 import org.combinators.cls.types.syntax._
 

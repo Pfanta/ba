@@ -1,10 +1,10 @@
 package org.combinators.cls.scheduling.control;
 
 import lombok.Getter;
+import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.scala.Scheduler;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
-import org.combinators.cls.scheduling.utils.RunnerUtils;
 import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
 
@@ -44,7 +44,7 @@ class Worker extends AbstractWorker {
 	 */
 	@Override
 	void work() {
-		ClassificationUtils.Classification classification = ClassificationUtils.classify(task);
+		Classification classification = ClassificationUtils.classify(task);
 		
 		if(!running) return;
 		
@@ -54,7 +54,7 @@ class Worker extends AbstractWorker {
 		if(!running) return;
 		
 		callback.onGenerationFinished(runnerResults.size());
-		results = RunnerUtils.runResults(classification, runnerResults, callback);
+		results = runResults(classification, runnerResults, callback);
 		
 		if(!running) return;
 		
@@ -64,5 +64,14 @@ class Worker extends AbstractWorker {
 		if(!running) return;
 		
 		callback.onEvaluationResult(results.get(0).getSecond().getResult());
+	}
+	
+	/**
+	 Returns worker results
+	 @return Worker results
+	 */
+	@Override
+	List<Tuple<String, Task>> getSchedulingResults() {
+		return this.results;
 	}
 }

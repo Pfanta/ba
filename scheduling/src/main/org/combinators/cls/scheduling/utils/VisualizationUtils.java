@@ -4,7 +4,12 @@ import org.combinators.cls.scheduling.model.*;
 
 import java.util.*;
 
+/**
+ Utils for Gantt-Charts */
 public class VisualizationUtils {
+	/**
+	 Background color of blocked areas
+	 */
 	private final static String BG_COLOR = "#AAAAAA";
 	
 	/**
@@ -19,6 +24,11 @@ public class VisualizationUtils {
 				       "</body></html>";
 	}
 	
+	/**
+	 Converts task to a machine chart
+	 @param task Task to be shown
+	 @return Gantt chart from machine perspective
+	 */
 	private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
 		final StringBuilder html = new StringBuilder("<table><caption>Machine View</caption><tr><th>Machine</th>");
@@ -68,6 +78,11 @@ public class VisualizationUtils {
 		return html.toString();
 	}
 	
+	/**
+	 Converts task to a job chart
+	 @param task Task to be shown
+	 @return Gantt chart from job perspective
+	 */
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();
 		final StringBuilder html = new StringBuilder("<table><caption>Job View</caption><tr><th>Job</th><th>Deadline</th>");

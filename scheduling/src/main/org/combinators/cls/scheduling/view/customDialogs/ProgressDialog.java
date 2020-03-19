@@ -8,7 +8,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
+import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.view.customcontrol.DialogLabel;
 
 public class ProgressDialog extends Dialog<ButtonType> {
@@ -56,7 +56,7 @@ public class ProgressDialog extends Dialog<ButtonType> {
 		this.getDialogPane().setContent(pane);
 	}
 	
-	public void setClassificationResult(ClassificationUtils.Classification classification) {
+	public void setClassificationResult(Classification classification) {
 		progressBar.setProgress(2F / 5F);
 		labelNumMachines.setText("" + classification.getMachineCount());
 		labelNumJobs.setText("" + classification.getJobCount());

@@ -1,10 +1,6 @@
 package org.combinators.cls.scheduling.algorithms;
 
-import org.combinators.cls.scheduling.model.Job;
-import org.combinators.cls.scheduling.model.Machine;
-import org.combinators.cls.scheduling.model.Stage;
-import org.combinators.cls.scheduling.model.Task;
-import org.combinators.cls.scheduling.utils.ClassificationUtils;
+import org.combinators.cls.scheduling.model.*;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,18 +9,18 @@ import java.util.Map;
 import java.util.function.Function;
 
 
-public class GifflerThompson implements Function<ClassificationUtils.Classification, Task> {
-    public Task apply(ClassificationUtils.Classification classification) {
-        final Task schedule = classification.getTask();
-        final Map<Machine, Integer> machineWorkingUntil = new HashMap<>(); //Zi
-        final Map<org.combinators.cls.scheduling.model.Job, Integer> jobWorkingUntil = new HashMap<>(); //Rj
-        final Map<Job, Integer> stepOfJob = new HashMap<>();
-    
-        schedule.getJobs().getFirst().getMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
-	    schedule.getJobs().forEach(job -> {
-		    jobWorkingUntil.put(job, 0);
-		    stepOfJob.put(job, 0);
-	    });
+public class GifflerThompson implements Function<Classification, Task> {
+	public Task apply(Classification classification) {
+		final Task schedule = classification.getTask();
+		final Map<Machine, Integer> machineWorkingUntil = new HashMap<>(); //Zi
+		final Map<org.combinators.cls.scheduling.model.Job, Integer> jobWorkingUntil = new HashMap<>(); //Rj
+		final Map<Job, Integer> stepOfJob = new HashMap<>();
+		
+		schedule.getJobs().getFirst().getMachines().forEach(machine -> machineWorkingUntil.put(machine, 0));
+		schedule.getJobs().forEach(job -> {
+			jobWorkingUntil.put(job, 0);
+			stepOfJob.put(job, 0);
+		});
     
         //Iterate #jobs x #machines times
 		for (int i = 0; i < classification.getMachineCount() * classification.getJobCount(); i++) {

@@ -1,11 +1,16 @@
 package org.combinators.cls.scheduling.control;
 
 import lombok.Getter;
+import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.scala.Scheduler;
-import org.combinators.cls.scheduling.utils.*;
+import org.combinators.cls.scheduling.utils.BenchmarkUtils;
+import org.combinators.cls.scheduling.utils.ClassificationUtils;
+import org.combinators.cls.scheduling.utils.GenerationUtils;
+import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
+import org.combinators.cls.scheduling.view.customDialogs.GenerationDialogResult;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +51,7 @@ class BenchmarkWorker extends AbstractWorker {
 		this.numInstances = numInstances;
 		this.tasks = new LinkedList<>();
 		
-		IntStream.range(0, numInstances).forEach(i -> this.tasks.add(GenerationUtils.generateRandomTask(new GenerationUtils.GenerationDialogResult(numMachines, numJobs, false, ShopClass.FS)))); //Generate random instances
+		IntStream.range(0, numInstances).forEach(i -> this.tasks.add(GenerationUtils.generateRandomTask(new GenerationDialogResult(numMachines, numJobs, false, ShopClass.FS)))); //Generate random instances
 	}
 	
 	/**
@@ -104,14 +109,23 @@ class BenchmarkWorker extends AbstractWorker {
 	 @return Map from heuristic to result
 	 */
 	protected Map<String, Integer> runTask(Task task) {
-		ClassificationUtils.Classification classification = ClassificationUtils.classify(task); //reclassify task
+		Classification classification = ClassificationUtils.classify(task); //reclassify task
 		
 		Map<String, String> runnerResults = Scheduler.run(classification); //generate results from CLS
 		
-		List<Tuple<String, Task>> results = RunnerUtils.runResults(classification, runnerResults, callback); //run results
+		List<Tuple<String, Task>> results = runResults(classification, runnerResults, callback); //run results
 		
 		Map<String, Integer> values = new TreeMap<>();
 		results.forEach(t -> values.put(t.getFirst(), t.getSecond().getResult())); //put results into map
 		return values;
+	}
+	
+	/**
+	 Not implemented in benchmark workers
+	 @return Noting
+	 */
+	@Override
+	List<Tuple<String, Task>> getSchedulingResults() {
+		throw new IllegalStateException("No schedules available from benchmarks.");
 	}
 }

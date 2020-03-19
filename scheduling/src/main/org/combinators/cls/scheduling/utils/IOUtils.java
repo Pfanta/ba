@@ -12,14 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ Utils for loading and saving */
 public class IOUtils {
-
-	private static final String HTML_LOCATION = "C:\\";
 	
-	public static Task loadTask(String file) throws IOException {
-		return loadTask(new File(file));
-	}
-	
+	/**
+	 Loads a task
+	 @param file File to be loaded
+	 @return Loaded task
+	 @throws IOException If the file is not readable
+	 */
 	public static Task loadTask(File file) throws IOException {
 		Task task = new Task();
 		Files.lines(file.toPath()).forEach(s -> task.add(parse(s)));
@@ -27,6 +29,12 @@ public class IOUtils {
 		return task;
 	}
 	
+	/**
+	 Loads a taillard instance file
+	 @param file File to be loaded
+	 @return Loaded tasks and upper bounds
+	 @throws IOException If the file is not readable
+	 */
 	public static List<Tuple<Task, Integer>> loadTaillard(File file) throws IOException {
 		List<Tuple<Task, Integer>> list = new LinkedList<>();
 		
@@ -54,15 +62,15 @@ public class IOUtils {
 		return list;
 	}
 	
+	/**
+	 Saves a task to a fle
+	 @param file File to create or override
+	 @param currentTask Task to be saved
+	 @throws IOException If the file is not readable
+	 */
 	public static void saveTask(File file, Task currentTask) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 		writer.write(currentTask.getString());
-		writer.close();
-	}
-	
-	public static void saveHTML(String html) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(new File(HTML_LOCATION.concat("result.html"))));
-		writer.write(html);
 		writer.close();
 	}
 	

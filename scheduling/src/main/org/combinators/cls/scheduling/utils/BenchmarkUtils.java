@@ -9,21 +9,37 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import lombok.Getter;
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
 import org.combinators.cls.scheduling.model.Task;
+import org.combinators.cls.scheduling.view.customDialogs.BenchmarkDialogResult;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
+/**
+ Utils for the benchmarking progress */
 public class BenchmarkUtils {
-
+	/**
+	 Default value for machine count
+	 */
 	private static final int DEFAULT_MACHINES_COUNT = 5;
+	
+	/**
+	 Default value for job count
+	 */
 	private static final int DEFAULT_JOBS_COUNT = 9;
+	
+	/**
+	 Default value for instance count
+	 */
 	private static final int DEFAULT_INSTANCES_COUNT = 10;
 	
+	/**
+	 Shows benchmarking dialog
+	 @return Container with dialog results
+	 */
 	public static Optional<BenchmarkDialogResult> showBenchmarkDialog() {
 		Dialog<BenchmarkDialogResult> dialog = new Dialog<>();
 		dialog.setTitle("Benchmark Dialog");
@@ -59,6 +75,10 @@ public class BenchmarkUtils {
 		return dialog.showAndWait();
 	}
 	
+	/**
+	 Shows taillard benchmarking dialog
+	 @return Vector of checked instances to benchmark
+	 */
 	public static Optional<Boolean[]> showTaillardBenchmarkDialog() {
 		Dialog<Boolean[]> dialog = new Dialog<>();
 		dialog.setTitle("Taillard Benchmark Dialog");
@@ -91,6 +111,11 @@ public class BenchmarkUtils {
 		return dialog.showAndWait();
 	}
 	
+	/**
+	 Calculates optimal schedule for permutation Flow Shop
+	 @param task Task, must be Flow Shop in order to work
+	 @return Optimal makespan for number of jobs < 10, -1 otherwise
+	 */
 	public static int getOptimalFlowShopSchedule(Task task) {
 		if(task.getJobs().size() >= 10) //Safety
 			return -1;
@@ -99,7 +124,7 @@ public class BenchmarkUtils {
 		
 		int[] indexes = new int[jobs.size()];
 		IntStream.range(0, indexes.length).forEach(i -> indexes[i] = 0);
-
+		
 		int i = 0, result = Integer.MAX_VALUE;
 		while (i < indexes.length) {
 			if (indexes[i] < i) {
@@ -123,6 +148,11 @@ public class BenchmarkUtils {
 		return result;
 	}
 	
+	/**
+	 Schedules a permutation Flow Shop sequence
+	 @param jobList Ordered sequence of jobs
+	 @return Scheduled task
+	 */
 	private static Task scheduleFlowShop(Task jobList) {
 		Task localSchedule = jobList.cloned();
 		Map<Machine, Integer> machineWorkingUntil = new HashMap<>();
@@ -145,20 +175,5 @@ public class BenchmarkUtils {
 		}
 		localSchedule.setResult(localSchedule.getMakespan());
 		return localSchedule;
-	}
-	
-	public static class BenchmarkDialogResult {
-		@Getter
-		private int numMachines;
-		@Getter
-		private int numJobs;
-		@Getter
-		private int numInstances;
-		
-		public BenchmarkDialogResult(int numMachines, int numJobs, int numInstances) {
-			this.numMachines = numMachines;
-			this.numJobs = numJobs;
-			this.numInstances = numInstances;
-		}
 	}
 }
