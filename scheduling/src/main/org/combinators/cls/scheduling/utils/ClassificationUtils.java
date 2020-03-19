@@ -103,7 +103,7 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Checks wether the given task is fleible or not
+	 Checks whether the given task is flexible or not
 	 @param task Task to be classified
 	 @return false if the task has no Stage with more than one machine, true otherwise
 	 */

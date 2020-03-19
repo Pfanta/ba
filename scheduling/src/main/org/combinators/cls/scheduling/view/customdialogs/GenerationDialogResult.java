@@ -34,7 +34,7 @@ public class GenerationDialogResult {
 	 Creates a new container with given values
 	 @param numMachines Number of machines
 	 @param numJobs Number of jobs
-	 @param deadlines wether the task has deadlines
+	 @param deadlines Whether the task has deadlines
 	 @param shopClass The shop class
 	 */
 	public GenerationDialogResult(int numMachines, int numJobs, boolean deadlines, ShopClass shopClass) {

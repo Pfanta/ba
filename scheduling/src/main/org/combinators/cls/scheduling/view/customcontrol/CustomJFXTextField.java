@@ -3,7 +3,7 @@ package org.combinators.cls.scheduling.view.customcontrol;
 import com.jfoenix.controls.JFXTextField;
 
 /**
- wrapper for custon JFXTextField */
+ wrapper for custom JFXTextField */
 public class CustomJFXTextField extends JFXTextField {
 	
 	/**

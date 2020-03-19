@@ -565,7 +565,7 @@ public class Reflect {
 	 @return A map containing field names and wrapped values.
 	 */
 	public Map<String, Reflect> fields() {
-		Map<String, Reflect> result = new LinkedHashMap<String, Reflect>();
+		Map<String, Reflect> result = new LinkedHashMap<>();
 		Class<?> t = type();
 		
 		do {
@@ -813,56 +813,53 @@ public class Reflect {
 	@SuppressWarnings("unchecked")
 	public <P> P as(final Class<P> proxyType, final Class<?>... additionalInterfaces) {
 		final boolean isMap = (object instanceof Map);
-		final InvocationHandler handler = new InvocationHandler() {
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				String name = method.getName();
-				
-				// Actual method name matches always come first
-				try {
-					return on(type, object).call(name, args).get();
+		final InvocationHandler handler = (proxy, method, args) -> {
+			String name = method.getName();
+			
+			// Actual method name matches always come first
+			try {
+				return on(type, object).call(name, args).get();
+			}
+			
+			// [#14] Emulate POJO behaviour on wrapped map objects
+			catch(ReflectException e) {
+				if(isMap) {
+					Map<String, Object> map = (Map<String, Object>) object;
+					int length = (args == null ? 0 : args.length);
+					
+					if(length == 0 && name.startsWith("get")) {
+						return map.get(property(name.substring(3)));
+					} else if(length == 0 && name.startsWith("is")) {
+						return map.get(property(name.substring(2)));
+					} else if(length == 1 && name.startsWith("set")) {
+						map.put(property(name.substring(3)), args[0]);
+						return null;
+					}
 				}
 				
-				// [#14] Emulate POJO behaviour on wrapped map objects
-				catch(ReflectException e) {
-					if(isMap) {
-						Map<String, Object> map = (Map<String, Object>) object;
-						int length = (args == null ? 0 : args.length);
-						
-						if(length == 0 && name.startsWith("get")) {
-							return map.get(property(name.substring(3)));
-						} else if(length == 0 && name.startsWith("is")) {
-							return map.get(property(name.substring(2)));
-						} else if(length == 1 && name.startsWith("set")) {
-							map.put(property(name.substring(3)), args[0]);
-							return null;
-						}
+				if(method.isDefault()) {
+					Lookup proxyLookup = null;
+					
+					// Java 9 version
+					if(CACHED_LOOKUP_CONSTRUCTOR == null) {
+						// Java 9 version for Java 8 distribution (jOOQ Open Source Edition)
+						if(proxyLookup == null)
+							proxyLookup = onClass(MethodHandles.class)
+									              .call("privateLookupIn", proxyType, MethodHandles.lookup())
+									              .call("in", proxyType)
+									              .get();
 					}
 					
-					if(method.isDefault()) {
-						Lookup proxyLookup = null;
-						
-						// Java 9 version
-						if(CACHED_LOOKUP_CONSTRUCTOR == null) {
-							// Java 9 version for Java 8 distribution (jOOQ Open Source Edition)
-							if(proxyLookup == null)
-								proxyLookup = onClass(MethodHandles.class)
-										              .call("privateLookupIn", proxyType, MethodHandles.lookup())
-										              .call("in", proxyType)
-										              .get();
-						}
-						
-						// Java 8 version
-						else
-							proxyLookup = CACHED_LOOKUP_CONSTRUCTOR.newInstance(proxyType);
-						
-						return proxyLookup.unreflectSpecial(method, proxyType)
-								       .bindTo(proxy)
-								       .invokeWithArguments(args);
-					}
+					// Java 8 version
+					else
+						proxyLookup = CACHED_LOOKUP_CONSTRUCTOR.newInstance(proxyType);
 					
-					throw e;
+					return proxyLookup.unreflectSpecial(method, proxyType)
+							       .bindTo(proxy)
+							       .invokeWithArguments(args);
 				}
+				
+				throw e;
 			}
 		};
 		
