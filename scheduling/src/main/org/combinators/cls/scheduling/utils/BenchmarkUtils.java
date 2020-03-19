@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 import org.combinators.cls.scheduling.model.Job;
 import org.combinators.cls.scheduling.model.Machine;
 import org.combinators.cls.scheduling.model.Task;
-import org.combinators.cls.scheduling.view.customDialogs.BenchmarkDialogResult;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
+import org.combinators.cls.scheduling.view.customdialogs.BenchmarkDialogResult;
 
 import java.util.*;
 import java.util.stream.IntStream;

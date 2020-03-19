@@ -19,11 +19,11 @@ import javafx.stage.FileChooser;
 import org.combinators.cls.scheduling.control.GenerationRunner;
 import org.combinators.cls.scheduling.model.*;
 import org.combinators.cls.scheduling.utils.*;
-import org.combinators.cls.scheduling.view.customDialogs.ProgressDialog;
-import org.combinators.cls.scheduling.view.customDialogs.ResultDialog;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXPlusButton;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXTextField;
 import org.combinators.cls.scheduling.view.customcontrol.CustomLabel;
+import org.combinators.cls.scheduling.view.customdialogs.ProgressDialog;
+import org.combinators.cls.scheduling.view.customdialogs.ResultDialog;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,9 +62,8 @@ public class MainWindowViewController implements MainWindowAUI {
     private javafx.stage.Stage stage;
     
     /**
-     * ProgressDialog that is shown while running task
-     *
-     * @see org.combinators.cls.scheduling.view.customDialogs.ProgressDialog
+     ProgressDialog that is shown while running task
+     @see org.combinators.cls.scheduling.view.customdialogs.ProgressDialog
      */
     private ProgressDialog progressDialog;
 
@@ -253,7 +252,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Opens the progress dialog.
      *
      * @param event ClickEvent
-     * @see org.combinators.cls.scheduling.view.customDialogs.ProgressDialog
+     * @see org.combinators.cls.scheduling.view.customdialogs.ProgressDialog
      */
     public void onRunButtonClicked(ActionEvent event) {
         runBtn.setOpacity(.5);

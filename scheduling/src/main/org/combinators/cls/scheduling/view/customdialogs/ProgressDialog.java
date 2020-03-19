@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.view.customDialogs;
+package org.combinators.cls.scheduling.view.customdialogs;
 
 import com.jfoenix.controls.JFXProgressBar;
 import javafx.geometry.Insets;

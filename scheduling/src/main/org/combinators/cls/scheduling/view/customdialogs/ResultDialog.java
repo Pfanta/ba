@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.view.customDialogs;
+package org.combinators.cls.scheduling.view.customdialogs;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;

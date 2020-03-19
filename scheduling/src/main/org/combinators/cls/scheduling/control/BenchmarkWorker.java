@@ -10,7 +10,7 @@ import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
 import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.view.MainWindowAUI;
-import org.combinators.cls.scheduling.view.customDialogs.GenerationDialogResult;
+import org.combinators.cls.scheduling.view.customdialogs.GenerationDialogResult;
 
 import java.util.LinkedList;
 import java.util.List;

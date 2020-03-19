@@ -9,8 +9,8 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import org.combinators.cls.scheduling.model.*;
-import org.combinators.cls.scheduling.view.customDialogs.GenerationDialogResult;
 import org.combinators.cls.scheduling.view.customcontrol.NumberTextField;
+import org.combinators.cls.scheduling.view.customdialogs.GenerationDialogResult;
 
 import java.util.Collections;
 import java.util.Optional;

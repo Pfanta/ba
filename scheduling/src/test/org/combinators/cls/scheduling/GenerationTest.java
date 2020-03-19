@@ -5,7 +5,7 @@ import org.combinators.cls.scheduling.model.ShopClass;
 import org.combinators.cls.scheduling.model.Task;
 import org.combinators.cls.scheduling.utils.ClassificationUtils;
 import org.combinators.cls.scheduling.utils.GenerationUtils;
-import org.combinators.cls.scheduling.view.customDialogs.GenerationDialogResult;
+import org.combinators.cls.scheduling.view.customdialogs.GenerationDialogResult;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

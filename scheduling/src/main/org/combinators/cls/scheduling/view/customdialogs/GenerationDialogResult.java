@@ -1,4 +1,4 @@
-package org.combinators.cls.scheduling.view.customDialogs;
+package org.combinators.cls.scheduling.view.customdialogs;
 
 import lombok.Getter;
 import org.combinators.cls.scheduling.model.ShopClass;
