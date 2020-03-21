@@ -26,16 +26,13 @@ public class ClassificationUtils {
 		int machineCount = (int) machines.stream().flatMap(Collection::stream).distinct().count();
 		
 		if(!checkFlexibility(task))
-			if(checkIsOpenShop(machines))
-				if(checkIsJobShop(task))
-					if(checkIsFlowShop(machines))
-						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FS);
-					else
-						return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.JS);
+			if(checkIsJobShop(task))
+				if(checkIsFlowShop(machines))
+					return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FS);
 				else
-					return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.OS);
+					return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.JS);
 			else
-				return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.NONE);
+				return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.OS);
 		else
 			return new Classification(task, machineCount, jobCount, task.hasDeadlines(), ShopClass.FFS); //TODO: Flexible
 		
@@ -58,17 +55,6 @@ public class ClassificationUtils {
 	 */
 	private static List<List<Machine>> getMachines(Task task) {
 		return task.getJobs().stream().map(Job::getMachines).collect(Collectors.toList());
-	}
-	
-	
-	/**
-	 Checks for given Task to be OpenShop
-	 @param machines Machines on current Task
-	 @return true if model matches
-	 @precondition Task is Non-Flexible
-	 */
-	private static boolean checkIsOpenShop(List<List<Machine>> machines) {
-		return true; //TODO checkIsOpenShop
 	}
 	
 	/**
