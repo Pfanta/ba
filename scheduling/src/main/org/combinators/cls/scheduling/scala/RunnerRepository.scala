@@ -37,8 +37,8 @@ trait RunnerRepository {
           |import org.combinators.cls.scheduling.model.*;
           |import org.combinators.cls.scheduling.utils.*;
 			    |
-			    |public class Runner implements java.util.function.Function<ClassificationUtils.Classification, Task> {
-			    | public Task apply(ClassificationUtils.Classification classification) {
+			    |public class Runner implements java.util.function.Function<Classification, Task> {
+			    | public Task apply(Classification classification) {
           |        $Algorithm
           |        schedule.setResult(schedule.getMakespan());
           |        return schedule;
