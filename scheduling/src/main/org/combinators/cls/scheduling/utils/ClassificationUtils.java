@@ -112,7 +112,7 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Validates Task, such that there is min. one Job containing min. one Stage with min. one Machine each
+	 Validates Task, such that there is min. one Job containing min. one Stage with min. one Machine each and valid deadlines and releaseDates
 	 @param task Task to be validated
 	 @return true for valid Task, false otherwise
 	 */
@@ -126,7 +126,7 @@ public class ClassificationUtils {
 			return false;
 		
 		for(Job job : jobs) {
-			if(job == null || job.getName() == null || job.getDeadline() < -1)
+			if(job == null || job.getName() == null || job.getDeadline() < -1 || job.getReleaseDate() < 0)
 				return false;
 			
 			LinkedList<Route> routes = job.getRoutes();
