@@ -15,6 +15,7 @@ object Scheduler {
 
   def run(classification: Classification): java.util.Map[String, String] = {
 
+    //Match classification to synthesis request
     var targetType: Constructor = 'Scheduler('NONE)
     classification.getShopClass match {
       case ShopClass.FS => targetType = 'Scheduler('FS)
@@ -31,7 +32,7 @@ object Scheduler {
     var i = 0
     while (b) {
       try {
-
+        //println(inhabitationResult.terms.index(i)) //DEBUG generated Trees
         var heuristic = ""
         val l1 = seqAsJavaList(inhabitationResult.terms.index(i).arguments).get(0)
         if (l1.name.equals("NEH"))
@@ -45,7 +46,7 @@ object Scheduler {
 
         i += 1
       } catch {
-        case _: java.lang.IndexOutOfBoundsException => b = false
+        case _: java.lang.IndexOutOfBoundsException => b = false //break loop
       }
     }
     results

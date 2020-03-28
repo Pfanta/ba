@@ -112,12 +112,12 @@ public class MainWindowViewController implements MainWindowAUI {
     
         //Show all Jobs in own row
         for(int i = 0; i < currentTask.getJobs().size(); i++) {
-            nodes.add(new CustomLabel(currentTask.getJobs().get(i).getName(), 10, 10 + i * 40, 50, 30));
+            nodes.add(new CustomLabel(currentTask.getJobs().get(i).getName() + ":", 10, 10 + i * 40, 50, 30));
         
             int y = 0;
             final Job currentJob = currentTask.getJobs().get(i);
             for (Stage stage : currentJob.getRoutes().get(0).getStages()) {
-                TextField textFieldMachine = new CustomJFXTextField(stage.getMachines().get(0).toString(), 60 + y * 130 + 30, 10 + i * 40, 50, 30);
+                TextField textFieldMachine = new CustomJFXTextField(stage.getMachines().get(0).toString(), 60 + y * 110, 10 + i * 40, 50, 30);
                 textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
                     if(newValue.isEmpty())
                         textFieldMachine.setText(oldValue);
@@ -125,7 +125,7 @@ public class MainWindowViewController implements MainWindowAUI {
                         stage.getMachines().get(0).setName(newValue);
                 });
     
-                TextField textFieldMachineTime = new CustomJFXTextField(stage.getScheduledMachine().getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
+                TextField textFieldMachineTime = new CustomJFXTextField(stage.getScheduledMachine().getDuration(), 60 + y * 110 + 60, 10 + i * 40, 20, 30);
                 textFieldMachineTime.textProperty().addListener((observable, oldValue, newValue) -> {
                     if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
                         textFieldMachineTime.setText(oldValue);
@@ -134,13 +134,12 @@ public class MainWindowViewController implements MainWindowAUI {
                 });
     
                 nodes.addAll(
-                        new CustomLabel("x", 60 + y * 130 + 20, 10 + i * 40, 10, 30), textFieldMachine,
-                        new CustomLabel(":", 60 + y * 130 + 80, 10 + i * 40, 5, 30), textFieldMachineTime,
-                        new CustomLabel("\u2192", 60 + y * 130 + 105, 10 + i * 40, 25, 30, 18));
+                        textFieldMachine, new CustomLabel(":", 60 + y * 110 + 55, 10 + i * 40, 5, 30),
+                        textFieldMachineTime, new CustomLabel("\u2192", 60 + y * 110 + 85, 10 + i * 40, 25, 30, 18));
                 y++;
             }
             nodes.remove(nodes.size() - 1);
-            nodes.add(new CustomJFXPlusButton(70 + y * 130, 10 + i * 40, 30, 30, event -> {
+            nodes.add(new CustomJFXPlusButton(70 + y * 110, 10 + i * 40, 30, 30, event -> {
                 currentJob.getRoutes().get(0).addStage(new Stage(new Machine("M0")));
                 refreshJobsPane();
             }));

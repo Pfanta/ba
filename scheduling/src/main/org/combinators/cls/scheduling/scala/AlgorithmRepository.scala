@@ -53,7 +53,7 @@ trait AlgorithmRepository extends RunnerRepository {
           |		LinkedList<Job> waitingJobsOnMachine = schedule.getJobs();
           |
           |   Map<Job, Integer> stepOfJob = new HashMap<>();
-          |		waitingJobsOnMachine.forEach(j -> stepOfJob.put(j,0));
+          |		waitingJobsOnMachine.forEach(j -> stepOfJob.put(j,-1));
           |
           |		Task jobList = new Task();
           |   while(!waitingJobsOnMachine.isEmpty()) {
@@ -151,8 +151,14 @@ trait AlgorithmRepository extends RunnerRepository {
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
 
-  @combinator object AlgorithmOS {
+  @combinator object AlgorithmFJS {
     val semanticType: Type = 'Algorithm :&: problemClass.flexibleJobShop
+
+    def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
+  }
+
+  @combinator object AlgorithmOS {
+    val semanticType: Type = 'Algorithm :&: problemClass.openShop
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
@@ -162,4 +168,5 @@ trait AlgorithmRepository extends RunnerRepository {
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
   }
+
 }

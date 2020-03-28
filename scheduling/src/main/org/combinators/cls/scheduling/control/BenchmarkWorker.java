@@ -22,6 +22,8 @@ import java.util.stream.IntStream;
  Benchmark worker class for benchmarking */
 class BenchmarkWorker extends AbstractWorker {
 	
+	private final int numJobs;
+	private final int numMachines;
 	/**
 	 Number of instances to be generated
 	 */
@@ -48,10 +50,10 @@ class BenchmarkWorker extends AbstractWorker {
 	 */
 	BenchmarkWorker(MainWindowAUI callback, int numJobs, int numMachines, int numInstances) {
 		super(callback);
+		this.numJobs = numJobs;
+		this.numMachines = numMachines;
 		this.numInstances = numInstances;
 		this.tasks = new LinkedList<>();
-		
-		IntStream.range(0, numInstances).forEach(i -> this.tasks.add(GenerationUtils.generateRandomTask(new GenerationDialogResult(numMachines, numJobs, false, ShopClass.FS)))); //Generate random instances
 	}
 	
 	/**
@@ -60,6 +62,8 @@ class BenchmarkWorker extends AbstractWorker {
 	 */
 	@Override
 	void work() {
+		IntStream.range(0, numInstances).forEach(i -> this.tasks.add(GenerationUtils.generateRandomTask(new GenerationDialogResult(numMachines, numJobs, false, ShopClass.FS)))); //Generate random instances
+		
 		boolean small = tasks.get(0).getJobs().size() < 10;
 		int i = 1;
 		Map<String, Integer> values = new TreeMap<>(); //average makespan
