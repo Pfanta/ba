@@ -42,25 +42,25 @@ public class GifflerThompson implements Function<Classification, Task> {
         
             //Find all jobs waiting for machine
 			LinkedList<Job> waitingJobsOnMachine = new LinkedList<>();
-			for (Job j : schedule.getJobs()) {
-				if (stepOfJob.get(j) >= j.getScheduledRoute().getStages().size())
+			for(Job j : schedule.getJobs()) {
+				if(stepOfJob.get(j) >= j.getScheduledRoute().getStages().size())
 					continue;
-
-				if (j.getScheduledRoute().getStages().get(stepOfJob.get(j)).getScheduledMachine().equals(machineToSchedule))
+				
+				if(j.getScheduledRoute().getStages().get(stepOfJob.get(j)).getScheduledMachine().equals(machineToSchedule))
 					waitingJobsOnMachine.add(j);
 			}
-
+			
 			//choose by heuristic
-			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) >= stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
+			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 			//waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 			Job jobToSchedule = waitingJobsOnMachine.getLast();
-
-
+			
+			
 			//Schedule Task
 			int jobDuration = jobToSchedule.getScheduledRoute().getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().getDuration();
 			finishTime = jobDuration + Math.max(machineWorkingUntil.get(machineToSchedule), jobWorkingUntil.get(jobToSchedule));
 			jobToSchedule.getScheduledRoute().getStages().get(stepOfJob.get(jobToSchedule)).getScheduledMachine().setScheduledTime(finishTime - jobDuration);
-
+			
 			//Update
 			stepOfJob.put(jobToSchedule, stepOfJob.get(jobToSchedule) + 1);
 			jobWorkingUntil.put(jobToSchedule, finishTime);
