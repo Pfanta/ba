@@ -23,7 +23,8 @@
 	             layoutX="615"
 	             layoutY="35"
 	             prefWidth="170"
-	             focusTraversable="false">
+	             focusTraversable="false"
+	             disable="true">
 		<items>
 			<FXCollections fx:factory="observableArrayList">
 				<String fx:value="Makespan"/>
@@ -41,6 +42,8 @@
 	<JFXCheckBox layoutX="620"
 	             layoutY="130"
 	             focusTraversable="false"
+	             disable="true"
+	             selected="true"
 	             text="permu"/>
 	
 	<JFXButton layoutX="610"

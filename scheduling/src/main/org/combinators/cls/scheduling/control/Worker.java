@@ -63,7 +63,7 @@ class Worker extends AbstractWorker {
 		
 		if(!running) return;
 		
-		callback.onEvaluationResult(results.get(0).getSecond().getResult());
+		callback.onEvaluationResult(results.size() > 0 ? results.get(0).getSecond().getResult() : -1);
 	}
 	
 	/**
