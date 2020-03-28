@@ -193,6 +193,7 @@ public class GenerationUtils {
 	 */
 	private static Task makeFlexible(Task task) {
 		//TODO
+		task.getJobs().forEach(job -> job.getScheduledRoute().getStages().getFirst().getMachines().add(new Machine("FlexMachine", 1)));
 		return task;
 	}
 }
