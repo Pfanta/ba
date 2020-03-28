@@ -126,7 +126,7 @@ public class MainWindowViewController implements MainWindowAUI {
                 });
     
                 TextField textFieldMachineTime = new CustomJFXTextField(stage.getScheduledMachine().getDuration(), 60 + y * 130 + 85, 10 + i * 40, 20, 30);
-                textFieldMachine.textProperty().addListener((observable, oldValue, newValue) -> {
+                textFieldMachineTime.textProperty().addListener((observable, oldValue, newValue) -> {
                     if(!newValue.matches("\\d+") || Integer.parseInt(newValue) < 0)
                         textFieldMachineTime.setText(oldValue);
                     else
