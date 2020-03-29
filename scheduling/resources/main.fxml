@@ -44,7 +44,7 @@
 	             focusTraversable="false"
 	             disable="true"
 	             selected="true"
-	             text="permu"/>
+	             text="prmu"/>
 	
 	<JFXButton layoutX="610"
 	           layoutY="300"
