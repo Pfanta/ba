@@ -19,8 +19,8 @@ public class VisualizationUtils {
 	 */
 	public static String taskToHTMLGanttChart(Task task) {
 		return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
-				       taskToMachineChart(task) +
 				       taskToJobChart(task) +
+				       taskToMachineChart(task) +
 				       "</body></html>";
 	}
 	
@@ -48,7 +48,7 @@ public class VisualizationUtils {
 		
 		//make header
 		for(int i = 1; i <= cmax; i++) {
-			html.append("<th>").append(String.format("%0" + (int) (Math.log10(cmax) + 1) + "d", i)).append("</th>");
+			html.append("<th width=20>").append(String.format("%0" + (int) (Math.log10(cmax) + 1) + "d", i)).append("</th>");
 		}
 		html.append("</tr>");
 		
@@ -85,17 +85,17 @@ public class VisualizationUtils {
 	 */
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();
-		final StringBuilder html = new StringBuilder("<table><caption>Job View</caption><tr><th>Job</th><th>Deadline</th>");
+		final StringBuilder html = new StringBuilder("<table><caption>Job View</caption><tr><th>Job</th>");
 		
 		//make header
 		for(int i = 1; i <= cmax; i++) {
-			html.append("<th>").append(String.format("%0" + (int) (Math.log10(cmax) + 1) + "d", i)).append("</th>");
+			html.append("<th width=20>").append(String.format("%0" + (int) (Math.log10(cmax) + 1) + "d", i)).append("</th>");
 		}
 		html.append("</tr>");
 		
 		//make entries
 		for(Job job : task.getJobs()) {
-			html.append("<tr><td>").append(job.getName()).append("</td><td>").append(job.getDeadline()).append("</td>");
+			html.append("<tr><td>").append(job.getName()).append("</td>");
 			
 			int end = 0;
 			for(Stage stage : job.getScheduledRoute().getStages()) {
