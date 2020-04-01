@@ -28,6 +28,11 @@ abstract class AbstractWorker extends Thread {
 	protected volatile boolean running;
 	
 	/**
+	 Counts reflected classes to prevent overriding errors
+	 */
+	private static int generationCounter = 0;
+	
+	/**
 	 Creates a new Worker with given callback AUI
 	 @param callback GUI callback AUI
 	 */
@@ -70,17 +75,16 @@ abstract class AbstractWorker extends Thread {
 	public static List<Tuple<String, Task>> runResults(Classification classification, Map<String, String> runners, MainWindowAUI callback) {
 		List<Tuple<String, Task>> results = new LinkedList<>();
 		
-		int i = 0;
 		for(String heuristic : runners.keySet()) {
 			try {
-				Function<Classification, Task> function = Reflect.compile("org.combinators.cls.scheduling.Runner" + i, runners.get(heuristic).replace("class Runner", "class Runner" + i)).create().get();
+				Function<Classification, Task> function = Reflect.compile("org.combinators.cls.scheduling.Runner" + generationCounter, runners.get(heuristic).replace("class Runner", "class Runner" + generationCounter)).create().get();
 				Task schedule = function.apply(classification.cloned()); //clone to prevent side-effects
 				results.add(new Tuple<>(heuristic, schedule));
 			} catch(ReflectException e) {
 				ApplicationUtils.showException("Reflection exception occurred", "Exception while running results", e);
 			}
-			callback.onRunnerProgress((float) i / (float) runners.size());
-			i++;
+			callback.onRunnerProgress((float) generationCounter / (float) runners.size());
+			generationCounter++;
 		}
 		
 		results.forEach(t -> System.out.println(t.getFirst() + " : " + t.getSecond().getResult()));
