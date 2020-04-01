@@ -8,7 +8,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
-
+/**
+ Test Algorithm */
 public class GifflerThompson implements Function<Classification, Task> {
 	public Task apply(Classification classification) {
 		final Task schedule = classification.getTask();
@@ -52,7 +53,6 @@ public class GifflerThompson implements Function<Classification, Task> {
 			
 			//choose by heuristic
 			waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().filter(stage -> j.getScheduledRoute().getStages().indexOf(stage) > stepOfJob.get(j)).map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
-			//waitingJobsOnMachine.sort(Comparator.comparingInt(j -> j.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).mapToInt(Machine::getDuration).sum()));
 			Job jobToSchedule = waitingJobsOnMachine.getLast();
 			
 			

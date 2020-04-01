@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+/**
+ Test Algorithm */
 public class SimpleDispatchingRulesFlowShop {
 	public Task apply(Classification classification) {
 		Task schedule = classification.getTask();

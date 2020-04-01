@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ Test Algorithm */
 public class RandomPermutationFlowShop {
 	public Task apply(Classification classification) {
 		Task schedule = classification.getTask();

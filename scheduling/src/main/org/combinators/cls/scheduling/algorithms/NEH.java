@@ -11,7 +11,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Function;
 
-
+/**
+ Test Algorithm */
 public class NEH implements Function<Classification, Task> {
 	public Task apply(Classification classification) {
 		final LinkedList<Job> jobs = classification.getTask().getJobs();
