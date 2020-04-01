@@ -8,12 +8,14 @@ import javafx.stage.Modality;
 import java.util.Map;
 
 /**
- dialog to show scheduling results */
+ * Dialog to show scheduling results
+ */
 public class BenchmarkResultDialog extends Dialog<Void> {
 	/**
-	 Creates a new dialog and shows benchmark results
-	 @param benchmarkResults absolute values
-	 @param relValues relative values
+	 * Creates a new dialog and shows benchmark results
+	 *
+	 * @param benchmarkResults absolute values
+	 * @param relValues relative values
 	 */
 	public BenchmarkResultDialog(Map<String, Double> benchmarkResults, Map<String, Double> relValues) {
 		super();
@@ -40,8 +42,9 @@ public class BenchmarkResultDialog extends Dialog<Void> {
 	}
 	
 	/**
-	 Creates a new dialog and shows taillard benchmark results
-	 @param benchmarkResults results
+	 * Creates a new dialog and shows taillard benchmark results
+	 *
+	 * @param benchmarkResults results
 	 */
 	public BenchmarkResultDialog(Map<String, Double> benchmarkResults) {
 		super();

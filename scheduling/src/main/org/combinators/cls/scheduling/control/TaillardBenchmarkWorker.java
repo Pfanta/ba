@@ -9,19 +9,20 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- Benchmark worker class for benchmarking on taillard instances */
+ * Benchmark worker class for benchmarking on taillard instances
+ */
 class TaillardBenchmarkWorker extends BenchmarkWorker {
 	
 	/**
-	 Tasks to be executed
-	 Tuple is constructed from task (first) and optimal solution or upper bound (second)
+	 * Tasks to be executed
+	 * Tuple is constructed from task (first) and optimal solution or upper bound (second)
 	 */
 	private final List<Tuple<Task, Integer>> tasks;
 	
 	/**
-	 Creates a new worker with given callback AUI and task to be executed
-	 @param callback GUI callback AUI
-	 @param tasks Tasks to be executed
+	 * Creates a new worker with given callback AUI and task to be executed
+	 * @param callback GUI callback AUI
+	 * @param tasks Tasks to be executed
 	 */
 	TaillardBenchmarkWorker(MainWindowAUI callback, List<Tuple<Task, Integer>> tasks) {
 		super(callback, -1, -1, 10);
@@ -29,8 +30,8 @@ class TaillardBenchmarkWorker extends BenchmarkWorker {
 	}
 	
 	/**
-	 Override method from AbstractWorker, that is invoked upon Thread.run() is called
-	 Needs to generate algorithms from CLS, run tasks and evaluate results
+	 * Override method from AbstractWorker, that is invoked upon Thread.run() is called
+	 * Needs to generate algorithms from CLS, run tasks and evaluate results
 	 */
 	@Override
 	void work() {

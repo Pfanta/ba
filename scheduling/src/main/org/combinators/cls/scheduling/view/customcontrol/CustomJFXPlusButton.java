@@ -5,16 +5,18 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 /**
- wrapper for custom JFXPlusButton */
+ * Wrapper for custom JFXPlusButton
+ */
 public class CustomJFXPlusButton extends JFXButton {
 	
 	/**
-	 Creates a new button
-	 @param layoutX Position x
-	 @param layoutY position y
-	 @param prefWidth Preferred width
-	 @param prefHeight Preferred height
-	 @param handler onClick event handler
+	 * Creates a new button
+	 *
+	 * @param layoutX Position x
+	 * @param layoutY position y
+	 * @param prefWidth Preferred width
+	 * @param prefHeight Preferred height
+	 * @param handler onClick event handler
 	 */
 	public CustomJFXPlusButton(int layoutX, int layoutY, int prefWidth, int prefHeight, EventHandler<ActionEvent> handler) {
 		super("+");

@@ -13,14 +13,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- Utils for loading and saving */
+ * Utils for loading and saving
+ */
 public class IOUtils {
 	
 	/**
-	 Loads a task
-	 @param file File to be loaded
-	 @return Loaded task
-	 @throws IOException If the file is not readable
+	 * Loads a task
+	 *
+	 * @param file File to be loaded
+	 *
+	 * @return Loaded task
+	 *
+	 * @throws IOException If the file is not readable
 	 */
 	public static Task loadTask(File file) throws IOException {
 		Task task = new Task();
@@ -30,10 +34,13 @@ public class IOUtils {
 	}
 	
 	/**
-	 Loads a taillard instance file
-	 @param file File to be loaded
-	 @return Loaded tasks and upper bounds
-	 @throws IOException If the file is not readable
+	 * Loads a taillard instance file
+	 *
+	 * @param file File to be loaded
+	 *
+	 * @return Loaded tasks and upper bounds
+	 *
+	 * @throws IOException If the file is not readable
 	 */
 	public static List<Tuple<Task, Integer>> loadTaillard(File file) throws IOException {
 		List<Tuple<Task, Integer>> list = new LinkedList<>();
@@ -63,10 +70,13 @@ public class IOUtils {
 	}
 	
 	/**
-	 Saves a task to a fle
-	 @param file File to create or override
-	 @param currentTask Task to be saved
-	 @throws IOException If the file is not readable
+	 * Saves a task to a fle
+	 *
+	 * @param file File to create or override
+	 *
+	 * @param currentTask Task to be saved
+	 *
+	 * @throws IOException If the file is not readable
 	 */
 	public static void saveTask(File file, Task currentTask) throws IOException {
 		BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -75,11 +85,14 @@ public class IOUtils {
 	}
 	
 	/**
-	 Parses non-flexible flow- or job-shop from String with format e.g.
-	 J1|-1|M1,5|M2,3|M3,3|M4,2|
-	 @param input string to parse
-	 @return Job
-	 @throws IllegalArgumentException IllegalArgumentException
+	 * Parses non-flexible flow- or job-shop from String with format e.g.
+	 * J1|-1|M1,5|M2,3|M3,3|M4,2|
+	 *
+	 * @param input string to parse
+	 *
+	 * @return Job
+	 *
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	public static Job parse(String input) throws IllegalArgumentException {
 		String[] split = input.split("\\|");

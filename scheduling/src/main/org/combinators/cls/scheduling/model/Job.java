@@ -10,17 +10,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- Class to model a job containing all available routes, the name, the deadline and the releaseDate */
+ * Class to model a job containing all available routes, the name, the deadline and the releaseDate
+ */
 public class Job implements IWritable, ICloneable<Job> {
 	
 	/**
-	 Available routes for this job
+	 * Available routes for this job
 	 */
 	@Getter
 	private final LinkedList<Route> routes = new LinkedList<>();
 	
 	/**
-	 Unique name of the job
+	 * Unique name of the job
 	 */
 	@Getter
 	@Setter
@@ -28,32 +29,34 @@ public class Job implements IWritable, ICloneable<Job> {
 	private String name;
 	
 	/**
-	 The job's deadline. -1 if the is no deadline
+	 * The job's deadline. -1 if the is no deadline
 	 */
 	@Getter
 	@Setter
 	private int deadline;
 	
 	/**
-	 The job's releaseDate. 0 if not specified
+	 * The job's releaseDate. 0 if not specified
 	 */
 	@Getter
 	@Setter
 	private int releaseDate;
 	
 	/**
-	 Creates a job with given name, no deadline and releaseDate 0
-	 @param name The job's name
+	 * Creates a job with given name, no deadline and releaseDate 0
+	 *
+	 * @param name The job's name
 	 */
 	public Job(String name) {
 		this(name, -1, 0);
 	}
 	
 	/**
-	 Creates a job with given name, deadline and releaseDate
-	 @param name The job's name
-	 @param deadline The job's deadline
-	 @param releaseDate The job's releaseDate
+	 * Creates a job with given name, deadline and releaseDate
+	 *
+	 * @param name The job's name
+	 * @param deadline The job's deadline
+	 * @param releaseDate The job's releaseDate
 	 */
 	public Job(String name, int deadline, int releaseDate) {
 		this.name = name;
@@ -62,11 +65,12 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	/**
-	 Creates a job with given name, deadline, releaseDate and routes
-	 @param name The job's name
-	 @param deadline The job's deadline
-	 @param releaseDate The job's releaseDate
-	 @param routes The available routes
+	 * Creates a job with given name, deadline, releaseDate and routes
+	 *
+	 * @param name The job's name
+	 * @param deadline The job's deadline
+	 * @param releaseDate The job's releaseDate
+	 * @param routes The available routes
 	 */
 	public Job(String name, int deadline, int releaseDate, Route... routes) {
 		this.name = name;
@@ -76,32 +80,36 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	/**
-	 Adds a route to the job
-	 @param route Route to be added
+	 * Adds a route to the job
+	 *
+	 * @param route Route to be added
 	 */
 	public void addRoute(Route route) {
 		this.routes.add(route);
 	}
 	
 	/**
-	 Returns the scheduled route, that is the route at first position
-	 @return Scheduled route
+	 * Returns the scheduled route, that is the route at first position
+	 *
+	 * @return Scheduled route
 	 */
 	public Route getScheduledRoute() {
 		return routes.get(0);
 	}
 	
 	/**
-	 Returns an ordered list of the machines in the order to be scheduled. Only works for non-flexible job- and open shops
-	 @return All machines
+	 * Returns an ordered list of the machines in the order to be scheduled. Only works for non-flexible job- and open shops
+	 *
+	 * @return All machines
 	 */
 	public List<Machine> getMachines() {
 		return this.getScheduledRoute().getStages().stream().map(Stage::getScheduledMachine).collect(Collectors.toList());
 	}
 	
 	/**
-	 Returns a string representation of the job
-	 @return String representation
+	 * Returns a string representation of the job
+	 *
+	 * @return String representation
 	 */
 	@Override
 	public String toString() {
@@ -109,8 +117,9 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	/**
-	 Returns a string containing all information saved in the object to be saved
-	 @return String representation
+	 * Returns a string containing all information saved in the object to be saved
+	 *
+	 * @return String representation
 	 */
 	@Override
 	public String getString() {
@@ -121,8 +130,9 @@ public class Job implements IWritable, ICloneable<Job> {
 	}
 	
 	/**
-	 Deeply clones the object
-	 @return deeply cloned instance
+	 * Deeply clones the object
+	 *
+	 * @return deeply cloned instance
 	 */
 	@Override
 	public Job cloned() {

@@ -8,13 +8,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- Utils for classifying tasks */
+ * Utils for classifying tasks
+ */
 public class ClassificationUtils {
 	
 	/**
-	 Classifies given Task
-	 @param task Task to be classified
-	 @return Classification for Task including machine- and job-count
+	 * Classifies given Task
+	 *
+	 * @param task Task to be classified
+	 *
+	 * @return Classification for Task including machine- and job-count
 	 */
 	public static Classification classify(Task task) {
 		if(!validate(task))
@@ -39,9 +42,11 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Returns the dimensions of a task
-	 @param task task to be classified
-	 @return Dimensions of the task: Number of machines (first) and number of jobs (second)
+	 * Returns the dimensions of a task
+	 *
+	 * @param task task to be classified
+	 *
+	 * @return Dimensions of the task: Number of machines (first) and number of jobs (second)
 	 */
 	public static Tuple<Integer, Integer> getTaskDimensions(Task task) {
 		List<List<Machine>> machines = getMachines(task);
@@ -49,19 +54,24 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Returns all machines in the given task
-	 @param task task to be classified
-	 @return All machines in the task
+	 * Returns all machines in the given task
+	 *
+	 * @param task task to be classified
+	 *
+	 * @return All machines in the task
 	 */
 	private static List<List<Machine>> getMachines(Task task) {
 		return task.getJobs().stream().map(Job::getMachines).collect(Collectors.toList());
 	}
 	
 	/**
-	 Checks for given Task to be JobShop: Just one route for each job and no duration=0
-	 @param currentTask Task to be classified
-	 @return true if model matches
-	 @precondition Task is OpenShop
+	 * Checks for given Task to be JobShop: Just one route for each job and no duration=0
+	 *
+	 * @precondition Task is OpenShop
+	 *
+	 * @param currentTask Task to be classified
+	 *
+	 * @return true if model matches
 	 */
 	@SuppressWarnings("RedundantIfStatement")
 	private static boolean checkIsJobShop(Task currentTask) {
@@ -75,10 +85,13 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Checks for given Task to be FlowShop
-	 @param machineOrders Machines in current Task
-	 @return true if model matches
-	 @precondition Task is JobShop
+	 * Checks for given Task to be FlowShop
+	 *
+	 * @precondition Task is JobShop
+	 *
+	 * @param machineOrders Machines in current Task
+	 *
+	 * @return true if model matches
 	 */
 	private static boolean checkIsFlowShop(List<List<Machine>> machineOrders) {
 		for(int i = 1; i < machineOrders.size(); i++) {
@@ -89,18 +102,22 @@ public class ClassificationUtils {
 	}
 	
 	/**
-	 Checks whether the given task is flexible or not
-	 @param task Task to be classified
-	 @return false if the task has no Stage with more than one machine, true otherwise
+	 * Checks whether the given task is flexible or not
+	 *
+	 * @param task Task to be classified
+	 *
+	 * @return false if the task has no Stage with more than one machine, true otherwise
 	 */
 	private static boolean checkFlexibility(Task task) {
 		return task.getJobs().stream().anyMatch(job -> job.getRoutes().stream().anyMatch(route -> route.getStages().stream().anyMatch(stage -> stage.getMachines().size() > 1)));
 	}
 	
 	/**
-	 Validates Task, such that there is min. one Job containing min. one Stage with min. one Machine each and valid deadlines and releaseDates
-	 @param task Task to be validated
-	 @return true for valid Task, false otherwise
+	 * Validates Task, such that there is min. one Job containing min. one Stage with min. one Machine each and valid deadlines and releaseDates
+	 *
+	 * @param task Task to be validated
+	 *
+	 * @return true for valid Task, false otherwise
 	 */
 	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 	public static boolean validate(Task task) {

@@ -4,23 +4,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- Tuple Class
- @param <K> Key
- @param <V> Value */
-public class Tuple<K, V> {
+ * Tuple Class
+ * @param <K> Key
+ * @param <V> Value
+ */
+public final class Tuple<K, V> {
 	/**
-	 First element / Key
+	 * First element / Key
 	 */
 	@Getter
 	@Setter
-	K first;
+	private K first;
 	
 	/**
-	 Second element / Value
+	 * Second element / Value
 	 */
 	@Getter
 	@Setter
-	V second;
+	private V second;
 	
 	/**
 	 Creates a new Tuple

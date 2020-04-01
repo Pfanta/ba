@@ -64,8 +64,9 @@ public class MainWindowViewController implements MainWindowAUI {
     private javafx.stage.Stage stage;
     
     /**
-     ProgressDialog that is shown while running task
-     @see org.combinators.cls.scheduling.view.customdialogs.ProgressDialog
+     * ProgressDialog that is shown while running task
+     *
+     * @see org.combinators.cls.scheduling.view.customdialogs.ProgressDialog
      */
     private ProgressDialog progressDialog;
 
@@ -153,10 +154,9 @@ public class MainWindowViewController implements MainWindowAUI {
     }
 
     //region action Handler
-    
     /**
-     Event handler for drag&drop .task files into the program
-     @param event DragEvent
+     * Event handler for drag&drop .task files into the program
+     * @param event DragEvent
      */
     public void onDragOver(DragEvent event) {
         if (event.getDragboard().hasFiles())
@@ -195,6 +195,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Opens the generation dialog.
      *
      * @param event ClickEvent
+     *
      * @see org.combinators.cls.scheduling.utils.GenerationUtils
      */
     public void onGenerateButtonClicked(ActionEvent event) {
@@ -253,6 +254,7 @@ public class MainWindowViewController implements MainWindowAUI {
      * Opens the progress dialog.
      *
      * @param event ClickEvent
+     *
      * @see org.combinators.cls.scheduling.view.customdialogs.ProgressDialog
      */
     public void onRunButtonClicked(ActionEvent event) {
@@ -288,9 +290,10 @@ public class MainWindowViewController implements MainWindowAUI {
     }
     
     /**
-     Called when the user clicked "Taillard Benchmark".
-     Opens the taillard benchmark dialog and starts the execution of a benchmark.
-     @param event ClickEvent
+     * Called when the user clicked "Taillard Benchmark".
+     * Opens the taillard benchmark dialog and starts the execution of a benchmark.
+     *
+     * @param event ClickEvent
      */
     public void onTaillardBenchmarkButtonClicked(ActionEvent event) {
         BenchmarkUtils.showTaillardBenchmarkDialog().ifPresent(result -> {
@@ -333,6 +336,11 @@ public class MainWindowViewController implements MainWindowAUI {
         });
     }
     
+    /**
+     * Tries to load a file from Filesystem
+     *
+     * @param file File to load
+     */
     private void tryLoadFile(File file) {
         try {
             currentTask = IOUtils.loadTask(file);
@@ -346,16 +354,31 @@ public class MainWindowViewController implements MainWindowAUI {
     //endregion
 
     //region AUI refreshes
+    /**
+     * Called upon classification finished
+     *
+     * @param result Resulting ShopClass found from classification
+     */
     @Override
-    public void onClassificationFinished(Classification classification) {
-        Platform.runLater(() -> progressDialog.setClassificationResult(classification));
+    public void onClassificationFinished(Classification result) {
+        Platform.runLater(() -> progressDialog.setClassificationResult(result));
     }
     
+    /**
+     * Called upon generation finished
+     *
+     * @param result Result count found by CLS
+     */
     @Override
     public void onGenerationFinished(int result) {
         Platform.runLater(() -> progressDialog.setGenerationResult(result));
     }
-
+    
+    /**
+     * Called upon benchmark progress
+     *
+     * @param progress benchmark progress
+     */
     @Override
     public void onBenchmarkProgress(float progress) {
         Platform.runLater(() -> {
@@ -363,37 +386,64 @@ public class MainWindowViewController implements MainWindowAUI {
             taillardBenchmarkProgressBar.setProgress(progress);
         });
     }
-
+    
+    /**
+     * Called upon runner progress
+     *
+     * @param progress runner progress
+     */
     @Override
     public void onRunnerProgress(float progress) {
         if (progressDialog != null)
             Platform.runLater(() -> progressDialog.setRunProgress(progress));
     }
-	
+    
+    /**
+     * Called upon runner finished
+     */
 	@Override
 	public void onRunnerFinished() {
 		Platform.runLater(() -> progressDialog.setRunFinished());
 	}
-	
+    
+    /**
+     * Called upon evaluation finished
+     *
+     * @param result result value for target Function e.g. finish time for function C_max
+     */
 	@Override
 	public void onEvaluationResult(int result) {
 		Platform.runLater(() -> progressDialog.setEvaluationResult(result));
 	}
-	
+    
+    /**
+     * Called upon benchmark finished
+     *
+     * @param benchmarkResults absolute values
+     * @param relValues relative values
+     */
 	@Override
 	public void onBenchmarkResult(Map<String, Double> benchmarkResults, Map<String, Double> relValues) {
 		Platform.runLater(() -> {
 			new BenchmarkResultDialog(benchmarkResults, relValues).showAndWait();
 		});
 	}
-	
+    
+    /**
+     * Called upon taillard benchmark finished
+     *
+     * @param benchmarkResults results
+     */
 	@Override
 	public void onTaillardBenchmarkResult(Map<String, Double> benchmarkResults) {
 		Platform.runLater(() -> {
 			new BenchmarkResultDialog(benchmarkResults).showAndWait();
 		});
 	}
-	
+    
+    /**
+     * Resets state
+     */
 	@Override
 	public void onFinishedOrCanceled() {
 		Platform.runLater(() -> {

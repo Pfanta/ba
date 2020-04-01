@@ -10,11 +10,13 @@ import org.combinators.cls.scheduling.utils.Tuple;
 import org.combinators.cls.scheduling.utils.VisualizationUtils;
 
 /**
- dialog to show scheduling results */
+ * Dialog to show scheduling results
+ */
 public class ResultDialog extends Dialog<Boolean> {
 	/**
-	 Creates a new dialog and shows gantt charts
-	 @param schedule Schedule to be shown
+	 * Creates a new dialog and shows gantt charts
+	 *
+	 * @param schedule Schedule to be shown
 	 */
 	public ResultDialog(Tuple<String, Task> schedule) {
 		super();

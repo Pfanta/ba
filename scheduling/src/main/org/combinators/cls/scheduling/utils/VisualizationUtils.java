@@ -5,17 +5,20 @@ import org.combinators.cls.scheduling.model.*;
 import java.util.*;
 
 /**
- Utils for Gantt-Charts */
+ * Utils for Gantt-Charts
+ */
 public class VisualizationUtils {
 	/**
-	 Background color of blocked areas
+	 * Background color of blocked areas
 	 */
 	private final static String BG_COLOR = "#AAAAAA";
 	
 	/**
-	 Transforms given task to HTML string representation
-	 @param task task to transform
-	 @return HTML string representation
+	 * Transforms given task to HTML string representation
+	 *
+	 * @param task task to transform
+	 *
+	 * @return HTML string representation
 	 */
 	public static String taskToHTMLGanttChart(Task task) {
 		return "<html><head><style>table, th, td {border: 1px solid black;border-collapse: collapse;}th, td {padding: 5px;text-align: center;}</style></head><body>" +
@@ -25,9 +28,11 @@ public class VisualizationUtils {
 	}
 	
 	/**
-	 Converts task to a machine chart
-	 @param task Task to be shown
-	 @return Gantt chart from machine perspective
+	 * Converts task to a machine chart
+	 *
+	 * @param task Task to be shown
+	 *
+	 * @return Gantt chart from machine perspective
 	 */
 	private static String taskToMachineChart(Task task) {
 		final int cmax = task.getResult();
@@ -79,9 +84,11 @@ public class VisualizationUtils {
 	}
 	
 	/**
-	 Converts task to a job chart
-	 @param task Task to be shown
-	 @return Gantt chart from job perspective
+	 * Converts task to a job chart
+	 *
+	 * @param task Task to be shown
+	 *
+	 * @return Gantt chart from job perspective
 	 */
 	private static String taskToJobChart(Task task) {
 		final int cmax = task.getResult();

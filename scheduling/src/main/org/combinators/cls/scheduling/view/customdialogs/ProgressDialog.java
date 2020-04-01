@@ -11,21 +11,25 @@ import javafx.scene.layout.Pane;
 import org.combinators.cls.scheduling.model.Classification;
 import org.combinators.cls.scheduling.view.customcontrol.DialogLabel;
 
+/**
+ * Progress dialog for running state feedback
+ */
 public class ProgressDialog extends Dialog<ButtonType> {
 	
 	/**
-	 Progress indicator
+	 * Progress indicator
 	 */
 	private final JFXProgressBar progressBar;
 	
 	/**
-	 Result label
+	 * Result label
 	 */
 	private final Label labelNumMachines, labelNumJobs, labelClassification, labelNumResults, labelResult, labelProgress;
 	
 	/**
-	 Creates a new dialog and shows results
-	 @param function Target function
+	 * Creates a new dialog and shows results
+	 *
+	 * @param function Target function
 	 */
 	public ProgressDialog(String function) {
 		super();
@@ -68,8 +72,9 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	}
 	
 	/**
-	 Updates classification result
-	 @param classification Classification
+	 * Updates classification result
+	 *
+	 * @param classification Classification
 	 */
 	public void setClassificationResult(Classification classification) {
 		progressBar.setProgress(2F / 5F);
@@ -80,8 +85,9 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	}
 	
 	/**
-	 Updates generation result
-	 @param result Generation result
+	 * Updates generation result
+	 *
+	 * @param result Generation result
 	 */
 	public void setGenerationResult(int result) {
 		labelNumResults.setText("" + result);
@@ -90,15 +96,16 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	}
 	
 	/**
-	 Updates run progress
-	 @param progress Progress from 0 to 1
+	 * Updates run progress
+	 *
+	 * @param progress Progress from 0 to 1
 	 */
 	public void setRunProgress(float progress) {
 		progressBar.setProgress((4F + progress) / 5F);
 	}
 	
 	/**
-	 Indicates that running the task has finished
+	 * Indicates that running the task has finished
 	 */
 	public void setRunFinished() {
 		progressBar.setProgress(4F / 5F);
@@ -106,7 +113,7 @@ public class ProgressDialog extends Dialog<ButtonType> {
 	}
 	
 	/**
-	 Indicates that result evaluation has finished
+	 * Indicates that result evaluation has finished
 	 */
 	public void setEvaluationResult(int result) {
 		labelResult.setText("" + result);

@@ -1,41 +1,43 @@
 package org.combinators.cls.scheduling.model;
 
 /**
- Enum for all supported shop classes (machine environments) */
+ * Enum for all supported shop classes (machine environments)
+ */
 public enum ShopClass {
 	/**
-	 (permutation) Flow Shop
+	 * (permutation) Flow Shop
 	 */
 	FS,
 	
 	/**
-	 Flexible Flow Shop
+	 * Flexible Flow Shop
 	 */
 	FFS,
 	
 	/**
-	 Job Shop
+	 * Job Shop
 	 */
 	JS,
 	
 	/**
-	 Flexible Job Shop
+	 * Flexible Job Shop
 	 */
 	FJS,
 	
 	/**
-	 Open Shop
+	 * Open Shop
 	 */
 	OS,
 	
 	/**
-	 None - not supported
+	 * None - not supported
 	 */
 	NONE;
 	
 	/**
-	 Returns a better readable representation
-	 @return Enum value in clear text
+	 * Returns a better readable representation
+	 *
+	 * @return Enum value in clear text
 	 */
 	@Override
 	public String toString() {

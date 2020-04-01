@@ -17,41 +17,43 @@ import java.util.Optional;
 import java.util.Random;
 
 /**
- Utils for task generation */
+ * Utils for task generation
+ */
 public class GenerationUtils {
 	/**
-	 Default value for machine count
+	 * Default value for machine count
 	 */
 	private static final int DEFAULT_MACHINES_COUNT = 4;
 	
 	/**
-	 Default value for job count
+	 * Default value for job count
 	 */
 	private static final int DEFAULT_JOBS_COUNT = 4;
 	
 	/**
-	 Lower bound for random machine times
+	 * Lower bound for random machine times
 	 */
 	private static final int MIN_MACHINE_TIME = 1;
 	
 	/**
-	 Upper bound for random machine times
+	 * Upper bound for random machine times
 	 */
 	private static final int MAX_MACHINE_TIME = 6;
 	
 	/**
-	 Maximum the deadline may exceed no-delay makespan
+	 * Maximum the deadline may exceed no-delay makespan
 	 */
 	private static final int MAX_DEADLINE_PLUS = 10;
 	
 	/**
-	 Instance of random number generator
+	 * Instance of random number generator
 	 */
 	private static final Random random = new Random();
 	
 	/**
-	 Shows generation dialog
-	 @return Container containing questioned values
+	 * Shows generation dialog
+	 *
+	 * @return Container containing questioned values
 	 */
 	public static Optional<GenerationDialogResult> showGenerateDialog() {
 		Dialog<GenerationDialogResult> dialog = new Dialog<>();
@@ -88,9 +90,11 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 Generates a random task
-	 @param result Generation dialog result
-	 @return Task Generated task
+	 * Generates a random task
+	 *
+	 * @param result Generation dialog result
+	 *
+	 * @return Task Generated task
 	 */
 	public static Task generateRandomTask(GenerationDialogResult result) {
 		if(result.getNumJobs() <= 0 || result.getNumMachines() <= 0 || result.getShopClass().equals(ShopClass.NONE))
@@ -114,11 +118,13 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 Generates a random FlowShop
-	 @param numMachines number of machines
-	 @param numJobs number of jobs
-	 @param deadlines whether deadlines should be generated
-	 @return Task
+	 * Generates a random FlowShop
+	 *
+	 * @param numMachines number of machines
+	 * @param numJobs number of jobs
+	 * @param deadlines whether deadlines should be generated
+	 *
+	 * @return Task
 	 */
 	private static Task generateRandomFlowShop(int numMachines, int numJobs, boolean deadlines) {
 		Task task = new Task();
@@ -148,11 +154,13 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 Generates a random JobShop
-	 @param numMachines number of machines
-	 @param numJobs number of jobs
-	 @param deadlines whether deadlines should be generated
-	 @return Task
+	 * Generates a random JobShop
+	 *
+	 * @param numMachines number of machines
+	 * @param numJobs number of jobs
+	 * @param deadlines whether deadlines should be generated
+	 *
+	 * @return Task
 	 */
 	private static Task generateRandomJobShop(int numMachines, int numJobs, boolean deadlines) {
 		Task task = generateRandomFlowShop(numMachines, numJobs, deadlines);
@@ -165,31 +173,37 @@ public class GenerationUtils {
 	}
 	
 	/**
-	 Generates a random FlexibleFlowShop
-	 @param numMachines number of machines
-	 @param numJobs number of jobs
-	 @param deadlines whether deadlines should be generated
-	 @return Task
+	 * Generates a random FlexibleFlowShop
+	 *
+	 * @param numMachines number of machines
+	 * @param numJobs number of jobs
+	 * @param deadlines whether deadlines should be generated
+	 *
+	 * @return Task
 	 */
 	private static Task generateRandomFlexibleFlowShop(int numMachines, int numJobs, boolean deadlines) {
 		return makeFlexible(generateRandomFlowShop(numMachines, numJobs, deadlines));
 	}
 	
 	/**
-	 Generates a random FlexibleJobShop
-	 @param numMachines number of machines
-	 @param numJobs number of jobs
-	 @param deadlines whether deadlines should be generated
-	 @return Task
+	 * Generates a random FlexibleJobShop
+	 *
+	 * @param numMachines number of machines
+	 * @param numJobs number of jobs
+	 * @param deadlines whether deadlines should be generated
+	 *
+	 * @return Task
 	 */
 	private static Task generateRandomFlexibleJobShop(int numMachines, int numJobs, boolean deadlines) {
 		return makeFlexible(generateRandomJobShop(numMachines, numJobs, deadlines));
 	}
 	
 	/**
-	 Turns given Task into a flexible one
-	 @param task Task
-	 @return flexible Task
+	 * Turns given Task into a flexible one
+	 *
+	 * @param task Task
+	 *
+	 * @return flexible Task
 	 */
 	private static Task makeFlexible(Task task) {
 		//TODO

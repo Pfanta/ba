@@ -9,22 +9,25 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 /**
- Main class to start the application */
+ * Main class to start the application
+ */
 public class Main extends Application {
 	
 	/**
-	 Static void main
-	 Launches the application
-	 @param args Runtime args
+	 * Static void main
+	 * Launches the application
+	 *
+	 * @param args Runtime args
 	 */
 	public static void main(String[] args) {
 		launch();
 	}
 	
 	/**
-	 Called upon application launch
-	 @param primaryStage Primary stage of the application
-	 @throws IOException IOException if .fxml files do not exist
+	 * Called upon application launch
+	 *
+	 * @param primaryStage Primary stage of the application
+	 * @throws IOException IOException if .fxml files do not exist
 	 */
 	@Override
 	public void start(Stage primaryStage) throws IOException {

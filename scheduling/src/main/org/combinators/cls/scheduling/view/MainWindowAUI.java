@@ -5,7 +5,8 @@ import org.combinators.cls.scheduling.model.Classification;
 import java.util.Map;
 
 /**
- MainWindow GUI callback interface */
+ * MainWindow GUI callback interface
+ */
 public interface MainWindowAUI {
 	/**
 	 * Called upon classification finished
@@ -17,9 +18,9 @@ public interface MainWindowAUI {
 	/**
 	 * Called upon generation finished
 	 *
-	 * @param results Result count found by CLS
+	 * @param result Result count found by CLS
 	 */
-	void onGenerationFinished(int results);
+	void onGenerationFinished(int result);
 	
 	/**
 	 * Called upon benchmark progress
@@ -36,31 +37,34 @@ public interface MainWindowAUI {
 	void onRunnerProgress(float progress);
 	
 	/**
-	 * * Called upon runner finished
+	 * Called upon runner finished
 	 */
 	void onRunnerFinished();
 	
 	/**
-	 Called upon evaluation finished
-	 @param result result value for target Function e.g. finish time for function C_max
+	 * Called upon evaluation finished
+	 *
+	 * @param result result value for target Function e.g. finish time for function C_max
 	 */
 	void onEvaluationResult(int result);
 	
 	/**
-	 Called upon benchmark finished
-	 @param benchmarkResults absolute values
-	 @param relValues relative values
+	 * Called upon benchmark finished
+	 *
+	 * @param benchmarkResults absolute values
+	 * @param relValues relative values
 	 */
 	void onBenchmarkResult(Map<String, Double> benchmarkResults, Map<String, Double> relValues);
 	
 	/**
-	 Called upon taillard benchmark finished
-	 @param benchmarkResults results
+	 * Called upon taillard benchmark finished
+	 *
+	 * @param benchmarkResults results
 	 */
 	void onTaillardBenchmarkResult(Map<String, Double> benchmarkResults);
 	
 	/**
-	 Resets
+	 * Resets state
 	 */
 	void onFinishedOrCanceled();
 }

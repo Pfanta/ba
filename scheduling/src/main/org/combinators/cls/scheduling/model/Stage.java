@@ -6,24 +6,26 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
- Class to model a route's stage containing all machines */
+ * Class to model a route's stage containing all machines
+ */
 public class Stage implements IWritable, ICloneable<Stage> {
 	/**
-	 All machines of this route
+	 * All machines of this route
 	 */
 	@Getter
 	private final LinkedList<Machine> machines;
 	
 	/**
-	 Creates an empty stage
+	 * Creates an empty stage
 	 */
 	public Stage() {
 		this.machines = new LinkedList<>();
 	}
 	
 	/**
-	 Creates a stage with given machines
-	 @param machines Machines at this stage
+	 * Creates a stage with given machines
+	 *
+	 * @param machines Machines at this stage
 	 */
 	public Stage(Machine... machines) {
 		this.machines = new LinkedList<>();
@@ -31,16 +33,18 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	}
 	
 	/**
-	 Returns the scheduled machine, that is the machine at first position
-	 @return Scheduled machine
+	 * Returns the scheduled machine, that is the machine at first position
+	 *
+	 * @return Scheduled machine
 	 */
 	public Machine getScheduledMachine() {
 		return machines.getFirst();
 	}
 	
 	/**
-	 Returns a string representation of the stage
-	 @return String representation
+	 * Returns a string representation of the stage
+	 *
+	 * @return String representation
 	 */
 	@Override
 	public String toString() {
@@ -48,8 +52,9 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	}
 	
 	/**
-	 Returns a string containing all information saved in the object to be saved
-	 @return String representation
+	 * Returns a string containing all information saved in the object to be saved
+	 *
+	 * @return String representation
 	 */
 	@Override
 	public String getString() {
@@ -57,8 +62,9 @@ public class Stage implements IWritable, ICloneable<Stage> {
 	}
 	
 	/**
-	 Deeply clones the object
-	 @return deeply cloned instance
+	 * Deeply clones the object
+	 *
+	 * @return deeply cloned instance
 	 */
 	@Override
 	public Stage cloned() {

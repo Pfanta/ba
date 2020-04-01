@@ -19,34 +19,44 @@ import java.util.TreeMap;
 import java.util.stream.IntStream;
 
 /**
- Benchmark worker class for benchmarking */
+ * Benchmark worker class for benchmarking
+ */
 class BenchmarkWorker extends AbstractWorker {
 	
-	private final int numJobs;
-	private final int numMachines;
 	/**
-	 Number of instances to be generated
+	 * Number of jobs
+	 */
+	private final int numJobs;
+	
+	/**
+	 * Number of machines
+	 */
+	private final int numMachines;
+	
+	/**
+	 * Number of instances to be generated
 	 */
 	private final int numInstances;
 	
 	/**
-	 Tasks to be executed
+	 * Tasks to be executed
 	 */
 	private final List<Task> tasks;
 	
 	/**
-	 Benchmarking results
-	 Maps heuristics to average makespan
+	 * Benchmarking results
+	 * Maps heuristics to average makespan
 	 */
 	@Getter
 	protected volatile Map<String, Double> benchmarkResults;
 	
 	/**
-	 Creates a new worker with given callback AUI and task to be executed
-	 @param callback GUI callback AUI
-	 @param numJobs Number of jobs to be generated
-	 @param numMachines Number of machines to be generated
-	 @param numInstances Number of instances to be generated and iterated through
+	 * Creates a new worker with given callback AUI and task to be executed
+	 *
+	 * @param callback GUI callback AUI
+	 * @param numJobs Number of jobs to be generated
+	 * @param numMachines Number of machines to be generated
+	 * @param numInstances Number of instances to be generated and iterated through
 	 */
 	BenchmarkWorker(MainWindowAUI callback, int numJobs, int numMachines, int numInstances) {
 		super(callback);
@@ -57,8 +67,8 @@ class BenchmarkWorker extends AbstractWorker {
 	}
 	
 	/**
-	 Override method from AbstractWorker, that is invoked upon Thread.run() is called
-	 Needs to generate algorithms from CLS, run tasks and evaluate results
+	 * Override method from AbstractWorker, that is invoked upon Thread.run() is called
+	 * Needs to generate algorithms from CLS, run tasks and evaluate results
 	 */
 	@Override
 	void work() {
@@ -111,10 +121,12 @@ class BenchmarkWorker extends AbstractWorker {
 	}
 	
 	/**
-	 Runs a single task
-	 Also used by TaillardBenchmarkWorker
-	 @param task task to be executed
-	 @return Map from heuristic to result
+	 * Runs a single task
+	 * Also used by TaillardBenchmarkWorker
+	 *
+	 * @param task task to be executed
+	 *
+	 * @return Map from heuristic to result
 	 */
 	protected Map<String, Integer> runTask(Task task) {
 		Classification classification = ClassificationUtils.classify(task); //reclassify task
@@ -129,8 +141,9 @@ class BenchmarkWorker extends AbstractWorker {
 	}
 	
 	/**
-	 Not implemented in benchmark workers
-	 @return Noting
+	 * Not implemented in benchmark workers
+	 *
+	 * @return Noting
 	 */
 	@Override
 	List<Tuple<String, Task>> getSchedulingResults() {

@@ -14,27 +14,29 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- Abstract class for all workers */
+ * Abstract class for all workers
+ */
 abstract class AbstractWorker extends Thread {
 	/**
-	 GUI callback field
+	 * GUI callback field
 	 */
 	protected final MainWindowAUI callback;
 	
 	/**
-	 Flag to be set to true when worker ist working
-	 Set and false if the worker has finished or cancellation is scheduled
+	 * Flag to be set to true when worker ist working
+	 * Set and false if the worker has finished or cancellation is scheduled
 	 */
 	protected volatile boolean running;
 	
 	/**
-	 Counts reflected classes to prevent overriding errors
+	 * Counts reflected classes to prevent overriding errors
 	 */
 	private static int generationCounter = 0;
 	
 	/**
-	 Creates a new Worker with given callback AUI
-	 @param callback GUI callback AUI
+	 * Creates a new Worker with given callback AUI
+	 *
+	 * @param callback GUI callback AUI
 	 */
 	AbstractWorker(MainWindowAUI callback) {
 		this.callback = callback;
@@ -42,8 +44,8 @@ abstract class AbstractWorker extends Thread {
 	}
 	
 	/**
-	 Override method inherited from java.lang.Thread
-	 Sets running lag and invokes work method
+	 * Override method inherited from java.lang.Thread
+	 * Sets running lag and invokes work method
 	 */
 	@Override
 	public void run() {
@@ -54,23 +56,25 @@ abstract class AbstractWorker extends Thread {
 	}
 	
 	/**
-	 Requests worker cancellation by setting running flag to false
+	 * Requests worker cancellation by setting running flag to false
 	 */
 	void cancel() {
 		running = false;
 	}
 	
 	/**
-	 Work method to be implemented in concrete classes
+	 * Work method to be implemented in concrete classes
 	 */
 	abstract void work();
 	
 	/**
-	 Compiles given runners and runs given task on each of them
-	 @param classification Classification of task to be executed on algorithms
-	 @param runners algorithm source code to be compiled and run
-	 @param callback GUI callback
-	 @return Results of the scheduling
+	 * Compiles given runners and runs given task on each of them
+	 *
+	 * @param classification Classification of task to be executed on algorithms
+	 * @param runners algorithm source code to be compiled and run
+	 * @param callback GUI callback
+	 *
+	 * @return Results of the scheduling
 	 */
 	public static List<Tuple<String, Task>> runResults(Classification classification, Map<String, String> runners, MainWindowAUI callback) {
 		List<Tuple<String, Task>> results = new LinkedList<>();
@@ -92,8 +96,9 @@ abstract class AbstractWorker extends Thread {
 	}
 	
 	/**
-	 Returns worker results
-	 @return Worker results
+	 * Returns worker results
+	 *
+	 * @return Worker results
 	 */
 	abstract List<Tuple<String, Task>> getSchedulingResults();
 }

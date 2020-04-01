@@ -13,25 +13,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- Worker class for algorithm generation and task execution */
+ * Worker class for algorithm generation and task execution
+ */
 class Worker extends AbstractWorker {
 	
 	/**
-	 Task to be executed
+	 * Task to be executed
 	 */
 	private final Task task;
 	
 	/**
-	 Scheduling results
-	 Tuple is constructed from chosen heuristic (first) and schedule (second)
+	 * Scheduling results
+	 * Tuple is constructed from chosen heuristic (first) and schedule (second)
 	 */
 	@Getter
 	protected volatile List<Tuple<String, Task>> results;
 	
 	/**
-	 Creates a new worker with given callback AUI and task to be executed
-	 @param callback GUI callback AUI
-	 @param task Task to be executed
+	 * Creates a new worker with given callback AUI and task to be executed
+	 *
+	 * @param callback GUI callback AUI
+	 * @param task Task to be executed
 	 */
 	Worker(MainWindowAUI callback, Task task) {
 		super(callback);
@@ -39,8 +41,8 @@ class Worker extends AbstractWorker {
 	}
 	
 	/**
-	 Override method from AbstractWorker, that is invoked upon Thread.run() is called
-	 Needs to generate algorithms from CLS, run task and evaluate results
+	 * Override method from AbstractWorker, that is invoked upon Thread.run() is called
+	 * Needs to generate algorithms from CLS, run task and evaluate results
 	 */
 	@Override
 	void work() {
@@ -67,8 +69,9 @@ class Worker extends AbstractWorker {
 	}
 	
 	/**
-	 Returns worker results
-	 @return Worker results
+	 * Returns worker results
+	 *
+	 * @return Worker results
 	 */
 	@Override
 	List<Tuple<String, Task>> getSchedulingResults() {

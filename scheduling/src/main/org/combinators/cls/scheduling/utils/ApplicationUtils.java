@@ -10,33 +10,36 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- Utils class on application level to show exceptions and warnings */
+ * Utils class on application level to show exceptions and warnings
+ */
 public class ApplicationUtils {
 	
 	/**
-	 Flag to prevent application from opening to many dialogs at a time
+	 * Flag to prevent application from opening to many dialogs at a time
 	 */
 	private static final int MAX_DIALOGS = 5;
 	
 	/**
-	 Counter for open dialogs
+	 * Counter for open dialogs
 	 */
 	private static int openDialogs = 0;
 	
 	/**
-	 Shows a dialog with exception details
-	 @param title dialog title
-	 @param content Dialog content
-	 @param ex Exception to be shown in expander
+	 * Shows a dialog with exception details
+	 *
+	 * @param title dialog title
+	 * @param content Dialog content
+	 * @param ex Exception to be shown in expander
 	 */
 	public static void showException(String title, String content, Exception ex) {
 		Platform.runLater(() -> showExceptionDialog(title, content, ex));
 	}
 	
 	/**
-	 Shows a dialog with a warning details
-	 @param title dialog title
-	 @param content Dialog content
+	 * Shows a dialog with a warning details
+	 *
+	 * @param title dialog title
+	 * @param content Dialog content
 	 */
 	public static void showWarning(String title, String content) {
 		Platform.runLater(() -> showWarningDialog(title, content));
@@ -45,10 +48,11 @@ public class ApplicationUtils {
 	//region private methods
 	
 	/**
-	 Shows a dialog with exception details
-	 @param title dialog title
-	 @param content Dialog content
-	 @param ex Exception to be shown in expander
+	 * Shows a dialog with exception details
+	 *
+	 * @param title dialog title
+	 * @param content Dialog content
+	 * @param ex Exception to be shown in expander
 	 */
 	private static void showExceptionDialog(String title, String content, Exception ex) {
 		if(++openDialogs >= MAX_DIALOGS)
@@ -81,9 +85,10 @@ public class ApplicationUtils {
 	}
 	
 	/**
-	 Shows a dialog with a warning details
-	 @param title dialog title
-	 @param content Dialog content
+	 * Shows a dialog with a warning details
+	 *
+	 * @param title dialog title
+	 * @param content Dialog content
 	 */
 	private static void showWarningDialog(String title, String content) {
 		if(++openDialogs >= MAX_DIALOGS)

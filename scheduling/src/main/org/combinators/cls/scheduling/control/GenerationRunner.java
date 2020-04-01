@@ -12,31 +12,34 @@ import java.util.List;
 import java.util.Map;
 
 /**
- Class supporting methods to run workflow
- Generates Results from CLS and runs tasks on algorithms */
+ * Class supporting methods to run workflow
+ * Generates Results from CLS and runs tasks on algorithms
+ */
 public class GenerationRunner {
 	
 	/**
-	 AUI callback to GUI
+	 * AUI callback to GUI
 	 */
 	final MainWindowAUI mainWindowAUI;
 	
 	/**
-	 Worker thread
+	 * Worker thread
 	 */
 	private AbstractWorker worker;
 	
 	/**
-	 Creates a new instance
-	 @param mainWindowAUI GUI callback AUI
+	 * Creates a new instance
+	 *
+	 * @param mainWindowAUI GUI callback AUI
 	 */
 	public GenerationRunner(MainWindowAUI mainWindowAUI) {
 		this.mainWindowAUI = mainWindowAUI;
 	}
 	
 	/**
-	 Runs one Task on the worker thread
-	 @param task Task to be executed
+	 * Runs one Task on the worker thread
+	 *
+	 * @param task Task to be executed
 	 */
 	public void run(Task task) {
 		worker = new Worker(mainWindowAUI, task);
@@ -44,10 +47,11 @@ public class GenerationRunner {
 	}
 	
 	/**
-	 Runs a benchmark on the algorithms in the repository with random instances of given problem size
-	 @param numJobs Number of jobs to be generated
-	 @param numMachines Number of machines to be generated
-	 @param numInstances Number of instances to be generated and iterated through
+	 * Runs a benchmark on the algorithms in the repository with random instances of given problem size
+	 *
+	 * @param numJobs Number of jobs to be generated
+	 * @param numMachines Number of machines to be generated
+	 * @param numInstances Number of instances to be generated and iterated through
 	 */
 	public void runBenchmark(int numJobs, int numMachines, int numInstances) {
 		worker = new BenchmarkWorker(mainWindowAUI, numJobs, numMachines, numInstances);
@@ -55,9 +59,10 @@ public class GenerationRunner {
 	}
 	
 	/**
-	 Runs a benchmark on the algorithms in the repository on taillard's instances
-	 @param inputFile File with task data
-	 @param outputFile File to save results
+	 * Runs a benchmark on the algorithms in the repository on taillard's instances
+	 *
+	 * @param inputFile File with task data
+	 * @param outputFile File to save results
 	 */
 	public void runTaillardBenchmark(File inputFile, File outputFile) throws InterruptedException, IOException {
 		TaillardBenchmarkWorker benchmarkWorker = new TaillardBenchmarkWorker(mainWindowAUI, IOUtils.loadTaillard(inputFile));
@@ -74,8 +79,8 @@ public class GenerationRunner {
 	}
 	
 	/**
-	 Cancels the execution of the current worker thread if there is any
-	 The worker should stop execution after current step
+	 * Cancels the execution of the current worker thread if there is any
+	 * The worker should stop execution after current step
 	 */
 	public void cancel() {
 		if(worker != null)
@@ -83,8 +88,9 @@ public class GenerationRunner {
 	}
 	
 	/**
-	 Returns worker results
-	 @return Worker results
+	 * Returns worker results
+	 *
+	 * @return Worker results
 	 */
 	public List<Tuple<String, Task>> getResults() {
 		return worker.getSchedulingResults();
