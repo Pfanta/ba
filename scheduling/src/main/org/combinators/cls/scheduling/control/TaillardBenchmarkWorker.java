@@ -68,5 +68,7 @@ class TaillardBenchmarkWorker extends BenchmarkWorker {
 			benchmarkResults.put(entry.getKey(), Math.round(entry.getValue() * 1000) / 100D);
 			System.out.println(entry.getKey() + " : " + Math.round(entry.getValue() * 1000) / 100D + "%");
 		}
+		
+		callback.onTaillardBenchmarkResult(benchmarkResults);
 	}
 }

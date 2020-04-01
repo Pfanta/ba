@@ -101,9 +101,13 @@ class BenchmarkWorker extends AbstractWorker {
 		System.out.println("--- RESULTS ---");
 		for(Map.Entry<String, Integer> entry : values.entrySet()) {
 			//average values from numInstances
-			benchmarkResults.put(entry.getKey(), (entry.getValue() / (double) numInstances));
+			benchmarkResults.put(entry.getKey(), entry.getValue() / (double) numInstances);
+			relValues.put(entry.getKey(), Math.round((relValues.get(entry.getKey()) / numInstances) * 1000) / 10D);
+			
 			System.out.println(entry.getKey() + " : " + (entry.getValue() / (double) numInstances) + " : " + Math.round((relValues.get(entry.getKey()) / numInstances) * 1000) / 10D + "%");
 		}
+		
+		callback.onBenchmarkResult(benchmarkResults, relValues);
 	}
 	
 	/**

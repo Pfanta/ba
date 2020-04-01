@@ -22,11 +22,13 @@ import org.combinators.cls.scheduling.utils.*;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXPlusButton;
 import org.combinators.cls.scheduling.view.customcontrol.CustomJFXTextField;
 import org.combinators.cls.scheduling.view.customcontrol.CustomLabel;
+import org.combinators.cls.scheduling.view.customdialogs.BenchmarkResultDialog;
 import org.combinators.cls.scheduling.view.customdialogs.ProgressDialog;
 import org.combinators.cls.scheduling.view.customdialogs.ResultDialog;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * ViewController for MainWindow GUI
@@ -367,26 +369,40 @@ public class MainWindowViewController implements MainWindowAUI {
         if (progressDialog != null)
             Platform.runLater(() -> progressDialog.setRunProgress(progress));
     }
-
-    @Override
-    public void onRunnerFinished() {
-        Platform.runLater(() -> progressDialog.setRunFinished());
-    }
-
-    @Override
-    public void onEvaluationResult(int result) {
-        Platform.runLater(() -> progressDialog.setEvaluationResult(result));
-    }
-
-    @Override
-    public void onFinishedOrCanceled() {
-        Platform.runLater(() -> {
-            runBtn.setOpacity(1);
-            benchmarkBtn.setOpacity(1);
-            taillardBenchmarkBtn.setOpacity(1);
-            benchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            taillardBenchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-        });
-    }
+	
+	@Override
+	public void onRunnerFinished() {
+		Platform.runLater(() -> progressDialog.setRunFinished());
+	}
+	
+	@Override
+	public void onEvaluationResult(int result) {
+		Platform.runLater(() -> progressDialog.setEvaluationResult(result));
+	}
+	
+	@Override
+	public void onBenchmarkResult(Map<String, Double> benchmarkResults, Map<String, Double> relValues) {
+		Platform.runLater(() -> {
+			new BenchmarkResultDialog(benchmarkResults, relValues).showAndWait();
+		});
+	}
+	
+	@Override
+	public void onTaillardBenchmarkResult(Map<String, Double> benchmarkResults) {
+		Platform.runLater(() -> {
+			new BenchmarkResultDialog(benchmarkResults).showAndWait();
+		});
+	}
+	
+	@Override
+	public void onFinishedOrCanceled() {
+		Platform.runLater(() -> {
+			runBtn.setOpacity(1);
+			benchmarkBtn.setOpacity(1);
+			taillardBenchmarkBtn.setOpacity(1);
+			benchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+			taillardBenchmarkProgressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+		});
+	}
     //endregion
 }
