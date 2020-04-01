@@ -125,9 +125,9 @@ public class BenchmarkUtils {
 		int[] indexes = new int[jobs.size()];
 		IntStream.range(0, indexes.length).forEach(i -> indexes[i] = 0);
 		
-		int i = 0, result = Integer.MAX_VALUE;
-		while (i < indexes.length) {
-			if (indexes[i] < i) {
+		int i = 0, result = scheduleFlowShop(new Task(jobs)).getResult();//Integer.MAX_VALUE;
+		while(i < indexes.length) {
+			if(indexes[i] < i) {
 				Collections.swap(jobs, i % 2 == 0 ? 0 : indexes[i], i);
 				
 				Task schedule = scheduleFlowShop(new Task(jobs));
