@@ -21,6 +21,13 @@ trait HeuristicRepository {
           |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
   }
 
+  /*@combinator object RANDOM {
+    val semanticType: Type = 'Heuristic
+
+    def apply: String =
+      s"""|Collections.shuffle(waitingJobsOnMachine);
+          |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
+  }
 
   @combinator object LRPT {
     val semanticType: Type = 'Heuristic
@@ -43,15 +50,7 @@ trait HeuristicRepository {
 
     def apply: String =
       s"""|Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
-  }
-
-  @combinator object RANDOM {
-    val semanticType: Type = 'Heuristic
-
-    def apply: String =
-      s"""|Collections.shuffle(waitingJobsOnMachine);
-          |Job jobToSchedule = waitingJobsOnMachine.getFirst();""".stripMargin
-  }
+  }*/
 
   @combinator object FSScheduler {
     val semanticType: Type = 'FlowShopScheduler

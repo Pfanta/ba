@@ -42,6 +42,9 @@ object Scheduler {
         else
           heuristic = seqAsJavaList(l1.arguments).get(0).name
 
+        while(results.containsKey(heuristic)) {
+          heuristic = heuristic + "'";
+        }
         results.put(heuristic, inhabitationResult.interpretedTerms.index(i))
 
         i += 1

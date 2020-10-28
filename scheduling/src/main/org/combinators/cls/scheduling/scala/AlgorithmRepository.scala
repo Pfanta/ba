@@ -67,7 +67,7 @@ trait AlgorithmRepository extends RunnerRepository {
           |   schedule = localSchedule;""".stripMargin
   }
 
-  @combinator object RandomPermutationFlowShop {
+  /*@combinator object RandomPermutationFlowShop {
     val semanticType: Type = 'FlowShopScheduler =>: 'Algorithm :&: problemClass.flowShop
 
     def apply(FSScheduler: String): String =
@@ -86,10 +86,10 @@ trait AlgorithmRepository extends RunnerRepository {
           |				localBest = localSchedule;
           |		}
           |		schedule = localBest;""".stripMargin
-  }
+  }*/
 
   @combinator object GifflerThompson {
-    val semanticType: Type = 'Heuristic =>: 'Algorithm :&: problemClass.jobShop
+    val semanticType: Type = 'Heuristic =>: 'Algorithm :&: problemClass.flowShop
 
     def apply(Heuristic: String): String =
       s"""|        final Task schedule = classification.getTask();
@@ -145,7 +145,7 @@ trait AlgorithmRepository extends RunnerRepository {
           |        }""".stripMargin
   }
 
-  @combinator object AlgorithmFFS {
+  /*@combinator object AlgorithmFFS {
     val semanticType: Type = 'Algorithm :&: problemClass.flexibleFlowShop
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
@@ -167,6 +167,5 @@ trait AlgorithmRepository extends RunnerRepository {
     val semanticType: Type = 'Algorithm :&: problemClass.none
 
     def apply: String = "throw new java.lang.UnsupportedOperationException(\"Not yet implemented.\")"
-  }
-
+  }*/
 }

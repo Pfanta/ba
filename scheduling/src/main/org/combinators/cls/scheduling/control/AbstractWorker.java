@@ -80,6 +80,9 @@ abstract class AbstractWorker extends Thread {
 		List<Tuple<String, Task>> results = new LinkedList<>();
 		
 		for(String heuristic : runners.keySet()) {
+			System.out.println(heuristic);
+			System.out.println(runners.get(heuristic));
+			System.out.println();
 			try {
 				Function<Classification, Task> function = Reflect.compile("org.combinators.cls.scheduling.Runner" + generationCounter, runners.get(heuristic).replace("class Runner", "class Runner" + generationCounter)).create().get();
 				Task schedule = function.apply(classification.cloned()); //clone to prevent side-effects
